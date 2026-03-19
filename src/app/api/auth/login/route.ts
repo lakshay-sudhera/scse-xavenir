@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+    console.log(user.userID);
     const isValid = await bcrypt.compare(password,user.password);
     if (!isValid) throw new Error("Invalid password");
     const logtokPayload = {

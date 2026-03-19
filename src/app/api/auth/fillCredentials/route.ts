@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
 
     if (eAuthRecord.token !== decoded.token) {
       const response = NextResponse.json(
-        { error: "Token mismatch", status: 401 },
+        { error: "Token mismatch" },
         { status: 401 }
       );
       response.cookies.delete("eAuthToken");
@@ -76,14 +76,14 @@ export async function POST(req: NextRequest) {
     const { email, fullName, password, collegeName } = await req.json();
     if (email !== tokenEmail) {
       return NextResponse.json(
-        { error: "Email mismatch", status: 401 },
+        { error: "Email mismatch" },
         { status: 401 }
       );
     }
     const user = await User.findOne({ email: email });
     if (user) {
       const response = NextResponse.json(
-        { error: "User already exists", status: 410 },
+        { error: "User already exists" },
         { status: 410 }
       );
       response.cookies.delete("eAuthToken");
