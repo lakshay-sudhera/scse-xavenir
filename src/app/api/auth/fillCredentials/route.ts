@@ -37,8 +37,8 @@ export async function POST(req: NextRequest) {
       decoded = await jwt.verify(eAuthToken, process.env.JWT_SECRET!);
     } catch (err: any) {
       const response = NextResponse.json(
-        { error: "Invalid or expired authentication token"},
-        { status: 405 }
+        { error: "Invalid or expired authentication token",status: 401},
+        { status: 401 }
       );
       response.cookies.delete("eAuthToken");
       return response;
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     const tokenEmail: string = decoded.email;
     if (!tokenEmail) {
       const response = NextResponse.json(
-        { error: "Invalid token payload" },
+        { error: "Invalid token payload" ,status: 401},
         { status: 401 }
       );
       response.cookies.delete("eAuthToken");
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     const eAuthRecord = await Eauth.findOne({ email: tokenEmail });
     if (!eAuthRecord) {
       const response = NextResponse.json(
-        { error: "Authentication record not found" },
+        { error: "Authentication record not found" ,status: 401},
         { status: 401 }
       );
       response.cookies.delete("eAuthToken");
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
 
     if (eAuthRecord.token !== decoded.token) {
       const response = NextResponse.json(
-        { error: "Token mismatch" },
+        { error: "Token mismatch" ,status: 401},
         { status: 401 }
       );
       response.cookies.delete("eAuthToken");
@@ -74,16 +74,17 @@ export async function POST(req: NextRequest) {
     }
 
     const { email, fullName, password, collegeName } = await req.json();
+    console.log("email:", email);
     if (email !== tokenEmail) {
       return NextResponse.json(
-        { error: "Email mismatch" },
+        { error: "Email mismatch",status: 401 },
         { status: 401 }
       );
     }
     const user = await User.findOne({ email: email });
     if (user) {
       const response = NextResponse.json(
-        { error: "User already exists" },
+        { error: "User already exists" ,status: 410},
         { status: 410 }
       );
       response.cookies.delete("eAuthToken");
@@ -118,14 +119,28 @@ export async function POST(req: NextRequest) {
     // Delete the temporary Eauth record and remove its cookie
     await Eauth.deleteOne({ email: tokenEmail });
 
+    const logtokPayload = {
+      userID,
+      email,
+      fullName,
+    };
+
+    const logtok = await jwt.sign(logtokPayload, process.env.JWT_SECRET!, {
+      expiresIn: "60d",
+    });
     // Set the logtok as a cookie and remove the eAuthToken cookie
     const response = NextResponse.json(
       {
-        message: "User registered successfully"
+        message: "User registered successfully",status:200
       },
       { status: 200 }
     );
-
+    response.cookies.set("logtok", logtok, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 24 * 60 * 60, // 7 days in seconds
+    });
     response.cookies.delete("eAuthToken");
     return response;
   } catch (error) {
