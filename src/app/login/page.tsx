@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Login(){
 
@@ -55,13 +56,23 @@ export default function Login(){
           onChange={(e)=>setEmail(e.target.value)}
         />
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-3 bg-black border border-gray-700 rounded"
-          value={password}
-          onChange={(e)=>setPassword(e.target.value)}
-        />
+        <div className="space-y-1">
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full p-3 bg-black border border-gray-700 rounded"
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
+          />
+          <div className="text-right">
+            <Link
+              href="/forgotpassword"
+              className="text-sm text-purple-400 hover:text-purple-300 hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
+        </div>
 
         <button
           className="w-full bg-purple-600 py-3 rounded-lg hover:bg-purple-700"
