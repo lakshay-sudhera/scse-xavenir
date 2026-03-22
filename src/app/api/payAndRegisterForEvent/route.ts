@@ -1,46 +1,50 @@
-import { connectDB } from "@/dbConfig/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
-import PendingEventRegistrations from "@/models/pendingEventPaymentModel";
-// for non-prime nitian student other than cse branch
+import PendingEventRegistrationsModel from "@/models/pendingEventPaymentModel";
+import { connectDB } from "@/dbConfig/dbConfig";
+
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
+
     const body = await req.json();
+
     const {
       eventName,
       teamName,
       paymentProof,
       members,
-      transactionId1,
+      transactionId,
       transactionId2,
       transactionId3,
     } = body;
-    if (
-      !eventName ||
-      !teamName ||
-      !paymentProof ||
-      !members ||
-      !transactionId1
-    ) {
+
+    // ✅ Validation 
+    if (!eventName || !teamName || !paymentProof || !members || !transactionId) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
-    const newRegistration = await PendingEventRegistrations.create({
+
+    
+    const data = await PendingEventRegistrationsModel.create({
       eventName,
       teamName,
-      paymentProof,
       members,
-      transactionId1,
-      transactionId2,
-      transactionId3,
+      paymentProof,
+      transactionId1: transactionId,
+      transactionId2: transactionId2 || "",
+      transactionId3: transactionId3 || "",
       isPending: true,
       isSpam: false,
     });
 
     return NextResponse.json(
-      { message: "Registration successful", newRegistration },
+      {
+        success: true,
+        message: "Registration successful",
+        data,
+      },
       { status: 201 }
     );
   } catch (error) {
