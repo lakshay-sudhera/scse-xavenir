@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import RegisterPage from "./rpage";
+import Page from "./fpage";
 
 export const metadata: Metadata = {
-  title: "RegisterPage - SCSE",
-  description: "Register to the SCSE",
+  title: "Register - SCSE",
+  description: "Register to the SCSE ",
   icons: {
     icon: "/SCSElogo.svg",
     apple: "/SCSElogo.svg", // Apple devices
@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardPage() {
-  return < RegisterPage/>;
+  return <Page />;
 }

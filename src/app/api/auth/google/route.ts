@@ -32,7 +32,6 @@ export async function GET(req: NextRequest) {
       `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${tokens.access_token}`
     );
     const { email } = data;
-    console.log("email is ", email);
 
     if (!email) {
       return NextResponse.json(
@@ -65,7 +64,7 @@ export async function GET(req: NextRequest) {
     const jwtToken = jwt.sign(payload, secret, { expiresIn: "2d" });
 
     const response = NextResponse.redirect(
-      new URL("/credentials", req.url)
+      new URL("/fillCredentials", req.url)
     );
 
     response.cookies.set("eAuthToken", jwtToken, {

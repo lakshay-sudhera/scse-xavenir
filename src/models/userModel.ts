@@ -10,7 +10,7 @@ export interface User extends Document {
   isPrime: boolean;
   isNitian: boolean;
   isFromCse: boolean;
-  b1: boolean;
+  b1: boolean; // this is source of truth for hoodie 
   b2: boolean;
   x: boolean;
 }
