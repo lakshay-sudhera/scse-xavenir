@@ -43,9 +43,29 @@ export async function GET(req: NextRequest) {
     //same as login start
     const user = await User.findOne({ email: email });
     if (user) {
+        // const response = NextResponse.redirect(
+        //     new URL("/login", req.url)
+        // );
+        // return response;
+
+        const logtokPayload = {
+          userID: user.userID,
+          email: user.email,
+          fullName: user.fullName,
+          role: user.role
+        };
+        const secret = process.env.JWT_SECRET || "def";
+        const logtok = jwt.sign(logtokPayload, secret, { expiresIn: "7d" });
+
         const response = NextResponse.redirect(
-            new URL("/login", req.url)
+          new URL("/dashboard", req.url)
         );
+        response.cookies.set("logtok", logtok, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          path: "/",
+          maxAge: 60 * 60 * 2 , // 2 hours in seconds
+        });
         return response;
     }
 

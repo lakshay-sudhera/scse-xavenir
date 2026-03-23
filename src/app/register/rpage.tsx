@@ -1,11 +1,8 @@
 "use client";
 
-import { UserContext } from "@/context/UserContext";
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function RegisterPage() {
-    
   const [hovered, setHovered] = useState(false);
   const [glitch, setGlitch] = useState(false);
 
@@ -20,7 +17,7 @@ export default function RegisterPage() {
     return () => clearInterval(iv);
   }, []);
 
-  const handleGoogleSignup = async () => {
+  const handleGoogleSignup = () => {
     const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile&access_type=offline&prompt=consent`;
     window.location.href = googleUrl;
   };
@@ -119,6 +116,19 @@ export default function RegisterPage() {
           <p style={s.note}>
             <span style={{ color: "#00f5ff" }}>🔒</span>&nbsp;
             Secured via Google OAuth 2.0
+          </p>
+
+          {/* Divider */}
+          <div style={s.divider}>
+            <div style={s.divLine} />
+            <span style={s.divText}>OR</span>
+            <div style={s.divLine} />
+          </div>
+
+          {/* Login redirect */}
+          <p style={s.loginText}>
+            Already have an account?{" "}
+            <a href="/login" style={s.loginLink}>&gt;&gt; SIGN_IN</a>
           </p>
         </div>
       </div>
@@ -329,5 +339,14 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Share Tech Mono', monospace",
     fontSize: "0.6rem", letterSpacing: 1,
     color: "rgba(180,200,255,0.35)", textAlign: "center" as const,
+  },
+  loginText: {
+    fontFamily: "'Share Tech Mono', monospace",
+    fontSize: "0.68rem", letterSpacing: 1,
+    color: "rgba(180,200,255,0.4)", textAlign: "center" as const,
+  },
+  loginLink: {
+    color: "#00f5ff", textDecoration: "none",
+    textShadow: "0 0 8px #00f5ff", letterSpacing: 2, fontWeight: 700,
   },
 };

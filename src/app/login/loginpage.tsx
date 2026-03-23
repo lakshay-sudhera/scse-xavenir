@@ -224,7 +224,7 @@ export default function Login() {
                   }
                 </button>
               </div>
-              <Link href="/register" style={s.forgotLink}>
+              <Link href="/forgotpassword" style={s.forgotLink}>
                 // forgot_password?
               </Link>
             </div>
