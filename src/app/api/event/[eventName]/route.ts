@@ -1,16 +1,17 @@
-import { NextResponse, NextRequest } from "next/server";
+ import { NextResponse, NextRequest } from "next/server";
 import { connectDB } from "@/dbConfig/dbConfig";
 import Event from "@/models/eventModel";
 export const dynamic = "force-dynamic";
 // this is to get details of particular event
 export async function GET(
   request: NextRequest,
-  { params }: { params: { eventName: string } }
+   { params }: { params: Promise<{ eventName: string }> }
 ) {
   try {
     await connectDB();
 
-    const eventName = decodeURIComponent(params.eventName);
+     const { eventName: rawName } = await params;
+    const eventName = decodeURIComponent(rawName);
 
     const event = await Event.findOne({ name: eventName });
 

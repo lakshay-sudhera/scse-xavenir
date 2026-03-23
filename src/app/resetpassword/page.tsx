@@ -1,10 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
 import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
-export default function ResetPassword() {
+function ResetPasswordContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -123,5 +124,18 @@ export default function ResetPassword() {
 
       </div>
     </main>
+  );
+}
+
+// Outer component wraps with Suspense 
+export default function ResetPassword() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-gray-400 text-sm">Loading...</div>
+      </main>
+    }>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
