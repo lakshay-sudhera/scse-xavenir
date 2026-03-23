@@ -588,6 +588,22 @@ function WebCard({ member, idx }: { member: WebMember; idx: number }) {
 
 // ── Main Page ─────────────────────────────────────────
 export default function AboutPage() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onResize = () => {
+      if (window.innerWidth > 900) setMobileOpen(false);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
   const { displayed: bootLine } = useTypingEffect(
     "Initializing SCSE.archive() → Loading member database... OK",
     30,
@@ -616,11 +632,166 @@ export default function AboutPage() {
         }
 
         .about-page {
-          background: var(--bg);
+          background:
+            linear-gradient(rgba(0, 3, 20, 0.72), rgba(0, 3, 20, 0.62)),
+            url('/aboutus.jpg') center/cover no-repeat fixed;
           min-height: 100vh;
           color: #e0e8ff;
           position: relative;
           overflow-x: hidden;
+        }
+
+        /* ── Navbar (same style as home) ── */
+        .nav {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 100;
+          height: 74px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 2rem;
+          background: rgba(0, 2, 18, 0.38);
+          backdrop-filter: blur(8px);
+          border-bottom: 1px solid rgba(0,245,255,0.08);
+          transition: all 0.25s ease;
+        }
+        .nav.nav-scrolled {
+          background: rgba(0, 2, 18, 0.75);
+          border-bottom-color: rgba(0,245,255,0.16);
+        }
+        .logo {
+          text-decoration: none;
+          color: #fff;
+          font-family: 'Orbitron', monospace;
+          font-size: 1.05rem;
+          letter-spacing: 1px;
+          font-weight: 700;
+        }
+        .logo:hover { color: #00f5ff; }
+        .nav-links {
+          list-style: none;
+          display: flex;
+          gap: 1.15rem;
+          margin: 0;
+          padding: 0;
+        }
+        .nav-links a {
+          color: rgba(220,230,255,0.9);
+          text-decoration: none;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.68rem;
+          letter-spacing: 1.6px;
+          transition: color 0.2s ease;
+        }
+        .nav-links a:hover { color: #00f5ff; }
+        .nav-right {
+          display: flex;
+          align-items: center;
+          gap: 0.65rem;
+        }
+        .nav-cta {
+          text-decoration: none;
+          font-family: 'Orbitron', monospace;
+          font-size: 0.58rem;
+          letter-spacing: 1.4px;
+          text-transform: uppercase;
+          padding: 8px 13px;
+          border: 1px solid rgba(0,245,255,0.3);
+          color: #00f5ff;
+          transition: all 0.2s ease;
+        }
+        .nav-cta:hover {
+          border-color: #00f5ff;
+          color: #fff;
+          box-shadow: 0 0 12px rgba(0,245,255,0.2);
+        }
+        .nav-cta-register {
+          background: #00f5ff;
+          color: #000;
+          border-color: #00f5ff;
+        }
+        .nav-cta-register:hover {
+          color: #000;
+          background: #66fbff;
+          box-shadow: 0 0 16px rgba(0,245,255,0.4);
+        }
+        .hamburger {
+          display: none;
+          width: 38px;
+          height: 34px;
+          background: transparent;
+          border: 1px solid rgba(0,245,255,0.22);
+          cursor: pointer;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          gap: 5px;
+        }
+        .hamburger span {
+          width: 18px;
+          height: 1.5px;
+          background: #00f5ff;
+          transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .hamburger-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .hamburger-open span:nth-child(2) { opacity: 0; }
+        .hamburger-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+        .mobile-nav {
+          position: fixed;
+          top: 74px;
+          right: 0;
+          width: min(88vw, 340px);
+          height: calc(100vh - 74px);
+          z-index: 110;
+          background: rgba(0, 3, 20, 0.96);
+          border-left: 1px solid rgba(0,245,255,0.15);
+          transform: translateX(100%);
+          transition: transform 0.24s ease;
+          padding: 1rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+          overflow-y: auto;
+        }
+        .mobile-nav-open { transform: translateX(0); }
+        .mob-link {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.6rem;
+          text-decoration: none;
+          color: rgba(220,230,255,0.9);
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.78rem;
+          letter-spacing: 1px;
+          padding: 0.78rem 0.8rem;
+          border: 1px solid rgba(0,245,255,0.12);
+          background: rgba(0,245,255,0.02);
+        }
+        .mob-link:hover { color: #00f5ff; border-color: rgba(0,245,255,0.35); }
+        .mob-link-icon { color: #00f5ff; margin-right: auto; }
+        .mob-link-arr { color: rgba(180,200,255,0.5); }
+        .mob-cta {
+          margin-top: 0.6rem;
+          text-decoration: none;
+          font-family: 'Orbitron', monospace;
+          font-size: 0.66rem;
+          letter-spacing: 1.4px;
+          text-transform: uppercase;
+          color: #000;
+          background: #00f5ff;
+          border: 1px solid #00f5ff;
+          padding: 0.85rem 0.9rem;
+          text-align: center;
+        }
+        .mob-backdrop {
+          position: fixed;
+          inset: 74px 0 0 0;
+          z-index: 105;
+          background: rgba(0,0,0,0.45);
         }
 
         /* ── scanlines + grid bg ── */
@@ -1532,6 +1703,10 @@ export default function AboutPage() {
           .web-grid { grid-template-columns: repeat(4, 1fr); }
         }
         @media (max-width: 900px) {
+          .nav { padding: 0 1rem; }
+          .nav-links { display: none; }
+          .nav-cta { display: none; }
+          .hamburger { display: inline-flex; }
           .about-hero { padding: 120px 2rem 60px; }
           .about-section { padding: 60px 2rem; }
           .about-grid { grid-template-columns: 1fr; gap: 2rem; }
@@ -1552,6 +1727,54 @@ export default function AboutPage() {
       `}</style>
 
       <div className="about-page">
+        <nav className={`nav ${scrolled ? "nav-scrolled" : ""}`}>
+          <Link href="/" className="logo">&lt;/SCSE&gt;</Link>
+          <ul className="nav-links">
+            <li><a href="/#hero">Home</a></li>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/#events">Events</a></li>
+            <li><a href="/#contact">Contact</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/sponsors">Sponsors</a></li>
+          </ul>
+          <div className="nav-right">
+            <Link href="/register" className="nav-cta nav-cta-register">Register</Link>
+            <Link href="/login" className="nav-cta">Login</Link>
+            <button
+              className={`hamburger ${mobileOpen ? "hamburger-open" : ""}`}
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label="Toggle menu"
+            >
+              <span /><span /><span />
+            </button>
+          </div>
+        </nav>
+
+        <div className={`mobile-nav ${mobileOpen ? "mobile-nav-open" : ""}`}>
+          {[
+            ["/#hero", "Home"],
+            ["/#about", "About"],
+            ["/#events", "Events"],
+            ["/#contact", "Contact"],
+            ["/gallery", "Gallery"],
+            ["/sponsors", "Sponsors"],
+          ].map(([href, label], i) => (
+            <a
+              key={label}
+              href={href}
+              className="mob-link"
+              style={{ animationDelay: mobileOpen ? `${i * 55}ms` : "0ms" }}
+              onClick={() => setMobileOpen(false)}
+            >
+              <span className="mob-link-icon">◆</span>{label}
+              <span className="mob-link-arr">›</span>
+            </a>
+          ))}
+          <Link href="/dashboard" className="mob-cta" onClick={() => setMobileOpen(false)}>
+            ▶ &nbsp;DASHBOARD
+          </Link>
+        </div>
+        {mobileOpen && <div className="mob-backdrop" onClick={() => setMobileOpen(false)} />}
 
         {/* ── HERO ── */}
         <section className="about-hero">
