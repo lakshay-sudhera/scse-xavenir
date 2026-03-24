@@ -43,7 +43,7 @@ export default function Login() {
       const response = await axios.post("/api/auth/login", formData);
       if (response.status === 200) {
         const userResponse = await axios.get("/api/users/getCurrent");
-        if (userResponse.data.data.status === 200) {
+        if (userResponse.data.data) {
           setUserData(userResponse.data.data);
         }
         router.push("/dashboard");

@@ -1,11 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { UserContext } from "@/context/UserContext";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { userData, setUserData } = useContext(UserContext);
+  const loggedIn = !!userData;
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    setUserData(null);
+    setMobileOpen(false);
+    router.push("/");
+  };
 
   // ── Scroll shadow ──────────────────────────────────
   useEffect(() => {
@@ -67,7 +79,7 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <ul className="nav-links">
-          <li><a href="/#hero">Home</a></li>
+          <li><Link href="/">Home</Link></li>
           <li><a href="/about">About</a></li>
           <li><a href="/events">Events</a></li>
           <li><a href="/contact">Contact</a></li>
@@ -77,8 +89,17 @@ export default function Navbar() {
         </ul>
 
         <div className="nav-right">
-          <Link href="/register" className="nav-cta nav-cta-register">Register</Link>
-          <Link href="/login" className="nav-cta">Login</Link>
+          {loggedIn ? (
+            <>
+              <Link href="/dashboard" className="nav-cta nav-cta-register">Dashboard</Link>
+              <button className="nav-cta" onClick={handleLogout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <Link href="/register" className="nav-cta nav-cta-register">Register</Link>
+              <Link href="/login" className="nav-cta">Login</Link>
+            </>
+          )}
           <button
             className={`hamburger ${mobileOpen ? "hamburger-open" : ""}`}
             onClick={() => setMobileOpen(v => !v)}
@@ -92,8 +113,8 @@ export default function Navbar() {
       {/* Mobile menu */}
       <div className={`mobile-nav ${mobileOpen ? "mobile-nav-open" : ""}`}>
         {[
-          ["/#hero",         "Home"],
-          ["/#about",        "About"],
+          ["/",              "Home"],
+          ["/about",         "About"],
           ["/events",        "Events"],
           ["/contact",       "Contact"],
           ["/gallery",       "Gallery"],
@@ -111,9 +132,17 @@ export default function Navbar() {
             <span className="mob-link-arr">›</span>
           </a>
         ))}
-        <Link href="/dashboard" className="mob-cta" onClick={() => setMobileOpen(false)}>
-          ▶ &nbsp;Dashboard
-        </Link>
+        {loggedIn ? (
+          <>
+            <Link href="/dashboard" className="mob-cta" onClick={() => setMobileOpen(false)}>▶ &nbsp;Dashboard</Link>
+            <button className="mob-cta" onClick={handleLogout}>▶ &nbsp;Logout</button>
+          </>
+        ) : (
+          <>
+            <Link href="/register" className="mob-cta" onClick={() => setMobileOpen(false)}>▶ &nbsp;Register</Link>
+            <Link href="/login" className="mob-cta" onClick={() => setMobileOpen(false)}>▶ &nbsp;Login</Link>
+          </>
+        )}
       </div>
 
       {mobileOpen && (
