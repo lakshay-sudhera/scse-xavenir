@@ -3,8 +3,22 @@ import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/userModel";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import { rateLimit, getIP } from "@/lib/rateLimit";
 
 export async function POST(req: NextRequest) {
+  // 5 attempts per 15 minutes per IP
+  //Rate limiting added
+  const ip = getIP(req);
+  const rl = rateLimit(ip, "forgotpassword", { limit: 5, windowMs: 15 * 60 * 1000 });
+
+  if (!rl.allowed) {
+    const retryAfterSec = Math.ceil(rl.retryAfterMs / 1000);
+    return NextResponse.json(
+      { error: `Too many requests. Try again in ${retryAfterSec} seconds.` },
+      { status: 429, headers: { "Retry-After": String(retryAfterSec) } }
+    );
+  }
+
   try {
     await connectDB();
 

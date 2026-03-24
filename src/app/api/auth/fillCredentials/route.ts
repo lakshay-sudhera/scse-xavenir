@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import User from "@/models/userModel";
 import Eauth from "@/models/eAuthModel";
 import bcrypt from "bcryptjs";
+import { rateLimit, getIP } from "@/lib/rateLimit";
 
 // Helper to generate a random 7-character alphanumeric ID prefixed with "USR-"
 function generateUserID(req: NextRequest): string {
@@ -17,6 +18,25 @@ function generateUserID(req: NextRequest): string {
 }
 
 export async function POST(req: NextRequest) {
+  // 5 registration attempts per hour per IP
+  const ip = getIP(req);
+  const rl = rateLimit(ip, "register", { limit: 5, windowMs: 60 * 60 * 1000 });
+
+  if (!rl.allowed) {
+    const retryAfterSec = Math.ceil(rl.retryAfterMs / 1000);
+    return NextResponse.json(
+      { error: `Too many registration attempts. Try again in ${Math.ceil(retryAfterSec / 60)} minutes.` },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(retryAfterSec),
+          "X-RateLimit-Limit": "5",
+          "X-RateLimit-Remaining": "0",
+        },
+      }
+    );
+  }
+
   try {
     await connectDB();
     // Retrieve the eAuthToken cookie
