@@ -38,7 +38,6 @@ function StatNum({ target, prefix = "", suffix = "" }: { target: number; prefix?
 
 
 // ── Three.js 3D Scene ─────────────────────────────────
-// ── Three.js 3D Scene ─────────────────────────────────
 function ThreeScene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -622,13 +621,12 @@ useEffect(() => {
       <div className={`mobile-nav ${mobileOpen ? "mobile-nav-open" : ""}`}>
         {[
           ["#hero",         "Home"],
-          ["#about",        "About"],
-          ["#events",       "Events"],
-          ["#aftermovie",   "Media"],
-          ["#competitions", "Compete"],
-          ["#contact",      "Contact"],
+          ["/about",        "About"],
+          ["/events",       "Events"],
+          ["/contact",      "Contact"],
           ["/gallery",      "Gallery"],
           ["/sponsors",     "Sponsors"],
+          ["/sponsors",     "Whatsapp"],
         ].map(([href, label], i) => (
           <a
             key={label}
@@ -656,7 +654,6 @@ useEffect(() => {
           </div>
 
           <h1 className="hero-title">
-            {/* Reduced neon on "SOCIETY OF" */}
             <span className="ht-society glitch" data-text="SOCIETY OF">SOCIETY OF</span>
             <span className="ht-cs glitch" data-text="COMPUTER SCIENCE">COMPUTER SCIENCE</span>
             <span className="ht-eng glitch" data-text="& ENGINEERING">&amp; ENGINEERING</span>
@@ -842,12 +839,7 @@ useEffect(() => {
       </section>
 
 {/* ══ COMPETITIONS ════════════════════════════════════ */}
-{/* 
-  REPLACE your existing competitions section JSX and CSS with the below.
-  The competitions array at the top of LandingPage() stays unchanged.
-*/}
  
-{/* ── JSX: replace the entire <section id="competitions"> block ── */}
  
 <section id="competitions" className="section comp-section">
   <span className="section-label">// competitions.load()</span>
