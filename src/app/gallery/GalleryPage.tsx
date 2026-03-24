@@ -15,46 +15,109 @@ type EventItem = {
 
 const EVENTS: EventItem[] = [
   {
-    id: "EV-SQUID-GAME-2025",
-    src: "https://picsum.photos/seed/scse-squid-game/900/700",
-    title: "Squid Game",
-    date: "9 FEB, 2025",
-    desc: "Intense 2-round challenge where both tech & non-tech questions will push your limits!",
+    id: "EV-INAUGURATION-2025",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361397/WhatsApp_Image_2026-03-24_at_7.18.09_PM_2_m8hmaq.jpg",
+    title: "Xavenir 2025 Inauguration",
+    date: "FEB, 2025",
+    desc: "The grand inauguration of Xavenir marks the the beginning of innovation, energy and cutting-edge brilliance!",
   },
   {
     id: "EV-SCSE-PL2-2025",
-    src: "https://picsum.photos/seed/scse-premier-league-2/900/700",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361258/cricket2024_xckxnt.webp",
     title: "SCSE Premier League - Season 2",
     date: "FEB, 2025",
     desc: "Ultimate cricket showdown as teams compete for glory in the second season of the SCSE Premier League!",
   },
   {
-    id: "EV-SCAVENGER-HUNT-2024",
-    src: "https://picsum.photos/seed/scse-scavenger-hunt/900/700",
-    title: "Scavenger Hunt",
+    id: "EV-LSA-2024",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361434/WhatsApp_Image_2026-03-24_at_7.18.10_PM_1_avh04v.jpg",
+    title: "Lights, Stage, Action",
     date: "2024",
-    desc: "A thrilling adventure where participants solve clues, explore the campus, and race against time to win exciting rewards.",
+    desc: "An electrifying eveining where talent took the spotlight.",
   },
   {
     id: "EV-DODGEBALL-2024",
-    src: "https://picsum.photos/seed/scse-dodgeball/900/700",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361271/Dodgeball_y5jbvu.jpg",
     title: "Dodgeball",
     date: "2024",
     desc: "Fast-paced and action-packed dodgeball tournament where agility and teamwork lead to victory.",
   },
   {
     id: "EV-SCSE-PL1-2024",
-    src: "https://picsum.photos/seed/scse-premier-league-1/900/700",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361178/Cricket2023.jpg_lrjj8s.jpg",
     title: "SCSE Premier League - Season 1",
     date: "2024",
     desc: "The inaugural season of our highly anticipated cricket tournament, bringing intense competition and unforgettable moments.",
   },
   {
     id: "EV-KODI-YATAVA-2024",
-    src: "https://picsum.photos/seed/scse-kodi-yatava/900/700",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361293/kodi_yatava.jpg_senx53.jpg",
     title: "Kodi Yatava",
     date: "2024",
     desc: "Beyond coding.",
+  },
+  {
+    id: "EV-XAVENIR-2025-01",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361484/WhatsApp_Image_2026-03-24_at_7.18.11_PM_2_rhwkgd.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-02",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361419/WhatsApp_Image_2026-03-24_at_7.18.09_PM_e28coy.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-03",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361448/WhatsApp_Image_2026-03-24_at_7.18.10_PM_2_i3644x.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-04",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361500/WhatsApp_Image_2026-03-24_at_7.18.11_PM_xvjd1g.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-05",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361459/WhatsApp_Image_2026-03-24_at_7.18.10_PM_vpqebr.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-06",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361324/WhatsApp_Image_2026-03-24_at_7.18.08_PM_o3zlcu.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-07",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361335/WhatsApp_Image_2026-03-24_at_7.18.09_PM_1_y1iuxb.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-08",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361473/WhatsApp_Image_2026-03-24_at_7.18.11_PM_1_jt0xsg.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-09",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361307/WhatsApp_Image_2026-03-24_at_7.18.07_PM_i2htrr.jpg",
+    title: "",
+    date: "",
+    desc: "",
   },
 ];
 
@@ -379,16 +442,6 @@ export default function GalleryPage() {
                   </div>
                   <span className="gal-tf-st" style={{ fontSize: '0.82rem' }}>LIVE</span>
                 </div>
-              </div>
-
-              <div className="gal-lb-info">
-                <div className="gal-lb-id" style={{ fontSize: '0.82rem', letterSpacing: '0.18em' }}>{lbItem.id}</div>
-                <h2 className="gal-lb-title" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', letterSpacing: '0.08em' }}>{lbItem.title}</h2>
-                <div className="gal-lb-tags" style={{ fontSize: '0.88rem', letterSpacing: '0.18em', gap: '0.75rem' }}>
-                  <span>EVENT</span>
-                  <span>{lbItem.date}</span>
-                </div>
-                <p className="gal-lb-desc" style={{ fontSize: '1.05rem', lineHeight: 1.85, opacity: 0.88 }}>{lbItem.desc}</p>
               </div>
             </motion.div>
           </motion.div>
