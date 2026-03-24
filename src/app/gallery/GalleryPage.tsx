@@ -214,12 +214,6 @@ export default function GalleryPage() {
       <div className="gal-noise" />
       <div className="gal-corner-glow" />
 
-      <div className="gal-data-stream" aria-hidden>
-        <span className="gal-ds-item" style={{ fontSize: '0.85rem', letterSpacing: '0.15em' }}>GALLERY.VISUAL_DB // READ_ONLY</span>
-        <span className="gal-ds-item" style={{ fontSize: '0.85rem', letterSpacing: '0.15em' }}>XAVENIR.26 // ARCHIVE</span>
-        <span className="gal-ds-item" style={{ fontSize: '0.85rem', letterSpacing: '0.15em' }}>NIT JAMSHEDPUR // SCSE</span>
-      </div>
-
       {/* ── HERO ── */}
       <header className="gal-hero">
         <div className="gal-hero-left">
