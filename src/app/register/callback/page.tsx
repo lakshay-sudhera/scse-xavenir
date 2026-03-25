@@ -11,15 +11,39 @@ export default function GoogleCallbackPage() {
   const [phase, setPhase] = useState<"loading" | "success" | "error">("loading");
   const { setUserData } = useContext(UserContext);
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
+ useEffect(() => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get("code");
 
-    if (!code) {
-      setStatus("Unable to extract auth code from URL.");
+  if (!code) {
+    setStatus("Unable to extract auth code from URL.");
+    setPhase("error");
+    return;
+  }
+
+  const fetchData = async () => {
+    try {
+      setStatus("Exchanging code with server...");
+
+      const res = await axios.get(`/api/auth/google?code=${code}`);
+
+     if (!res.data?.user) {
+  throw new Error("Invalid response from server");
+}
+
+setUserData(res.data.user);
+      setStatus("Authentication successful!");
+      setPhase("success");
+
+      setTimeout(() => {
+        router.push("/dashboard"); 
+      }, 1500);
+
+    } catch (err) {
+      setStatus("Authentication failed. Please try again.");
       setPhase("error");
-      return;
     }
+  };
 
     // const fetchData = async () => {
     //   try {
