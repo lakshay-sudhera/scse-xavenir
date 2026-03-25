@@ -19,6 +19,7 @@ type User = {
   phone?: string;
   gender?: string;
   profilePic?: string;
+  // phoneVerified?: boolean;
 };
 
 type Tab = "overview" | "events" | "profile" | "receipt" | "certificates" | "notifications" | "community";
@@ -40,6 +41,13 @@ export default function Dashboard() {
   const [gender, setGender] = useState("");
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState("");
+
+  // // phone OTP verification
+  // const [otpPhone, setOtpPhone] = useState("");
+  // const [otpSent, setOtpSent] = useState(false);
+  // const [otpValue, setOtpValue] = useState("");
+  // const [otpLoading, setOtpLoading] = useState(false);
+  // const [otpMsg, setOtpMsg] = useState("");
 
   // profile pic
   const [uploading, setUploading] = useState(false);
@@ -108,6 +116,43 @@ export default function Dashboard() {
     } catch { setSaveMsg("// NETWORK_ERROR"); }
     setSaving(false);
   };
+
+  // const handleSendOtp = async () => {
+  //   if (!otpPhone.trim()) { setOtpMsg("Enter a phone number first."); return; }
+  //   setOtpLoading(true); setOtpMsg("");
+  //   try {
+  //     const res = await fetch("/api/users/phone-otp/send", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ phone: otpPhone }),
+  //     });
+  //     const d = await res.json();
+  //     if (res.ok) { setOtpSent(true); setOtpMsg("OTP sent to your registered email."); }
+  //     else { setOtpMsg(d.error || "Failed to send OTP."); }
+  //   } catch { setOtpMsg("Network error."); }
+  //   setOtpLoading(false);
+  // };
+
+  // const handleVerifyOtp = async () => {
+  //   if (!otpValue.trim()) { setOtpMsg("Enter the OTP."); return; }
+  //   setOtpLoading(true); setOtpMsg("");
+  //   try {
+  //     const res = await fetch("/api/users/phone-otp/verify", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ otp: otpValue }),
+  //     });
+  //     const d = await res.json();
+  //     if (res.ok) {
+  //       setUser(prev => ({ ...prev!, phone: otpPhone, phoneVerified: true }));
+  //       setUserData({ ...userData!, phone: otpPhone } as any);
+  //       setPhone(otpPhone);
+  //       setOtpSent(false); setOtpValue(""); setOtpPhone("");
+  //       setOtpMsg("✓ Phone verified and saved!");
+  //     } else { setOtpMsg(d.error || "Verification failed."); }
+  //   } catch { setOtpMsg("Network error."); }
+  //   setOtpLoading(false);
+  // };
 
   const handlePicUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -181,6 +226,10 @@ export default function Dashboard() {
             <span>USER_ID:</span> {user?.userID} &nbsp;|&nbsp;
             <span>ROLE:</span> {user?.role?.toUpperCase()} &nbsp;|&nbsp;
             <span>STATUS:</span> <span style={{ color: "#ff0080" }}>ACTIVE</span>
+          </p>
+          <p className="db-hero-sub" style={{ marginTop: "0.3rem" }}>
+            <span>NITJSR:</span> <span style={{ color: user?.isNitian ? "#00ff88" : "#ff0080" }}>{user?.isNitian ? "YES ✓" : "NO"}</span> &nbsp;|&nbsp;
+            <span>CSE:</span> <span style={{ color: user?.isFromCse ? "#00ff88" : "#ff0080" }}>{user?.isFromCse ? "YES ✓" : "NO"}</span>
           </p>
           <div className="db-badge-row">
             {user?.isNitian  && <span className="db-badge db-badge-cyan">◈ NIT JAMSHEDPUR</span>}
@@ -261,7 +310,7 @@ export default function Dashboard() {
                     {[
                       { label: "EMAIL",   val: user?.email },
                       { label: "COLLEGE", val: user?.collegeName },
-                      { label: "PHONE",   val: user?.phone || "—" },
+                       { label: "PHONE",   val: user?.phone || "—" }, 
                       { label: "GENDER",  val: user?.gender || "—" },
                     ].map(f => (
                       <div key={f.label} className="db-pf-row">
@@ -410,6 +459,94 @@ export default function Dashboard() {
                         : <span className="db-edit-static">{user?.phone || <span style={{ opacity: 0.35 }}>not set</span>}</span>
                       }
                     </div>
+
+                    {/* ── PHONE OTP VERIFICATION ──
+{editMode && (
+  <div style={{
+    marginTop: 8,
+    padding: "14px 16px",
+    background: "rgba(0,245,255,0.04)",
+    border: "1px solid rgba(0,245,255,0.15)",
+  }}>
+    <div className="db-section-label" style={{ marginBottom: 10, fontSize: "0.72rem" }}>
+      // phone.verify()
+    </div>
+
+    {user?.phoneVerified ? (
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "0.85rem", color: "#00ff88", fontWeight: 600 }}>
+        ✓ PHONE VERIFIED
+      </p>
+    ) : (
+      <>
+        <p style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "0.85rem", color: "rgba(180,200,255,0.5)", marginBottom: 10 }}>
+          Enter a number and verify via OTP sent to your email.
+        </p>
+
+        <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
+          <input
+            className="db-input"
+            style={{ flex: 1, minWidth: 160 }}
+            value={otpPhone}
+            onChange={e => setOtpPhone(e.target.value)}
+            placeholder="+91 XXXXXXXXXX"
+            disabled={otpSent}
+          />
+          <button
+            className="db-btn-outline"
+            style={{ padding: "6px 14px", fontSize: "0.78rem", whiteSpace: "nowrap" }}
+            onClick={handleSendOtp}
+            disabled={otpLoading || otpSent}
+          >
+            {otpLoading ? "◌ SENDING..." : otpSent ? "✓ OTP SENT" : "SEND OTP"}
+          </button>
+        </div>
+
+        {otpSent && (
+          <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
+            <input
+              className="db-input"
+              style={{ flex: 1, minWidth: 120, letterSpacing: 6, fontWeight: 700 }}
+              value={otpValue}
+              onChange={e => setOtpValue(e.target.value)}
+              placeholder="_ _ _ _ _ _"
+              maxLength={6}
+            />
+            <button
+              className="db-btn-primary"
+              style={{ padding: "6px 14px", fontSize: "0.78rem", whiteSpace: "nowrap" }}
+              onClick={handleVerifyOtp}
+              disabled={otpLoading}
+            >
+              <span>{otpLoading ? "◌ VERIFYING..." : "VERIFY"}</span>
+            </button>
+            <button
+              className="db-btn-outline"
+              style={{ padding: "6px 10px", fontSize: "0.78rem" }}
+              onClick={() => { setOtpSent(false); setOtpValue(""); setOtpMsg(""); }}
+            >
+              ↩
+            </button>
+          </div>
+        )}
+
+        {otpMsg && (
+          <p style={{
+            fontFamily: "'Inter',sans-serif",
+            fontSize: "0.8rem",
+            color: otpMsg.startsWith("✓") ? "#00ff88" : "var(--pink)",
+            marginTop: 4,
+          }}>
+            {otpMsg}
+          </p>
+        )}
+      </>
+    )}
+  </div>
+)} */}
+
+
+
+
 
                     <div className="db-edit-row">
                       <span className="db-edit-label">GENDER</span>

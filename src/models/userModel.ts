@@ -16,6 +16,7 @@ export interface User extends Document {
   phone?: string;
   gender?: string;
   profilePic?: string;
+  // phoneVerified?: boolean;
 }
 
 const UserSchema: Schema<User> = new Schema(
@@ -84,6 +85,7 @@ const UserSchema: Schema<User> = new Schema(
     phone: { type: String, default: "" },
     gender: { type: String, enum: ["male", "female", "non-binary", "genderqueer", "genderfluid", "agender", "other", ""], default: "" },
     profilePic: { type: String, default: "" },
+    // phoneVerified: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
