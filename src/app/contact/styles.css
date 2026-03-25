@@ -614,3 +614,42 @@ textarea.contact-input {
           .contact-cards-grid { grid-template-columns: 1fr; }
           .contact-hero-title { letter-spacing: 3px; }
         }
+
+        @media (max-width: 900px) {
+          .contact-hero { padding: 55px 1.8rem 44px; }
+          .contact-cards-section { padding: 44px 1.8rem; }
+          .contact-bottom { padding: 44px 1.8rem; }
+          .contact-map-section { padding: 44px 1.8rem; }
+          .contact-bottom-grid { grid-template-columns: 1fr; }
+          .contact-cards-grid { grid-template-columns: repeat(2, 1fr); }
+          .contact-hero-title { font-size: clamp(2rem, 6vw, 3.5rem); letter-spacing: 3px; }
+          .contact-hero-sub { font-size: 0.9rem; letter-spacing: 2px; }
+          .contact-card-img-wrap { height: 200px; }
+          .contact-form-wrap { padding: 1.6rem; }
+        }
+        @media (max-width: 600px) {
+          .contact-hero { padding: 44px 1.2rem 36px; }
+          .contact-cards-section { padding: 36px 1.2rem; }
+          .contact-bottom { padding: 36px 1.2rem; }
+          .contact-cards-grid { grid-template-columns: 1fr; }
+          .contact-hero-title { font-size: clamp(1.6rem, 8vw, 2.8rem); letter-spacing: 2px; }
+          .contact-hero-sub { font-size: 0.8rem; letter-spacing: 1px; }
+          .contact-card-img-wrap { height: 180px; }
+          .contact-card-name { font-size: 1.4rem; }
+          .contact-card-role { font-size: 0.85rem; }
+          .contact-card-detail { font-size: 0.95rem; }
+          .contact-form-wrap { padding: 1.2rem; }
+          .contact-form-title { font-size: 1.6rem; }
+          .contact-section-label { font-size: 0.6rem; letter-spacing: 2px; }
+        }
+        @media (max-width: 480px) {
+          .contact-hero { padding: 36px 1rem 28px; }
+          .contact-cards-section { padding: 28px 1rem; }
+          .contact-bottom { padding: 28px 1rem; }
+          .contact-hero-title { font-size: clamp(1.3rem, 9vw, 2.2rem); }
+          .contact-card-img-wrap { height: 160px; }
+          .contact-card-name { font-size: 1.2rem; }
+          .contact-card-body { padding: 1rem 1.1rem 1.2rem; }
+          .contact-input { padding: 11px 14px; font-size: 0.92rem; }
+          .contact-submit { padding: 13px; font-size: 0.95rem; }
+        }

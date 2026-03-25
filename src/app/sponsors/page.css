@@ -489,3 +489,44 @@ body {
   0%, 100% { opacity: 1; text-shadow: 0 0 8px currentColor; }
   50%       { opacity: 0.5; text-shadow: 0 0 2px currentColor; }
 }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .glitch { font-size: 4.5rem; letter-spacing: 0.1em; }
+  .sponsor-card-wrapper { min-width: 200px; max-width: 260px; padding: 1.4rem; }
+  .cta-btn { font-size: 1.1rem; padding: 0.9rem 2rem; }
+  .bank-card { max-width: 100% !important; }
+  .contact-card-inner { max-width: 100% !important; }
+}
+
+@media (max-width: 600px) {
+  .glitch {
+    font-size: 3rem;
+    letter-spacing: 0.06em;
+    text-shadow: 0.03em 0 0 var(--cyan), -0.02em -0.02em 0 var(--magenta);
+  }
+  .sponsor-card-wrapper {
+    min-width: 140px;
+    max-width: 100%;
+    width: 100%;
+    padding: 1.2rem;
+  }
+  .cyber-frame { top: 10px; left: 10px; right: 10px; bottom: 10px; }
+  .cta-btn { font-size: 1rem; padding: 0.85rem 1.5rem; letter-spacing: 0.12em; }
+  .flip-front-label { font-size: 1rem; letter-spacing: 0.1em; }
+  .bank-label { font-size: 0.78rem; }
+  .bank-value { font-size: 0.9rem; }
+  .bank-card-title { font-size: 1rem; }
+  .forefront-section h2 { font-size: 1.4rem; }
+  .forefront-section p { font-size: 0.9rem; }
+}
+
+@media (max-width: 480px) {
+  .glitch { font-size: 2.2rem; letter-spacing: 0.04em; }
+  .sponsor-card-wrapper { padding: 1rem; border-radius: 10px; }
+  .cta-btn { font-size: 0.9rem; padding: 0.75rem 1.2rem; }
+  .flip-front-label { font-size: 0.88rem; }
+  .bank-row { flex-direction: column; align-items: flex-start; gap: 2px; padding: 0.8rem 0; }
+  .bank-label { font-size: 0.7rem; opacity: 0.6; }
+  .bank-value { font-size: 0.88rem; }
+}

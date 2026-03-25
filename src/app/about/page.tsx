@@ -906,21 +906,54 @@ export default function AboutPage() {
           .mem-grid, .web-grid { grid-template-columns: repeat(4, 1fr); }
         }
         @media (max-width: 900px) {
-          .about-hero { padding: 120px 2rem 60px; }
-          .about-section { padding: 60px 2rem; }
-          .cta-section { padding: 70px 2rem; }
+          .about-hero { padding: 100px 1.8rem 50px; }
+          .about-section { padding: 55px 1.8rem; }
+          .cta-section { padding: 55px 1.8rem; }
           .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+          .about-hero-title { font-size: clamp(2rem, 6vw, 3.5rem); }
+          .about-hero-sub { font-size: 0.8rem; letter-spacing: 0.12em; }
           .prof-grid { grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
           .core-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
           .mem-grid, .web-grid { grid-template-columns: repeat(3, 1fr); }
           .edition-stats-row { gap: 2rem; }
+          .sec-title { font-size: clamp(1.4rem, 4vw, 2rem); }
+          .about-term-body { padding: 1.4rem 1.2rem; font-size: 0.82rem; }
         }
         @media (max-width: 600px) {
+          .about-hero { padding: 90px 1.2rem 40px; }
+          .about-section { padding: 44px 1.2rem; }
+          .cta-section { padding: 44px 1.2rem; }
+          .about-hero-title { font-size: clamp(1.7rem, 8vw, 2.8rem); }
+          .about-hero-sub { font-size: 0.72rem; letter-spacing: 0.08em; }
+          .about-hero-tags { gap: 0.6rem; }
+          .about-tag, .about-tag-pink, .about-tag-purple { font-size: 0.65rem; padding: 4px 10px; }
           .prof-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
           .core-grid { grid-template-columns: 1fr; }
-          .mem-grid, .web-grid { grid-template-columns: repeat(2, 1fr); }
+          .mem-grid, .web-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
           .edition-header { flex-wrap: wrap; gap: 1rem; padding: 1.2rem; }
           .edition-stats-row { flex-wrap: wrap; gap: 1.5rem; }
+          .sec-title { font-size: clamp(1.2rem, 6vw, 1.8rem); }
+          .sec-label { font-size: 0.68rem; letter-spacing: 0.18em; }
+          .about-term-body { padding: 1rem; font-size: 0.78rem; line-height: 1.75; }
+          .core-card { flex-direction: column; }
+          .core-img-wrap { width: 100%; height: 200px; }
+          .core-img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+          .xav-title { font-size: 1.1rem; }
+          .xav-text { font-size: 0.95rem; }
+        }
+        @media (max-width: 480px) {
+          .about-hero { padding: 85px 1rem 36px; }
+          .about-section { padding: 36px 1rem; }
+          .about-hero-title { font-size: clamp(1.4rem, 9vw, 2.2rem); line-height: 1.1; }
+          .prof-grid { grid-template-columns: 1fr; gap: 1rem; }
+          .mem-grid, .web-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+          .mem-name, .web-card-name { font-size: 0.82rem; }
+          .mem-role, .web-card-role { font-size: 0.7rem; }
+          .edition-year { font-size: 1rem; }
+          .edition-theme { font-size: 0.72rem; }
+          .edition-stat-val { font-size: 1.2rem; }
+          .prof-name { font-size: 0.9rem; }
+          .prof-role { font-size: 0.72rem; }
         }
       `}</style>
 

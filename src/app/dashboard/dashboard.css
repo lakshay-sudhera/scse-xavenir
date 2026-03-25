@@ -409,12 +409,16 @@ select.db-input option { background: #020010; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  .db-wrap { padding: 2rem 1.2rem 6rem; } /* extra bottom for tab bar */
+  .db-wrap { padding: 2rem 1.2rem 3rem; }
   .db-overview-grid { grid-template-columns: 1fr; }
   .db-profile-grid { grid-template-columns: 1fr; }
   .db-community-grid { grid-template-columns: 1fr; }
-  .db-terminal { display: none; } /* replaced by bottom tab bar */
-  .db-mobile-tabs { display: flex; }
+  .db-terminal { display: block; } /* keep tabs at top on mobile */
+  .db-mobile-tabs { display: none; } /* hide bottom tab bar */
+  .db-tabs { overflow-x: auto; padding: 0 4px; gap: 0; }
+  .db-tab { padding: 12px 14px; font-size: 0.75rem; white-space: nowrap; flex-shrink: 0; }
+  .db-term-bar { padding: 8px 14px; }
+  .db-term-title { font-size: 0.65rem; }
   .db-hero-title { font-size: clamp(1.7rem, 6vw, 2.4rem); }
   .db-edit-row { grid-template-columns: 100px 1fr; }
 }

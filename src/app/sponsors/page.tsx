@@ -15,10 +15,10 @@ function Sponsors() {
       <div className="relative z-10 w-full">
 
         {/* ── HERO / SPONSOR CARDS ── */}
-        <main className="flex flex-col items-center w-full min-h-screen pb-20" style={{ paddingTop: '140px' }}>
+        <main className="flex flex-col items-center w-full min-h-screen pb-20" style={{ paddingTop: 'clamp(90px, 12vw, 140px)' }}>
 
           {/* Title */}
-          <div className="relative flex flex-col items-center mb-80 py-12 w-full max-w-5xl">
+          <div className="relative flex flex-col items-center mb-16 md:mb-80 py-8 md:py-12 w-full max-w-5xl px-4">
             <div className="cyber-frame">
               <div className="cyber-frame-tr"></div>
               <div className="cyber-frame-bl"></div>
@@ -34,7 +34,7 @@ function Sponsors() {
           </div>
 
           {/* Sponsor Cards */}
-          <div className="flex flex-wrap justify-center gap-12 w-full max-w-6xl px-4 mt-72">
+          <div className="flex flex-wrap justify-center gap-6 md:gap-12 w-full max-w-6xl px-4 mt-8 md:mt-72">
 
             {/* CARD 1 */}
             <div className="sponsor-card-wrapper">
@@ -109,10 +109,10 @@ function Sponsors() {
         </div>
 
         {/* ── FLIP CARDS ── */}
-        <div className="flex flex-col gap-6 p-6 items-center w-full mt-7">
+        <div className="flex flex-col gap-6 p-4 md:p-6 items-center w-full mt-4 md:mt-7">
 
           {/* BRAND EXPOSURE */}
-          <div className="w-full max-w-[850px] h-[110px] perspective">
+          <div className="w-full max-w-[850px] min-h-[90px] h-auto perspective">
             <div className="flip-inner">
               <div className="flip-front"
                 style={{
@@ -135,7 +135,7 @@ function Sponsors() {
           </div>
 
           {/* RECRUITMENT EDGE */}
-          <div className="w-full max-w-[850px] h-[110px] perspective">
+          <div className="w-full max-w-[850px] min-h-[90px] h-auto perspective">
             <div className="flip-inner">
               <div className="flip-front"
                 style={{
@@ -158,7 +158,7 @@ function Sponsors() {
           </div>
 
           {/* CAMPUS PRESENCE */}
-          <div className="w-full max-w-[850px] h-[110px] perspective">
+          <div className="w-full max-w-[850px] min-h-[90px] h-auto perspective">
             <div className="flip-inner">
               <div className="flip-front"
                 style={{
@@ -181,7 +181,7 @@ function Sponsors() {
           </div>
 
           {/* CREDIBILITY BOOST */}
-          <div className="w-full max-w-[850px] h-[110px] perspective">
+          <div className="w-full max-w-[850px] min-h-[90px] h-auto perspective">
             <div className="flip-inner">
               <div className="flip-front"
                 style={{
@@ -204,7 +204,7 @@ function Sponsors() {
           </div>
 
           {/* INDUSTRY COLLABORATION */}
-          <div className="w-full max-w-[850px] h-[110px] perspective">
+          <div className="w-full max-w-[850px] min-h-[90px] h-auto perspective">
             <div className="flip-inner">
               <div className="flip-front"
                 style={{
