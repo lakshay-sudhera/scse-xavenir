@@ -21,17 +21,17 @@ export default function GoogleCallbackPage() {
       return;
     }
 
-    const fetchData = async () => {
-      try {
-        await fetch(`/api/auth/google?code=${code}`);
-      } catch {
-        setStatus("Network error. Connection lost.");
-        setPhase("error");
-      }
-    };
+  //   const fetchData = async () => {
+  //     try {
+  //       await fetch(`/api/auth/google?code=${code}`);
+  //     } catch {
+  //       setStatus("Network error. Connection lost.");
+  //       setPhase("error");
+  //     }
+  //   };
 
-    fetchData();
-  }, [router]);
+  //   fetchData();
+  // }, [router]);
 
   const accentColor =
     phase === "success" ? "#00ff88" :
