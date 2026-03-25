@@ -109,6 +109,20 @@ body {
 .nav-cta-register { border-color: var(--cyan); color: var(--cyan); background: rgba(0,245,255,0.06); }
 .nav-cta-register:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); }
 
+/* ── NAV SKELETON (prevents auth flash) ── */
+.nav-skeleton { display: flex; align-items: center; gap: 10px; }
+.nav-skel-btn {
+  display: block; height: 34px; width: 100px; border-radius: 2px;
+  background: linear-gradient(90deg, rgba(0,245,255,0.06) 25%, rgba(0,245,255,0.12) 50%, rgba(0,245,255,0.06) 75%);
+  background-size: 200% 100%;
+  animation: skel-shimmer 1.4s ease infinite;
+}
+.nav-skel-btn-sm { width: 72px; }
+@keyframes skel-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 /* ── NAV UNDERGLOW ── */
 .nav-underglow {
   position: fixed; top: 70px; left: 0; right: 0;

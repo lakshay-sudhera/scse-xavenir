@@ -3,7 +3,29 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import User from "@/models/userModel";
 import bcrypt from "bcryptjs";
+import { rateLimit, getIP } from "@/lib/rateLimit";
+
 export async function POST(req: NextRequest) {
+  // 10 attempts per 15 minutes per IP
+  // Rate Limiting added
+  const ip = getIP(req);
+  const rl = rateLimit(ip, "login", { limit: 10, windowMs: 15 * 60 * 1000 });
+
+  if (!rl.allowed) {
+    const retryAfterSec = Math.ceil(rl.retryAfterMs / 1000);
+    return NextResponse.json(
+      { error: `Too many login attempts. Try again in ${retryAfterSec} seconds.` },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(retryAfterSec),
+          "X-RateLimit-Limit": "10",
+          "X-RateLimit-Remaining": "0",
+        },
+      }
+    );
+  }
+
   try {
     await connectDB();
     const { email, password } = await req.json();
