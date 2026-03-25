@@ -96,6 +96,9 @@ export default function Navbar() {
             </div>
           ) : loggedIn ? (
             <>
+              {userData?.role === "admin" && (
+                <Link href="/admin" className="nav-cta" style={{ borderColor: "var(--yellow)", color: "var(--yellow)" }}>Admin</Link>
+              )}
               <Link href="/dashboard" className="nav-cta nav-cta-register">Dashboard</Link>
               <button className="nav-cta" onClick={handleLogout}>Logout</button>
             </>
@@ -139,6 +142,9 @@ export default function Navbar() {
         ))}
         {loggedIn ? (
           <>
+            {userData?.role === "admin" && (
+              <Link href="/admin" className="mob-cta" style={{ borderColor: "var(--yellow)", color: "var(--yellow)" }} onClick={() => setMobileOpen(false)}>▶ &nbsp;Admin</Link>
+            )}
             <Link href="/dashboard" className="mob-cta" onClick={() => setMobileOpen(false)}>▶ &nbsp;Dashboard</Link>
             <button className="mob-cta" onClick={handleLogout}>▶ &nbsp;Logout</button>
           </>

@@ -9,6 +9,7 @@ export interface PendingPayments extends Document {
   transactionId2?: string;
   transactionId3?: string;
   isSpam: boolean;
+  status: "pending" | "verified" | "rejected";
 }
 
 const PendingPaymentsSchema: Schema<PendingPayments> = new Schema(
@@ -38,6 +39,11 @@ const PendingPaymentsSchema: Schema<PendingPayments> = new Schema(
       type: Boolean,
       required: true,
       default: false,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "verified", "rejected"],
+      default: "pending",
     },
     transactionId1: {
       type: String,

@@ -7,6 +7,7 @@ export interface PendingEventRegistration extends Document {
   members: string[];
   isPending: boolean;
   isSpam: boolean;
+  status: "pending" | "verified" | "rejected";
   transactionId1: string;
   transactionId2?: string;
   transactionId3?: string;
@@ -39,6 +40,11 @@ const PendingEventRegistrationSchema: Schema<PendingEventRegistration> = new mon
     isSpam: {
       type: Boolean,
       default: false,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "verified", "rejected"],
+      default: "pending",
     },
     transactionId1: {
       type: String,
