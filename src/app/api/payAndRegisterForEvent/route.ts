@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import PendingEventRegistrationsModel from "@/models/pendingEventPaymentModel";
+import PendingEventRegistrations from "@/models/pendingEventPaymentModel";
 import { connectDB } from "@/dbConfig/dbConfig";
 
 export async function POST(req: NextRequest) {
@@ -13,32 +13,31 @@ export async function POST(req: NextRequest) {
       teamName,
       paymentProof,
       members,
-      transactionId,
+      transactionId1,
       transactionId2,
       transactionId3,
     } = body;
-
+    console.log(body);
     // ✅ Validation 
-    if (!eventName || !teamName || !paymentProof || !members || !transactionId) {
+    if (!eventName || !teamName || !paymentProof || (members.length == 0) || !transactionId1) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    
-    const data = await PendingEventRegistrationsModel.create({
+    const data = await PendingEventRegistrations.create({
       eventName,
       teamName,
       members,
       paymentProof,
-      transactionId1: transactionId,
+      transactionId1: transactionId1,
       transactionId2: transactionId2 || "",
       transactionId3: transactionId3 || "",
       isPending: true,
       isSpam: false,
     });
-
+    console.log("hi");
     return NextResponse.json(
       {
         success: true,

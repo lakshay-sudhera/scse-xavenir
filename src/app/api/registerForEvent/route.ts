@@ -36,10 +36,17 @@ export async function POST(req: NextRequest) {
     for (const memberId of members) {
       const user = await User.findOne({ userID: memberId });
       console.log(user);
+      let mustBePrime = false;
       if (!user) {
         return NextResponse.json(
           { error: `Member not found in DB: ${memberId}` },
           { status: 404 }
+        );
+      }
+      if(user.isNitian && user.isFromCse && !user.isPrime){
+        return NextResponse.json(
+          { error: "All members are not Prime , register as prime" },
+          { status: 400 }
         );
       }
       if (!user.isPrime) {
