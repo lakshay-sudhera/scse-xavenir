@@ -33,8 +33,8 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Navigate</h4>
           <a href="/#hero">Home</a>
-          <a href="/#about">About</a>
-          <a href="/#events">Events</a>
+          <a href="/about">About</a>
+          <a href="/events">Events</a>
           <Link href="/gallery">Gallery</Link>
           <Link href="/sponsors">Sponsors</Link>
         </div>
