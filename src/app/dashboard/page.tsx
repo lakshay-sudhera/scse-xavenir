@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { UserContext } from "@/context/UserContext";
 import "./dashboard.css";
+import Loading from "@/components/Loading";
 
 type User = {
   fullName: string;
@@ -27,6 +28,8 @@ export default function Dashboard() {
   const { userData, setUserData } = useContext(UserContext);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [ready, setReady] = useState(false);
+  const mountTime = useRef(Date.now());
   const [tab, setTab] = useState<Tab>("overview");
   const [events, setEvents] = useState<any[]>([]);
   const [glitch, setGlitch] = useState(false);
@@ -44,6 +47,9 @@ export default function Dashboard() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    mountTime.current = Date.now();
+
+    // Fetch user data
     fetch("/api/users/getCurrent")
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(d => {
@@ -52,9 +58,17 @@ export default function Dashboard() {
         setGender(d.data.gender || "");
         setPicPreview(d.data.profilePic || "");
         setLoading(false);
+
+        // How long did the fetch take?
+        const elapsed = Date.now() - mountTime.current;
+        const remaining = Math.max(0, 2000 - elapsed);
+
+        // Wait out the remaining time before showing dashboard
+        setTimeout(() => setReady(true), remaining);
       })
       .catch(() => router.push("/login"));
-  }, [router]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -129,16 +143,7 @@ export default function Dashboard() {
     router.push("/");
   };
 
-  if (loading) return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#020010" }}>
-      <div style={{ textAlign: "center" }}>
-        <div className="db-loader-ring" />
-        <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, color: "#00f5ff", letterSpacing: 3, fontSize: 14, marginTop: 20 }}>
-          INITIALIZING...
-        </p>
-      </div>
-    </div>
-  );
+  if (!ready) return <Loading />;
 
   const tabs: { key: Tab; label: string; icon: string }[] = [
     { key: "overview",      label: "OVERVIEW",      icon: "◈" },
@@ -184,7 +189,7 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* ── TERMINAL TAB BAR ── */}
+        {/* ── TERMINAL TAB BAR (desktop) ── */}
         <div className="db-terminal">
           <div className="db-term-bar">
             <div className="db-term-dots"><span /><span /><span /></div>
@@ -203,6 +208,20 @@ export default function Dashboard() {
               </button>
             ))}
           </div>
+        </div>
+
+        {/* ── MOBILE BOTTOM TAB BAR ── */}
+        <div className="db-mobile-tabs">
+          {tabs.map(t => (
+            <button
+              key={t.key}
+              className={`db-mobile-tab${tab === t.key ? " db-mobile-tab-active" : ""}`}
+              onClick={() => setTab(t.key)}
+            >
+              <span className="db-mobile-tab-icon">{t.icon}</span>
+              <span className="db-mobile-tab-label">{t.label}</span>
+            </button>
+          ))}
         </div>
 
         {/* ── CONTENT ── */}

@@ -8,7 +8,7 @@ import { UserContext } from "@/context/UserContext";
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { userData, setUserData } = useContext(UserContext);
+  const { userData, setUserData, authLoading } = useContext(UserContext);
   const loggedIn = !!userData;
   const router = useRouter();
 
@@ -89,7 +89,12 @@ export default function Navbar() {
         </ul>
 
         <div className="nav-right">
-          {loggedIn ? (
+          {authLoading ? (
+            <div className="nav-skeleton" aria-hidden="true">
+              <span className="nav-skel-btn" />
+              <span className="nav-skel-btn nav-skel-btn-sm" />
+            </div>
+          ) : loggedIn ? (
             <>
               <Link href="/dashboard" className="nav-cta nav-cta-register">Dashboard</Link>
               <button className="nav-cta" onClick={handleLogout}>Logout</button>
