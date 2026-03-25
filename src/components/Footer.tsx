@@ -26,7 +26,7 @@ export default function Footer() {
           <Link href="/contact">Contact</Link>
           <Link href="/privacy">Privacy Policy</Link>
           <Link href="/refund">Refund &amp; Cancellation</Link>
-          <Link href="/shipping">Shipping &amp; Delivery</Link>
+          <Link href="/shopping">Shipping &amp; Delivery</Link>
         </div>
 
         {/* Navigate */}
