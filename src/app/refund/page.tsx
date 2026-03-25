@@ -41,7 +41,7 @@ const CyberpunkRefund = () => {
   const mainContainerStyle: CSSProperties = {
     minHeight: '100vh',
     width: '100%',
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.6)), url('/Gemini_Generated_Image_t9kye6t9kye6t9ky.png')`,
+   backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.6)), url('public/contact/cyberpunk-bg.jpeg')`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',
