@@ -1028,7 +1028,7 @@ export default function AboutPage() {
                 this fest is for YOU! Connect with like-minded enthusiasts and recruiters,
                 and attend workshops and guest talks from top industry professionals.
               </p>
-              <a href="/SCSE_brochure.pdf" target="_blank" rel="noopener noreferrer" className="xav-btn">
+              <a href="/sponsorship_brochure.pdf" target="_blank" rel="noopener noreferrer" className="xav-btn">
                 ▶ View Brochure
               </a>
             </div>
