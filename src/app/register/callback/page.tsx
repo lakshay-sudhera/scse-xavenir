@@ -28,10 +28,9 @@ export default function GoogleCallbackPage() {
       const res = await axios.get(`/api/auth/google?code=${code}`);
 
      if (!res.data?.user) {
-  throw new Error("Invalid response from server");
-}
-
-setUserData(res.data.user);
+      throw new Error("Invalid response from server");
+    }
+      setUserData(res.data.user);
       setStatus("Authentication successful!");
       setPhase("success");
 
