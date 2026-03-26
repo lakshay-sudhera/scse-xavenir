@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import InstagramEmbed from '../components/InstagramEmbed';
 
+
+
+
+
+
 // ── Count-up hook ──────────────────────────────────────
 function useCountUp(target: number, active: boolean, duration = 2200) {
   const [val, setVal] = useState(0);
