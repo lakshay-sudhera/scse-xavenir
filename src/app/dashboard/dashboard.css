@@ -278,6 +278,8 @@
 
 /* ── EVENTS ── */
 .db-events-list { display: flex; flex-direction: column; gap: 10px; }
+.db-events-teams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+@media (max-width: 700px) { .db-events-teams-grid { grid-template-columns: 1fr; } }
 .db-event-row {
   display: flex; align-items: center; gap: 18px;
   padding: 16px 20px;
