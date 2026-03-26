@@ -59,6 +59,16 @@ export async function POST(request: NextRequest) {
       email
     );
 
+    const alreadyPaid = await Rverify.findOne({ email });
+    if (alreadyPaid) {
+      // Idempotent: just ensure isPrime is synced and return success
+      if (!user.isPrime) {
+        user.isPrime = true;
+        await user.save();
+      }
+      return NextResponse.json({ success: true, message: "Payment already verified" });
+    }
+
     const bool = await Rverify.findOne({
       razorpay_order_id: razorpay_order_id,
     });
