@@ -955,6 +955,7 @@ export default function Dashboard() {
   const [teamMembers, setTeamMembers] = useState<Record<string, any[]>>({});
   const [invites, setInvites] = useState<any[]>([]);
   const [sentInvites, setSentInvites] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [respondingInvite, setRespondingInvite] = useState<string | null>(null);
   const [glitch, setGlitch] = useState(false);
 
@@ -1031,6 +1032,10 @@ export default function Dashboard() {
     fetch("/api/team-invites")
       .then(r => r.json())
       .then(d => { setInvites(d.data || []); setSentInvites(d.sent || []); })
+      .catch(() => {});
+    fetch("/api/notifications")
+      .then(r => r.json())
+      .then(d => setNotifications(d.data || []))
       .catch(() => {});
   }, [user]);
 
@@ -1234,12 +1239,14 @@ export default function Dashboard() {
               >
                 <span className="db-tab-icon">{t.icon}</span>
                 {t.label}
-                {t.key === "notifications" && invites.filter(inv => inv.status === "pending").length > 0 && (
-                  <span style={{ marginLeft: 6, background: "var(--pink)", color: "#fff", borderRadius: "50%", fontSize: "0.6rem", fontWeight: 700, padding: "1px 5px", fontFamily: "'Inter',sans-serif" }}>
-                    {invites.filter(inv => inv.status === "pending").length}
-                  </span>
-                )}
-              </button>
+                {t.key === "notifications" && (() => {
+                  const count = invites.filter(inv => inv.status === "pending").length + notifications.filter(n => !n.read).length;
+                  return count > 0 ? (
+                    <span style={{ marginLeft: 6, background: "var(--pink)", color: "#fff", borderRadius: "50%", fontSize: "0.6rem", fontWeight: 700, padding: "1px 5px", fontFamily: "'Inter',sans-serif" }}>
+                      {count}
+                    </span>
+                  ) : null;
+                })()}              </button>
             ))}
           </div>
         </div>
@@ -1843,28 +1850,43 @@ export default function Dashboard() {
           {/* NOTIFICATIONS */}
           {tab === "notifications" && (
             <div className="db-section">
-              <div className="db-section-label">// notifications.load()</div>
-              {invites.length === 0 ? (
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                <div className="db-section-label">// notifications.load()</div>
+                {(notifications.some(n => !n.read) || invites.some(inv => inv.status === "pending")) && (
+                  <button
+                    className="db-btn-outline"
+                    style={{ padding: "4px 14px", fontSize: "0.72rem" }}
+                    onClick={() => {
+                      fetch("/api/notifications", { method: "PATCH" }).catch(() => {});
+                      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+                    }}
+                  >
+                    ✓ MARK ALL READ
+                  </button>
+                )}
+              </div>
+              {invites.length === 0 && notifications.length === 0 ? (
                 <div className="db-card">
                   <div className="db-card-corner tl" /><div className="db-card-corner br" />
                   <div className="db-card-top-bar" style={{ background: "var(--purple)" }} />
                   <div className="db-empty-state">
                     <div className="db-empty-icon">🔔</div>
                     <div className="db-empty-title">ALL CAUGHT UP</div>
-                    <p className="db-empty-desc">No new notifications. Team invites will appear here.</p>
+                    <p className="db-empty-desc">No notifications yet.</p>
                   </div>
                 </div>
               ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {/* Team invites (actionable) */}
                   {invites.map((inv, i) => (
-                    <div key={i} className="db-card" style={{ gap: 10 }}>
+                    <div key={`inv-${i}`} className="db-card" style={{ gap: 10, borderColor: inv.status === "pending" ? "rgba(191,0,255,0.35)" : undefined }}>
                       <div className="db-card-corner tl" /><div className="db-card-corner br" />
                       <div className="db-card-top-bar" style={{ background: inv.status === "pending" ? "var(--purple)" : inv.status === "accepted" ? "#00ff88" : "var(--pink)" }} />
                       <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                        <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.72rem", color: "var(--purple)", opacity: 0.7 }}>TEAM INVITE</span>
-                        <span style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.8rem", color: "var(--cyan)" }}>{inv.teamName}</span>
-                        <span style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "0.8rem", color: "rgba(180,200,255,0.45)" }}>for {inv.eventName}</span>
-                        <span style={{ marginLeft: "auto", fontFamily: "'Share Tech Mono',monospace", fontSize: "0.7rem",
+                        <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.68rem", color: "var(--purple)" }}>⬡ TEAM INVITE</span>
+                        <span style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.78rem", color: "var(--cyan)" }}>{inv.teamName}</span>
+                        <span style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "0.78rem", color: "rgba(180,200,255,0.4)" }}>· {inv.eventName}</span>
+                        <span style={{ marginLeft: "auto", fontFamily: "'Share Tech Mono',monospace", fontSize: "0.68rem",
                           color: inv.status === "pending" ? "var(--yellow)" : inv.status === "accepted" ? "#00ff88" : "var(--pink)" }}>
                           ◉ {inv.status.toUpperCase()}
                         </span>
@@ -1874,26 +1896,52 @@ export default function Dashboard() {
                       </p>
                       {inv.status === "pending" && (
                         <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
-                          <button
-                            className="db-btn-primary"
-                            style={{ padding: "6px 18px", fontSize: "0.8rem" }}
-                            disabled={respondingInvite === inv._id}
-                            onClick={() => handleInviteRespond(inv._id, "accept")}
-                          >
+                          <button className="db-btn-primary" style={{ padding: "6px 18px", fontSize: "0.8rem" }}
+                            disabled={respondingInvite === inv._id} onClick={() => handleInviteRespond(inv._id, "accept")}>
                             <span>{respondingInvite === inv._id ? "◌..." : "✓ ACCEPT"}</span>
                           </button>
-                          <button
-                            className="db-btn-outline"
-                            style={{ padding: "6px 18px", fontSize: "0.8rem" }}
-                            disabled={respondingInvite === inv._id}
-                            onClick={() => handleInviteRespond(inv._id, "reject")}
-                          >
+                          <button className="db-btn-outline" style={{ padding: "6px 18px", fontSize: "0.8rem" }}
+                            disabled={respondingInvite === inv._id} onClick={() => handleInviteRespond(inv._id, "reject")}>
                             ✕ REJECT
                           </button>
                         </div>
                       )}
                     </div>
                   ))}
+                  {/* System notifications */}
+                  {notifications.map((n, i) => {
+                    const iconMap: Record<string, string> = {
+                      team_invite_response: "👥",
+                      team_confirmed: "✅",
+                      payment_verified: "💳",
+                      prime_granted: "★",
+                      announcement: "📢",
+                    };
+                    const colorMap: Record<string, string> = {
+                      team_invite_response: "var(--cyan)",
+                      team_confirmed: "#00ff88",
+                      payment_verified: "#00ff88",
+                      prime_granted: "var(--yellow)",
+                      announcement: "var(--pink)",
+                    };
+                    return (
+                      <div key={`notif-${i}`} className="db-card" style={{ gap: 8, opacity: n.read ? 0.6 : 1, borderColor: n.read ? undefined : colorMap[n.type] + "44" }}>
+                        <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                        <div className="db-card-top-bar" style={{ background: colorMap[n.type] }} />
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <span style={{ fontSize: "1.1rem" }}>{iconMap[n.type] || "🔔"}</span>
+                          <span style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.78rem", color: colorMap[n.type], letterSpacing: 1 }}>{n.title}</span>
+                          {!n.read && <span style={{ marginLeft: "auto", width: 7, height: 7, borderRadius: "50%", background: "var(--pink)", boxShadow: "0 0 6px var(--pink)", display: "inline-block" }} />}
+                          <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.65rem", color: "rgba(180,200,255,0.3)", marginLeft: n.read ? "auto" : 0 }}>
+                            {new Date(n.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "0.88rem", color: "rgba(180,200,255,0.65)", paddingLeft: "2rem" }}>
+                          {n.message}
+                        </p>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>

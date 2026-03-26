@@ -15,7 +15,7 @@ type Payment = {
 };
 
 type Tab = "pending" | "approved" | "rejected";
-type Panel = "payments" | "search";
+type Panel = "payments" | "search" | "announce";
 
 export default function AdminClient({ payments }: { payments: Payment[] }) {
   const [localPayments, setLocalPayments] = useState<Payment[]>(payments);
@@ -24,6 +24,13 @@ export default function AdminClient({ payments }: { payments: Payment[] }) {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+
+  // Announce state
+  const [announceTitle, setAnnounceTitle] = useState("");
+  const [announceMsg, setAnnounceMsg] = useState("");
+  const [announceTarget, setAnnounceTarget] = useState("");
+  const [announcing, setAnnouncing] = useState(false);
+  const [announceResult, setAnnounceResult] = useState("");
 
   // User search state
   const [searchId, setSearchId] = useState("");
@@ -111,6 +118,9 @@ export default function AdminClient({ payments }: { payments: Payment[] }) {
         </button>
         <button className={`panel-btn${panel === "search" ? " panel-active" : ""}`} onClick={() => setPanel("search")}>
           ◎ USER SEARCH
+        </button>
+        <button className={`panel-btn${panel === "announce" ? " panel-active" : ""}`} onClick={() => setPanel("announce")}>
+          📢 ANNOUNCE
         </button>
       </div>
 
@@ -269,6 +279,46 @@ export default function AdminClient({ payments }: { payments: Payment[] }) {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* ── ANNOUNCE PANEL ── */}
+      {panel === "announce" && (
+        <div className="search-panel">
+          <div className="section-divider" style={{ padding: "24px 32px 0" }}>
+            <span className="divider-label">// BROADCAST ANNOUNCEMENT</span>
+            <div className="divider-line" />
+          </div>
+          <div style={{ padding: "24px 40px", maxWidth: 600, display: "flex", flexDirection: "column", gap: 16 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <label style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, letterSpacing: 2, color: "rgba(0,180,255,0.5)", textTransform: "uppercase" }}>Title *</label>
+              <input className="search-input" style={{ borderRight: "1px solid rgba(0,180,255,0.2)" }} placeholder="Announcement title" value={announceTitle} onChange={e => setAnnounceTitle(e.target.value)} />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <label style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, letterSpacing: 2, color: "rgba(0,180,255,0.5)", textTransform: "uppercase" }}>Message *</label>
+              <textarea className="search-input" style={{ borderRight: "1px solid rgba(0,180,255,0.2)", minHeight: 100, resize: "vertical" }} placeholder="Announcement message..." value={announceMsg} onChange={e => setAnnounceMsg(e.target.value)} />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <label style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, letterSpacing: 2, color: "rgba(0,180,255,0.5)", textTransform: "uppercase" }}>Target User ID (leave blank to broadcast to all)</label>
+              <input className="search-input" style={{ borderRight: "1px solid rgba(0,180,255,0.2)" }} placeholder="SCSE-XXXXXXX (optional)" value={announceTarget} onChange={e => setAnnounceTarget(e.target.value)} />
+            </div>
+            <button className="search-btn" disabled={announcing || !announceTitle || !announceMsg} onClick={async () => {
+              setAnnouncing(true); setAnnounceResult("");
+              try {
+                const res = await fetch("/api/admin/announce", {
+                  method: "POST", headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ title: announceTitle, message: announceMsg, targetUserID: announceTarget || undefined }),
+                });
+                const d = await res.json();
+                setAnnounceResult(d.message || "Sent");
+                if (res.ok) { setAnnounceTitle(""); setAnnounceMsg(""); setAnnounceTarget(""); }
+              } catch { setAnnounceResult("Network error"); }
+              setAnnouncing(false);
+            }}>
+              {announcing ? <span className="btn-loading" /> : "📢 SEND ANNOUNCEMENT"}
+            </button>
+            {announceResult && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#00ffb3" }}>{announceResult}</p>}
+          </div>
         </div>
       )}
 

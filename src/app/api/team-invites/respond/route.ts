@@ -4,6 +4,7 @@ import TeamInvite from "@/models/teamInviteModel";
 import EventRegistration from "@/models/eventRegistrationModel";
 import PendingEventRegistrations from "@/models/pendingEventPaymentModel";
 import jwt from "jsonwebtoken";
+import { notify } from "@/lib/notify";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,10 +14,10 @@ export async function POST(req: NextRequest) {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
     const User = (await import("@/models/userModel")).default;
-    const user = await User.findOne({ email: decoded.email }).select("userID").lean();
+    const user = await User.findOne({ email: decoded.email }).select("userID fullName").lean();
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-    const { inviteId, action } = await req.json(); // action: "accept" | "reject"
+    const { inviteId, action } = await req.json();
     if (!inviteId || !["accept", "reject"].includes(action)) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }
@@ -34,15 +35,31 @@ export async function POST(req: NextRequest) {
     await invite.save();
 
     if (action === "reject") {
-      // Mark all sibling invites for this team as rejected too
       await TeamInvite.updateMany(
         { teamName: invite.teamName, eventName: invite.eventName, invitedBy: invite.invitedBy, status: "pending" },
         { status: "rejected" }
       );
+      // Notify leader of rejection
+      await notify({
+        userID: invite.invitedBy,
+        type: "team_invite_response",
+        title: "Team invite rejected",
+        message: `${user.fullName} (${user.userID}) rejected the invite to join team "${invite.teamName}" for ${invite.eventName}.`,
+        meta: { teamName: invite.teamName, eventName: invite.eventName, responder: user.userID, action: "rejected" },
+      });
       return NextResponse.json({ message: "Invite rejected" }, { status: 200 });
     }
 
-    // Check if all invites for this team are accepted
+    // Notify leader of acceptance
+    await notify({
+      userID: invite.invitedBy,
+      type: "team_invite_response",
+      title: "Team invite accepted",
+      message: `${user.fullName} (${user.userID}) accepted the invite to join team "${invite.teamName}" for ${invite.eventName}.`,
+      meta: { teamName: invite.teamName, eventName: invite.eventName, responder: user.userID, action: "accepted" },
+    });
+
+    // Check if all invites accepted
     const allInvites = await TeamInvite.find({
       teamName: invite.teamName,
       eventName: invite.eventName,
@@ -54,45 +71,39 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Accepted — waiting for other members" }, { status: 200 });
     }
 
-    // All accepted — finalize registration
+    // Finalize registration
     const payload = invite.registrationPayload;
     const type = invite.registrationType;
 
     if (type === "free") {
-      const newReg = new EventRegistration({
-        teamName: invite.teamName,
-        eventName: invite.eventName,
-        members: invite.allMembers,
-        isAllPrime: true,
-        razorpay_order_id: "no_need",
-        razorpay_payment_id: "no_need",
-        razorpay_signature: "no_need",
-      });
-      await newReg.save();
+      await new EventRegistration({
+        teamName: invite.teamName, eventName: invite.eventName, members: invite.allMembers,
+        isAllPrime: true, razorpay_order_id: "no_need", razorpay_payment_id: "no_need", razorpay_signature: "no_need",
+      }).save();
     } else if (type === "razorpay") {
-      const newReg = new EventRegistration({
-        teamName: invite.teamName,
-        eventName: invite.eventName,
-        members: invite.allMembers,
-        isAllPrime: false,
-        razorpay_order_id: payload.razorpay_order_id,
-        razorpay_payment_id: payload.razorpay_payment_id,
-        razorpay_signature: payload.razorpay_signature,
-      });
-      await newReg.save();
+      await new EventRegistration({
+        teamName: invite.teamName, eventName: invite.eventName, members: invite.allMembers,
+        isAllPrime: false, razorpay_order_id: payload.razorpay_order_id,
+        razorpay_payment_id: payload.razorpay_payment_id, razorpay_signature: payload.razorpay_signature,
+      }).save();
     } else if (type === "manual") {
       await PendingEventRegistrations.create({
-        eventName: invite.eventName,
-        teamName: invite.teamName,
-        members: invite.allMembers,
-        paymentProof: payload.paymentProof,
-        transactionId1: payload.transactionId1,
-        transactionId2: payload.transactionId2 || "",
-        transactionId3: payload.transactionId3 || "",
-        isPending: true,
-        isSpam: false,
+        eventName: invite.eventName, teamName: invite.teamName, members: invite.allMembers,
+        paymentProof: payload.paymentProof, transactionId1: payload.transactionId1,
+        transactionId2: payload.transactionId2 || "", transactionId3: payload.transactionId3 || "",
+        isPending: true, isSpam: false,
       });
     }
+
+    // Notify ALL team members (including leader) that team is confirmed
+    const allMemberIDs: string[] = invite.allMembers;
+    await notify(allMemberIDs.map(uid => ({
+      userID: uid,
+      type: "team_confirmed" as const,
+      title: "Team registration confirmed",
+      message: `Your team "${invite.teamName}" has been successfully registered for ${invite.eventName}. All members have accepted.`,
+      meta: { teamName: invite.teamName, eventName: invite.eventName },
+    })));
 
     return NextResponse.json({ message: "All members accepted — team registered!" }, { status: 200 });
   } catch (err: any) {

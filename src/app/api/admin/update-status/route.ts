@@ -3,6 +3,7 @@ import PendingPaymentsModel from "@/models/pendingPaymentModel";
 import User from "@/models/userModel";
 import { connectDB } from "@/dbConfig/dbConfig";
 import { requireAdmin } from "@/lib/requireAdmin";
+import { notify } from "@/lib/notify";
 
 export async function POST(req: NextRequest) {
   const auth = await requireAdmin(req);
@@ -32,12 +33,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Record not found" }, { status: 404 });
     }
 
-    // On approval, mark the user as isPrime in the User collection
+    // On approval, mark the user as isPrime and send notification
     if (isApproved && updated.email) {
-      await User.findOneAndUpdate(
+      const updatedUser = await User.findOneAndUpdate(
         { email: updated.email },
-        { isPrime: true }
+        { isPrime: true },
+        { new: true }
       );
+      if (updatedUser) {
+        await notify({
+          userID: updatedUser.userID,
+          type: "payment_verified",
+          title: "Registration payment verified",
+          message: "Your registration payment has been manually verified by the admin. Prime access is now active.",
+          meta: { email: updated.email },
+        });
+      }
     }
 
     return NextResponse.json(
