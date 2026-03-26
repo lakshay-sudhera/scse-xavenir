@@ -262,14 +262,6 @@ const MEMBERS: Member[] = [
     linkedin: "https://www.linkedin.com/in/aameya-devansh",
   },
   {
-    name: "Anuj Kumar",
-    role: "EM Head",
-    img: "/images/IMG-20250515-WA0025 - ᗩᑎᑌᒍ Kᑌᗰᗩᖇ.jpg",
-    phone: "7858927896",
-    email: "kumar10305ak@gmail.com",
-    linkedin: "https://www.linkedin.com/in/anuj-kumar-2b376a281/",
-  },
-  {
     name: "Udit pandey",
     role: "EM Head",
     img: "",
@@ -278,6 +270,7 @@ const MEMBERS: Member[] = [
     linkedin: "https://www.linkedin.com/in/udit-pandey-351417328?utm_source=share_via&utm_content=profile&utm_medium=member_android",
   },
 ];
+
 
 // ── Replace these with real web team members ──────────
 const WEB_TEAM: WebMember[] = [
