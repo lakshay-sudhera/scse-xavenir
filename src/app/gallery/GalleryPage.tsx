@@ -222,15 +222,15 @@ export default function GalleryPage() {
             NIT Jamshedpur // CSE
           </p>
           <h1 className="gal-hero-title" style={{ lineHeight: 1.05 }}>
-            <span className="gal-glitch" data-text="EVENTS" style={{ fontSize: 'clamp(4rem, 9vw, 8rem)', display: 'block' }}>
-              EVENTS
+            <span className="gal-glitch" data-text="GALLERY" style={{ fontSize: 'clamp(4rem, 9vw, 8rem)', display: 'block' }}>
+              GALLERY
             </span>
             <span className="gal-glitch gal-glitch-pink" data-text="ARCHIVE" style={{ fontSize: 'clamp(4rem, 9vw, 8rem)', display: 'block' }}>
               ARCHIVE
             </span>
           </h1>
           <p className="gal-hero-sub" style={{ fontSize: '1.1rem', lineHeight: 1.8, maxWidth: '480px', opacity: 0.85 }}>
-            Encrypted event frames from XAVENIR &amp; SCSE ops. Hover to decrypt details. Click to open a node.
+            Encrypted visual frames from XAVENIR &amp; SCSE ops. Hover to decrypt details. Click to open a node.
           </p>
         </div>
 
@@ -260,7 +260,7 @@ export default function GalleryPage() {
               </div>
               <div>
                 <div className="gal-ops-num gal-ops-num-pink" style={{ fontSize: '2rem' }}>{String(items.length)}</div>
-                <div className="gal-ops-lbl" style={{ fontSize: '0.75rem', letterSpacing: '0.18em' }}>EVENT FRAMES</div>
+                <div className="gal-ops-lbl" style={{ fontSize: '0.75rem', letterSpacing: '0.18em' }}>VISUAL FRAMES</div>
               </div>
             </div>
           </div>
@@ -271,13 +271,13 @@ export default function GalleryPage() {
       <section className="gal-section cyberpunk-events" aria-label="Events grid">
         <div className="gal-section-head">
           <span className="gal-section-label glitch" style={{ fontSize: '1.1rem', letterSpacing: '0.15em' }}>
-            // events.archive()
+            // gallery.log()
           </span>
           <div className="gal-cyber-panel neon-border">
             <div className="gal-cp-corner gal-tl pulse" />
             <div className="gal-cp-corner gal-br pulse" />
             <div className="gal-cp-status hologram" style={{ fontSize: '0.8rem', letterSpacing: '0.2em' }}>
-              EVENTS // READY
+              MOMENTS // READY
             </div>
             <div className="gal-cp-row matrix-rain">
               <div className="data-node">

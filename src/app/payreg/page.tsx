@@ -54,11 +54,11 @@ function Page() {
   }, []);
   console.log(userData);
   let amount = 900;
-  if (checkIsFromCse(userData?.email!) && checkIsFromNit(userData?.email!)) {
+  if (userData?.isNitian && userData.isFromCse) {
     amount = 500;
     if (check3rdYear(userData?.email!)) amount = 500;
-  } else if (!checkIsFromCse(userData?.email!) && checkIsFromNit(userData?.email!)) {
-    amount = 300;
+  } else if (userData?.isNitian && !userData.isFromCse) {
+    amount = 900;
   } else {
     amount = 900;
   }

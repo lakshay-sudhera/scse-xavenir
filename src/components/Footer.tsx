@@ -23,7 +23,7 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Quick Links</h4>
           <Link href="/terms">Terms &amp; Conditions</Link>
-          <a href="#contact">Contact</a>
+          <Link href="/contact">Contact</Link>
           <Link href="/privacy">Privacy Policy</Link>
           <Link href="/refund">Refund &amp; Cancellation</Link>
           <Link href="/shipping">Shipping &amp; Delivery</Link>

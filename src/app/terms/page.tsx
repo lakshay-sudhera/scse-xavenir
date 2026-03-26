@@ -1,347 +1,189 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
-import Head from 'next/head';
+import Link from "next/link";
 
-export default function Home() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+const sections = [
+  {
+    title: "1. Acceptance of Terms",
+    content: "By using the Xavenir platform and its services, you confirm that you have read, understood, and agree to be bound by these Terms. We reserve the right to modify these Terms at any time. Continued use of the platform constitutes acceptance of any revised Terms.",
+  },
+  {
+    title: "2. Account Registration",
+    content: "To access and use the Services, you agree to provide true, accurate, and complete information during registration. You are responsible for all activity that occurs under your registered account and must keep your credentials secure.",
+  },
+  {
+    title: "3. Accuracy of Information",
+    content: "Neither SCSE nor any third parties guarantee the accuracy, timeliness, or completeness of information on this platform. We expressly exclude liability for any inaccuracies or errors to the fullest extent permitted by law.",
+  },
+  {
+    title: "4. Use of Services",
+    content: "Your use of our Services is solely at your own risk. You agree not to use the platform for any purpose that is unlawful, illegal, or forbidden by these Terms or applicable Indian laws.",
+  },
+  {
+    title: "5. Intellectual Property",
+    content: "All content on this platform is proprietary to SCSE, NIT Jamshedpur. You have no authority to claim any intellectual property rights, title, or interest in its contents without explicit written permission.",
+  },
+  {
+    title: "6. Payments & Refunds",
+    content: "You agree to pay the charges associated with event registrations. Refund claims must be raised within the stipulated time period as per our refund policy. Failure to do so makes you ineligible for a refund.",
+  },
+  {
+    title: "7. Third-Party Links",
+    content: "The platform may contain links to third-party websites. On accessing these links, you will be governed by the terms, privacy policy, and other policies of those third-party websites. We are not responsible for their content.",
+  },
+  {
+    title: "8. Limitation of Liability",
+    content: "Neither party shall be liable for any failure to perform obligations under these Terms if performance is prevented or delayed by a force majeure event beyond reasonable control.",
+  },
+  {
+    title: "9. Governing Law",
+    content: "These Terms shall be governed by and construed in accordance with the laws of India. All disputes shall be subject to the exclusive jurisdiction of the courts in Jamshedpur, Jharkhand.",
+  },
+  {
+    title: "10. Contact",
+    content: "All concerns or communications relating to these Terms must be directed to us via the contact information provided on this website or at scse@nitjsr.ac.in.",
+  },
+];
 
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-    // --- Three.js setup ---
-    const canvas = canvasRef.current;
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x03030c, 1);
-
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x03030c);
-    scene.fog = new THREE.FogExp2(0x03030c, 0.004);
-
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(2, 1.5, 4.2);
-    camera.lookAt(0, 0, 0);
-
-    // Lighting
-    const ambient = new THREE.AmbientLight(0x111122);
-    scene.add(ambient);
-    const mainLight = new THREE.PointLight(0x88aaff, 0.35);
-    mainLight.position.set(2, 2.5, 3);
-    scene.add(mainLight);
-    const fillLight = new THREE.PointLight(0xaa88ff, 0.2);
-    fillLight.position.set(-1.5, 1, -2);
-    scene.add(fillLight);
-
-    // Central torus knot
-    const knotGeo = new THREE.TorusKnotGeometry(0.8, 0.14, 120, 14, 3, 4);
-    const knotMat = new THREE.MeshStandardMaterial({
-      color: 0x88aaff,
-      emissive: 0x224466,
-      emissiveIntensity: 0.08,
-      metalness: 0.5,
-    });
-    const knot = new THREE.Mesh(knotGeo, knotMat);
-    scene.add(knot);
-
-    // Stars
-    const starCount = 800;
-    const starGeo = new THREE.BufferGeometry();
-    const starPositions = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount; i++) {
-      starPositions[i * 3] = (Math.random() - 0.5) * 200;
-      starPositions[i * 3 + 1] = (Math.random() - 0.5) * 100;
-      starPositions[i * 3 + 2] = (Math.random() - 0.5) * 80 - 30;
-    }
-    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-    const starMat = new THREE.PointsMaterial({ color: 0x88aacc, size: 0.08, transparent: true, opacity: 0.4 });
-    const stars = new THREE.Points(starGeo, starMat);
-    scene.add(stars);
-
-    // Floating particles
-    const particleCount = 600;
-    const particleGeo = new THREE.BufferGeometry();
-    const particlePositions = new Float32Array(particleCount * 3);
-    const particleColors = new Float32Array(particleCount * 3);
-    for (let i = 0; i < particleCount; i++) {
-      const radius = 1.4 + Math.random() * 1.6;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      particlePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-      particlePositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta) * 0.6;
-      particlePositions[i * 3 + 2] = radius * Math.cos(phi);
-      const col = new THREE.Color(0x88aaff);
-      particleColors[i * 3] = col.r * 0.5;
-      particleColors[i * 3 + 1] = col.g * 0.5;
-      particleColors[i * 3 + 2] = col.b * 0.6;
-    }
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-    particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
-    const particleMat = new THREE.PointsMaterial({
-      size: 0.03,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.3,
-      blending: THREE.AdditiveBlending,
-    });
-    const particles = new THREE.Points(particleGeo, particleMat);
-    scene.add(particles);
-
-    // Flying car
-    const carGroup = new THREE.Group();
-    const bodyGeo = new THREE.BoxGeometry(0.85, 0.2, 1.5);
-    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x446688, metalness: 0.4 });
-    const body = new THREE.Mesh(bodyGeo, bodyMat);
-    body.position.y = 0;
-    carGroup.add(body);
-    const cockpitGeo = new THREE.SphereGeometry(0.28, 16, 16);
-    const cockpitMat = new THREE.MeshStandardMaterial({ color: 0x88aaff, emissive: 0x2266aa, emissiveIntensity: 0.05 });
-    const cockpit = new THREE.Mesh(cockpitGeo, cockpitMat);
-    cockpit.position.set(0, 0.18, 0.45);
-    carGroup.add(cockpit);
-    const engineGlow = new THREE.PointLight(0x88aaff, 0.25);
-    engineGlow.position.set(0, -0.05, -0.8);
-    carGroup.add(engineGlow);
-    scene.add(carGroup);
-    carGroup.position.set(-7, 0.85, -0.2);
-
-    let carProgress = 0;
-    let carAnimId: number | null = null;
-    const animateCar = () => {
-      carProgress += 0.007;
-      if (carProgress >= 1) {
-        carProgress = 0;
-        carGroup.position.set(-7, 0.85, -0.2);
-      }
-      const t = carProgress;
-      const x = -7 + 15 * t;
-      const y = 0.85 + Math.sin(t * Math.PI * 2) * 0.18;
-      const z = -0.2 + Math.sin(t * Math.PI * 1.6) * 0.06;
-      carGroup.position.set(x, y, z);
-      carGroup.rotation.z = Math.sin(t * Math.PI * 2) * 0.1;
-      engineGlow.intensity = 0.22 + Math.sin(Date.now() * 0.01) * 0.1;
-      carAnimId = requestAnimationFrame(animateCar);
-    };
-    animateCar();
-
-    // Main animation loop
-    let time = 0;
-    let animFrameId: number;
-    const animate = () => {
-      animFrameId = requestAnimationFrame(animate);
-      time += 0.008;
-
-      knot.rotation.x = Math.sin(time * 0.3) * 0.15;
-      knot.rotation.y = time * 0.2;
-      knot.rotation.z = Math.sin(time * 0.4) * 0.1;
-      knotMat.emissiveIntensity = 0.08 + Math.sin(time) * 0.03;
-
-      particles.rotation.y = time * 0.03;
-      stars.rotation.y += 0.0002;
-
-      camera.position.x += (0 - camera.position.x) * 0.01;
-      camera.position.y += (1.4 + Math.sin(time * 0.1) * 0.05 - camera.position.y) * 0.01;
-      camera.lookAt(0, 0, 0);
-
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    // Resize handler
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    window.addEventListener('resize', handleResize);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animFrameId);
-      if (carAnimId) cancelAnimationFrame(carAnimId);
-      renderer.dispose();
-    };
-  }, []);
-
-  // Generate terms text
-  const generateLongText = () => {
-    const baseText = `By using our website and availing the Services, you agree that you have read and accepted these Terms (including the Privacy Policy). We reserve the right to modify these Terms at any time and without assigning any reason. It is your responsibility to periodically review these Terms to stay informed of updates
-
-The use of this website or availing of our Services is subject to the following terms of use:
-
-To access and use the Services, you agree to provide true, accurate and complete information to us during and after registration, and you shall be responsible for all acts done through the use of your registered account.
-Neither we nor any third parties provide any warranty or guarantee as to the accuracy, timeliness, performance, completeness or suitability of the information and materials offered on this website or through the Services, for any specific purpose. You acknowledge that such information and materials may contain inaccuracies or errors and we expressly exclude liability for any such inaccuracies or errors to the fullest extent permitted by law.
-Your use of our Services and the website is solely at your own risk and discretion. You are required to independently assess and ensure that the Services meet your requirements.
-The contents of the Website and the Services are proprietary to Us and you will not have any authority to claim any intellectual property rights, title, or interest in its contents.
-You acknowledge that unauthorized use of the Website or the Services may lead to action against you as per these Terms or applicable laws.
-You agree to pay us the charges associated with availing the Services.
-You agree not to use the website and/ or Services for any purpose that is unlawful, illegal or forbidden by these Terms, or Indian or local laws that might apply to you.
-You agree and acknowledge that the website and the Services may contain links to other third party websites. On accessing these links, you will be governed by the terms of use, privacy policy and such other policies of such third party websites.
-You understand that upon initiating a transaction for availing the Services you are entering into a legally binding and enforceable contract with us for the Services.
-You shall be entitled to claim a refund of the payment made by you in case we are not able to provide the Service. The timelines for such return and refund will be according to the specific Service you have availed or within the time period provided in our policies (as applicable). In case you do not raise a refund claim within the stipulated time, then this would make you ineligible for a refund.
-Notwithstanding anything contained in these Terms, the parties shall not be liable for any failure to perform an obligation under these Terms if performance is prevented or delayed by a force majeure event.
-These Terms and any dispute or claim relating to it, or its enforceability, shall be governed by and construed in accordance with the laws of India.
-All disputes arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts in Jamshedpur, Jharkhand.
-All concerns or communications relating to these Terms must be communicated to us using the contact information provided on this website.`;
-
-    let fullText = '';
-   
-      fullText += baseText + ' ';
-    
-    return fullText;
-  };
-
-  const termsText = generateLongText();
-
-  const handleAccept = () => {
-    alert('Terms accepted (demo)');
-    // Add your accept logic here
-  };
-
+export default function TermsPage() {
   return (
-    <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-        />
-      </Head>
-      <canvas ref={canvasRef} className="bg-canvas" />
-      <div className="content">
-        <div className="card">
-          <h1>TERMS AND CONDITIONS</h1>
-          <div className="sub">TERMS OF USE</div>
-          <div className="text-container">
-            <div className="desc">{termsText}</div>
-          </div>
-          <button onClick={handleAccept}>
-            <i className="fas fa-check-circle"></i> ACCEPT TERMS
-          </button>
+    <div className="tc-root">
+      <div className="tc-grid-bg" />
+      <div className="tc-scanlines" />
+
+      <div className="tc-wrap">
+        <div className="tc-hero">
+          <span className="tc-label">// legal.terms()</span>
+          <h1 className="tc-title">Terms &amp; <span>Conditions</span></h1>
+          <p className="tc-sub">Please read these terms carefully before using the Xavenir platform and its services.</p>
+          <div className="tc-divider" />
+        </div>
+
+        <div className="tc-list">
+          {sections.map((s, i) => (
+            <div key={i} className="tc-item">
+              <div className="tc-item-num">{String(i + 1).padStart(2, "0")}</div>
+              <div className="tc-item-content">
+                <h2 className="tc-item-title">{s.title}</h2>
+                <p className="tc-item-body">{s.content}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="tc-footer">
+          <p>Last updated: 2025 &nbsp;|&nbsp; Questions? <a href="mailto:scse@nitjsr.ac.in">scse@nitjsr.ac.in</a></p>
+          <Link href="/privacy" className="tc-link">View Privacy Policy →</Link>
         </div>
       </div>
 
-      <style jsx>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-        body {
-          font-family: 'Orbitron', monospace;
-          background: #03030c;
-          overflow: hidden;
-          height: 100vh;
-          color: #99aaff;
-        }
-        .bg-canvas {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          display: block;
-          z-index: 0;
-        }
-        .content {
+      <style>{`
+        .tc-root {
+          min-height: 100vh;
+          background: var(--dark);
+          padding-top: var(--nav-h);
           position: relative;
-          z-index: 10;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          padding: 1rem;
+          overflow-x: hidden;
         }
-        .card {
-          background: rgba(8, 12, 25, 0.55);
-          backdrop-filter: blur(6px);
-          border-radius: 20px;
-          padding: 1.4rem 1.6rem;
-          text-align: center;
-          width: 100%;
-          max-width: 520px;
-          border: 1px solid rgba(100, 120, 200, 0.2);
-          transition: all 0.2s;
+        .tc-grid-bg {
+          position: fixed; inset: 0; z-index: 0; pointer-events: none;
+          background-image:
+            linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+          background-size: 60px 60px;
         }
-        h1 {
-          font-size: 1.5rem;
-          font-weight: 600;
-          letter-spacing: 2px;
-          margin-bottom: 0.2rem;
-          color: #bbccff;
+        .tc-scanlines {
+          position: fixed; inset: 0; z-index: 0; pointer-events: none;
+          background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px);
         }
-        .sub {
-          font-size: 0.7rem;
-          color: #99aaff;
-          margin-bottom: 1rem;
-          letter-spacing: 1px;
-          opacity: 0.7;
+        .tc-wrap {
+          max-width: 900px; margin: 0 auto;
+          padding: 4rem 3rem 6rem;
+          position: relative; z-index: 1;
         }
-        .text-container {
-          max-height: 360px;
-          overflow-y: auto;
-          margin: 0.8rem 0 1rem;
-          padding-right: 0.5rem;
-          scrollbar-width: thin;
-        }
-        .desc {
+        .tc-hero { margin-bottom: 3rem; }
+        .tc-label {
           font-family: 'Share Tech Mono', monospace;
-          font-size: 0.75rem;
-          line-height: 1.5;
-          color: #aaccff;
-          text-align: justify;
-          opacity: 0.85;
+          font-size: 0.75rem; letter-spacing: 4px;
+          color: var(--pink); display: block; margin-bottom: 1rem;
+          text-transform: uppercase;
         }
-        .text-container::-webkit-scrollbar {
-          width: 3px;
+        .tc-title {
+          font-family: 'Orbitron', monospace;
+          font-size: clamp(2rem, 5vw, 3.5rem);
+          font-weight: 900; color: #fff;
+          letter-spacing: 0.1em; margin-bottom: 1rem; line-height: 1.1;
         }
-        .text-container::-webkit-scrollbar-track {
-          background: #111122;
+        .tc-title span { color: var(--cyan); text-shadow: 0 0 24px rgba(0,245,255,0.5); }
+        .tc-sub {
+          font-family: 'Rajdhani', sans-serif;
+          font-size: 1.05rem; color: rgba(180,200,255,0.6);
+          max-width: 600px; line-height: 1.7; margin-bottom: 2rem;
         }
-        .text-container::-webkit-scrollbar-thumb {
-          background: #88aaff;
+        .tc-divider {
+          height: 1px; width: 100%;
+          background: linear-gradient(90deg, var(--cyan), var(--pink), transparent);
+          opacity: 0.3;
         }
-        button {
-          background: transparent;
-          border: 1px solid #88aaff;
-          color: #88aaff;
-          padding: 5px 16px;
-          font-family: inherit;
-          font-size: 0.7rem;
-          font-weight: 500;
-          cursor: pointer;
-          border-radius: 30px;
-          transition: all 0.2s;
+        .tc-list { display: flex; flex-direction: column; gap: 0; }
+        .tc-item {
+          display: flex; gap: 2rem; align-items: flex-start;
+          padding: 1.8rem 0;
+          border-bottom: 1px solid rgba(0,245,255,0.07);
+          transition: background 0.2s;
         }
-        button i {
-          margin-right: 6px;
+        .tc-item:last-child { border-bottom: none; }
+        .tc-item:hover { background: rgba(0,245,255,0.02); }
+        .tc-item-num {
+          font-family: 'Orbitron', monospace;
+          font-size: 1.6rem; font-weight: 900;
+          color: rgba(0,245,255,0.15);
+          flex-shrink: 0; width: 48px;
+          line-height: 1;
+          padding-top: 4px;
         }
-        button:hover {
-          background: rgba(136, 170, 255, 0.1);
-          border-color: #aa88ff;
-          color: #ccbbff;
+        .tc-item-content { flex: 1; }
+        .tc-item-title {
+          font-family: 'Orbitron', monospace;
+          font-size: 0.82rem; font-weight: 700;
+          color: var(--cyan); letter-spacing: 1.5px;
+          margin-bottom: 0.8rem; text-transform: uppercase;
+        }
+        .tc-item-body {
+          font-family: 'Rajdhani', sans-serif;
+          font-size: 1rem; color: rgba(200,215,255,0.72);
+          line-height: 1.8;
+        }
+        .tc-footer {
+          display: flex; align-items: center; justify-content: space-between;
+          flex-wrap: wrap; gap: 1rem;
+          padding-top: 2.5rem;
+          margin-top: 1rem;
+          border-top: 1px solid rgba(0,245,255,0.08);
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.8rem; color: rgba(180,200,255,0.45);
+        }
+        .tc-footer a { color: var(--cyan); text-decoration: none; }
+        .tc-footer a:hover { text-decoration: underline; }
+        .tc-link {
+          font-family: 'Orbitron', monospace; font-size: 0.7rem;
+          letter-spacing: 2px; color: var(--pink) !important;
+          border: 1px solid rgba(255,0,128,0.3);
+          padding: 8px 18px; transition: all 0.2s;
+          text-decoration: none !important;
+        }
+        .tc-link:hover { background: rgba(255,0,128,0.1); border-color: var(--pink); }
+        @media (max-width: 768px) {
+          .tc-wrap { padding: 3rem 1.5rem 4rem; }
+          .tc-item { gap: 1.2rem; }
+          .tc-item-num { font-size: 1.2rem; width: 36px; }
         }
         @media (max-width: 480px) {
-          .card {
-            padding: 1rem;
-          }
-          h1 {
-            font-size: 1.3rem;
-          }
-          .text-container {
-            max-height: 300px;
-          }
+          .tc-wrap { padding: 2rem 1rem 3rem; }
+          .tc-item { gap: 0.8rem; padding: 1.4rem 0; }
+          .tc-item-num { display: none; }
         }
       `}</style>
-    </>
+    </div>
   );
 }
