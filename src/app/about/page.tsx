@@ -51,6 +51,7 @@ const WEB_TEAM: WebMember[] = [
   { name: "Ayush Sarkar",            role: "Web Team",  img: "/web-team-photo/IMG_20260102_194028 - Ayush Sarkar.jpg",         github: "https://github.com/ayushsarkar314",           linkedin: "https://www.linkedin.com/in/ayush-sarkar-441b9a39b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   { name: "Darshita Maheshwari",     role: "Web Team",  img: "/web-team-photo/Screenshot_20260325_084115_Photos - DARSHITA MAHESHWARI.jpg", github: "https://github.com/darshita44",           linkedin: "https://www.linkedin.com/in/darshita-maheshwari-836980383" },
   
+  
 ];
 
 const EDITIONS: Edition[] = [
