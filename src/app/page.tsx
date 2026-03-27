@@ -1914,16 +1914,39 @@ useEffect(() => {
       clearInterval(id);
     };
   }, []);
-  const competitions = [
-    { icon: "⌨", title: "Computer Fundamentals Quiz", desc: "Test your grasp on CS basics in a challenging quiz. Think fast, answer faster!", prize: "₹8,000 PRIZE" },
-    { icon: "⚡", title: "Typing Speed Challenge",     desc: "Compete to type swiftly and accurately. The fastest fingers claim glory.",          prize: "₹3,000 PRIZE" },
-    { icon: "🧩", title: "Code Debugging",             desc: "Spot the bugs and fix them faster than anyone. Debug to dominate.",                 prize: "₹5,000 PRIZE" },
-    { icon: "🤖", title: "AI Hackathon",               desc: "Build an AI-powered solution in 24 hours. Innovate or perish.",                    prize: "₹15,000 PRIZE" },
-    { icon: "🔒", title: "CTF Challenge",              desc: "Capture the Flag cybersecurity battle. Crack the system.",                         prize: "₹8,000 PRIZE" },
-    { icon: "◉",  title: "Circuit Design",             desc: "Design and simulate embedded circuits under time pressure.",                        prize: "₹6,000 PRIZE" },
-    { icon: "🎬", title: "Tech Reel",                  desc: "Craft a captivating video reel on technology trends. Capture the vibe!",           prize: "₹2,000 PRIZE" },
-    { icon: "🎮", title: "PUBG / Valorant",            desc: "Battle it out in a gaming tournament. Dominate the field!",                        prize: "₹3,000 PRIZE" },
-  ];
+ const competitions = [
+  { icon: "🕵️", title: "Scavenger Hunt", desc: "Solve tech puzzles, hunt hidden clues, and outsmart rival teams in a fast-paced challenge.", prize: "₹5,000 PRIZE" },
+
+  { icon: "💃", title: "Paper Dance", desc: "Dance with your partner on shrinking paper—balance, coordination, and fun combined.", prize: "₹3,000 PRIZE" },
+
+  { icon: "🤖", title: "AI-ML Challenge", desc: "Build an AI/ML model to solve real-world problems under constraints.", prize: "₹8,000 PRIZE" },
+
+  { icon: "🎮", title: "PUBG, Valorant & Free Fire Tournament", desc: "Compete in high-intensity esports battles and prove your squad’s dominance.", prize: "₹3,000 PRIZE" },
+
+  { icon: "🎨", title: "Frontend Design Contest", desc: "Design and build a stunning frontend UI from scratch—where creativity meets code.", prize: "₹4,000 PRIZE" },
+
+  { icon: "🔐", title: "Ethical Hacking Challenge", desc: "Test your penetration testing and cybersecurity skills in a controlled environment.", prize: "₹5,000 PRIZE" },
+
+  { icon: "🥟", title: "Golgappa Eating Challenge", desc: "A fun-filled eating contest—push your limits in the ultimate golgappa showdown.", prize: "₹1,000 PRIZE" },
+
+  { icon: "🤖", title: "Robotics Competition", desc: "Design, build, and program robots to complete exciting real-world challenges.", prize: "₹3,000 PRIZE" },
+
+  { icon: "🙈", title: "Blind Coding", desc: "Code without seeing your screen—pure logic, memory, and confidence.", prize: "₹3,000 PRIZE" },
+
+  { icon: "💡", title: "Ideathon", desc: "Pitch innovative tech ideas and showcase your creativity and problem-solving vision.", prize: "₹3,000 PRIZE" },
+
+  { icon: "🎬", title: "Movie Mania", desc: "Enjoy a tech-themed movie screening followed by an engaging trivia challenge.", prize: "₹2,000 PRIZE" },
+
+  { icon: "💻", title: "Competitive Programming", desc: "Solve algorithmic problems under time pressure and prove your coding skills.", prize: "₹8,000 PRIZE" },
+
+  { icon: "⚡", title: "Hackathon", desc: "Build innovative solutions in an intense 24-hour coding marathon.", prize: "₹15,000 PRIZE" },
+
+  { icon: "⌨️", title: "Computer Fundamentals Quiz", desc: "Test your knowledge of core computer science concepts in a competitive quiz.", prize: "₹8,000 PRIZE" },
+
+  { icon: "⚡", title: "Typing Speed Challenge", desc: "Compete on speed and accuracy—fastest fingers take the win.", prize: "₹3,000 PRIZE" },
+
+  { icon: "🎥", title: "Tech Reel", desc: "Create a short, engaging video capturing the essence of technology trends.", prize: "₹2,000 PRIZE" }
+];
 
   return (
     <>
