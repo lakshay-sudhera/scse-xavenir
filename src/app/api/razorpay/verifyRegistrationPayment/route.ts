@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import User from "@/models/userModel";
 import Rverify from "@/models/registrationFeesModel";
+import { notify } from "@/lib/notify";
 export async function POST(request: NextRequest) {
   await connectDB()
   try {
@@ -59,6 +60,16 @@ export async function POST(request: NextRequest) {
       email
     );
 
+    const alreadyPaid = await Rverify.findOne({ email });
+    if (alreadyPaid) {
+      // Idempotent: just ensure isPrime is synced and return success
+      if (!user.isPrime) {
+        user.isPrime = true;
+        await user.save();
+      }
+      return NextResponse.json({ success: true, message: "Payment already verified" });
+    }
+
     const bool = await Rverify.findOne({
       razorpay_order_id: razorpay_order_id,
     });
@@ -93,17 +104,17 @@ export async function POST(request: NextRequest) {
       console.log("payment verifed");
       user.isPrime = true;
       await user.save();
-      const rverify = new Rverify({
-        email,
-        razorpay_order_id,
-        razorpay_signature,
-        razorpay_payment_id,
-      });
+      const rverify = new Rverify({ email, razorpay_order_id, razorpay_signature, razorpay_payment_id });
       await rverify.save();
-      return NextResponse.json({
-        success: true,
-        message: "Payment successfully completed",
+      // Notify user
+      await notify({
+        userID: user.userID,
+        type: "prime_granted",
+        title: "Registration payment successful",
+        message: "Your registration payment has been verified. You now have Prime access — all events and features are unlocked.",
+        meta: { razorpay_payment_id },
       });
+      return NextResponse.json({ success: true, message: "Payment successfully completed" });
     } else {
       return NextResponse.json(
         {

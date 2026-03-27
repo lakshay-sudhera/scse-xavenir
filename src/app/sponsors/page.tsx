@@ -1,264 +1,289 @@
-
 import './page.css'
 import SponsorCard from './SponsorCard'
 
 function Sponsors() {
-
-
   return (
     <>
       <video autoPlay muted loop id="video-bg">
         <source src="carMoving.mp4" type="video/mp4" />
       </video>
 
-    
       <div className="scanlines"></div>
       <div className="vignette"></div>
 
-      
-      <main className="relative z-10 flex flex-col items-center w-full min-h-screen pt-24 pb-20">
-        
-    
-        <div className="relative flex flex-col items-center mb-64 py-12 w-full max-w-5xl">
-          <div className="cyber-frame">
-            <div className="cyber-frame-tr"></div>
-            <div className="cyber-frame-bl"></div>
+      {/* ─── WRAPPER ─── */}
+      <div className="relative z-10 w-full">
+
+        {/* ── HERO / SPONSOR CARDS ── */}
+        <main className="flex flex-col items-center w-full min-h-screen pb-20" style={{ paddingTop: 'clamp(90px, 12vw, 140px)' }}>
+
+          {/* Title */}
+          <div className="relative flex flex-col items-center mb-16 md:mb-80 py-8 md:py-12 w-full max-w-5xl px-4">
+            <div className="cyber-frame">
+              <div className="cyber-frame-tr"></div>
+              <div className="cyber-frame-bl"></div>
+            </div>
+            <h1
+              className="glitch"
+              data-text="SPONSORS"
+              style={{ textShadow: '0 0 18px rgba(0,247,255,0.5)' }}
+            >
+              SPONSORS
+            </h1>
+            <div className="neon-divider"></div>
           </div>
-          <h1 className="glitch" data-text="SPONSORS" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'}}>SPONSORS</h1>
-          
-          <div className="h-1 w-48 bg-gradient-to-r from-blue-500 to-purple-500 mt-2 rounded-full shadow-[0_0_10px_#00f7ff]"></div>
+
+          {/* Sponsor Cards */}
+          <div className="flex flex-wrap justify-center gap-6 md:gap-12 w-full max-w-6xl px-4 mt-8 md:mt-72">
+
+            {/* CARD 1 */}
+            <div className="sponsor-card-wrapper">
+              <SponsorCard
+                title="Cloud Partner"
+                logo="utho.png"
+                name="Utho"
+                tagline="UTHO - BHARAT KA CLOUD"
+              />
+            </div>
+
+            {/* CARD 2 */}
+            <div className="sponsor-card-wrapper">
+              <SponsorCard
+                title="Travel Partner"
+                logo="wheelBros.png"
+                name="WheelBros"
+                tagline="Your Travel, your way"
+              />
+            </div>
+
+            {/* CARD 3 */}
+            <div className="sponsor-card-wrapper">
+              <SponsorCard
+                title="Food Partner"
+                logo="foodAffair.png"
+                name="FoodAffairs"
+                tagline="You decide.. your Taste.."
+              />
+            </div>
+
+          </div>
+
+          {/* BE OUR SPONSORS CTA */}
+          <div className="sponsor-cta">
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSclbHWh3OGFRJP31Zic5KFtvQ1QSQ-wOyAnJLbhBM3huR39hw/viewform?pli=1"
+              className="cta-btn"
+            >
+              ⚡ Be Our Sponsor
+            </a>
+          </div>
+
+        </main>
+
+        {/* ── FOREFRONT SECTION ── */}
+        <div className="flex justify-center mt-20 px-4">
+          <div className="forefront-section max-w-3xl text-center space-y-6">
+            <h2>Be at the forefront of innovation!</h2>
+            <p>
+              SCSE, the premier event of NIT Jamshedpur, where creativity meets
+              cutting-edge technology. By sponsoring us, you align your brand with
+              groundbreaking innovations, vibrant competitions, and a community of
+              future leaders.
+            </p>
+            <p>
+              Partner with us to drive progress, inspire excellence, and be a part of
+              the legacy that shapes tomorrow.
+            </p>
+          </div>
         </div>
 
-        
-        <div className="flex flex-wrap justify-center gap-12 w-full max-w-6xl px-4 mt-48">
+        {/* ── WHY SPONSOR US ── */}
+        <div className="flex flex-col items-center mb-12 why-sponsor-margin">
+          <h2
+            className="glitch !text-[3.2rem] md:!text-[3.8rem] text-center"
+            data-text="WHY SPONSOR US ?"
+          >
+            WHY SPONSOR US ?
+          </h2>
+          <div className="neon-divider"></div>
+        </div>
 
-          {/* CARD 1 */}
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 
-                          min-w-[260px] max-w-[300px] flex-1 
-                          cursor-pointer transition-all duration-300
-                          hover:-translate-y-2 hover:scale-105
-                          hover:shadow-[0_0_20px_#00f7ff,0_0_40px_#ff00ff]
-                          active:scale-95">
-            <SponsorCard
-              title="Cloud Partner"
-              logo="utho.png"
-              name="Utho"
-              tagline="UTHO - BHARAT KA CLOUD"
-            />
+        {/* ── FLIP CARDS ── */}
+        <div className="flex flex-col gap-6 p-4 md:p-6 items-center w-full mt-4 md:mt-7">
+
+          {/* BRAND EXPOSURE */}
+          <div className="w-full max-w-[850px] min-h-[90px] h-auto perspective">
+            <div className="flip-inner">
+              <div className="flip-front"
+                style={{
+                  border: '1.5px solid rgba(0,247,255,0.45)',
+                  boxShadow: '0 0 18px rgba(0,247,255,0.2) inset, 0 0 18px rgba(0,247,255,0.15)'
+                }}>
+                <span className="flip-front-label" style={{ color: '#00f7ff', textShadow: '0 0 12px rgba(0,247,255,0.7)' }}>
+                  Brand Exposure
+                </span>
+              </div>
+              <div className="flip-back"
+                style={{
+                  border: '1.5px solid rgba(0,247,255,0.45)',
+                  boxShadow: '0 0 25px rgba(0,247,255,0.3) inset'
+                }}>
+                <p>Get visibility across social media, event banners, and official merchandise.</p>
+                <p style={{ color: '#00f7ff' }}>Connect with top-tier tech talent and future innovators.</p>
+              </div>
+            </div>
           </div>
 
-          {/* CARD 2 */}
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 
-                          min-w-[260px] max-w-[300px] flex-1 
-                          cursor-pointer transition-all duration-300
-                          hover:-translate-y-2 hover:scale-105
-                          hover:shadow-[0_0_20px_#00f7ff,0_0_40px_#ff00ff]
-                          active:scale-95">
-            <SponsorCard
-              title="Travel Partner"
-              logo="wheelBros.png"
-              name="WheelBros"
-              tagline="Your Travel, your way"
-            />
+          {/* RECRUITMENT EDGE */}
+          <div className="w-full max-w-[850px] min-h-[90px] h-auto perspective">
+            <div className="flip-inner">
+              <div className="flip-front"
+                style={{
+                  border: '1.5px solid rgba(255,0,200,0.45)',
+                  boxShadow: '0 0 18px rgba(255,0,200,0.2) inset, 0 0 18px rgba(255,0,200,0.15)'
+                }}>
+                <span className="flip-front-label" style={{ color: '#ff00c8', textShadow: '0 0 12px rgba(255,0,200,0.7)' }}>
+                  Recruitment Edge
+                </span>
+              </div>
+              <div className="flip-back"
+                style={{
+                  border: '1.5px solid rgba(255,0,200,0.45)',
+                  boxShadow: '0 0 25px rgba(255,0,200,0.3) inset'
+                }}>
+                <p>Targeted Reach — access a curated pool of skilled students</p>
+                <p style={{ color: '#ff00c8' }}>for internships and full-time opportunities.</p>
+              </div>
+            </div>
           </div>
 
-          {/* CARD 3 */}
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 
-                          min-w-[260px] max-w-[300px] flex-1 
-                          cursor-pointer transition-all duration-300
-                          hover:-translate-y-2 hover:scale-105
-                          hover:shadow-[0_0_20px_#00f7ff,0_0_40px_#ff00ff]
-                          active:scale-95">
-            <SponsorCard
-              title="Food Partner"
-              logo="foodAffair.png"
-              name="FoodAffairs"
-              tagline="You decide.. your Taste.."
-            />
+          {/* CAMPUS PRESENCE */}
+          <div className="w-full max-w-[850px] min-h-[90px] h-auto perspective">
+            <div className="flip-inner">
+              <div className="flip-front"
+                style={{
+                  border: '1.5px solid rgba(252,228,54,0.45)',
+                  boxShadow: '0 0 18px rgba(252,228,54,0.2) inset, 0 0 18px rgba(252,228,54,0.15)'
+                }}>
+                <span className="flip-front-label" style={{ color: '#fce436', textShadow: '0 0 12px rgba(252,228,54,0.7)' }}>
+                  Campus Presence
+                </span>
+              </div>
+              <div className="flip-back"
+                style={{
+                  border: '1.5px solid rgba(252,228,54,0.45)',
+                  boxShadow: '0 0 25px rgba(252,228,54,0.3) inset'
+                }}>
+                <p style={{ color: '#fce436' }}>Strengthen your brand within the academic ecosystem of NIT Jamshedpur</p>
+                <p>and build lasting recognition among tomorrow's engineers.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* CREDIBILITY BOOST */}
+          <div className="w-full max-w-[850px] min-h-[90px] h-auto perspective">
+            <div className="flip-inner">
+              <div className="flip-front"
+                style={{
+                  border: '1.5px solid rgba(0,255,136,0.45)',
+                  boxShadow: '0 0 18px rgba(0,255,136,0.2) inset, 0 0 18px rgba(0,255,136,0.15)'
+                }}>
+                <span className="flip-front-label" style={{ color: '#00ff88', textShadow: '0 0 12px rgba(0,255,136,0.7)' }}>
+                  Credibility Boost
+                </span>
+              </div>
+              <div className="flip-back"
+                style={{
+                  border: '1.5px solid rgba(0,255,136,0.45)',
+                  boxShadow: '0 0 25px rgba(0,255,136,0.3) inset'
+                }}>
+                <p>Associate your brand with a prestigious technical society.</p>
+                <p style={{ color: '#00ff88' }}>Gain trust through institutional recognition.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* INDUSTRY COLLABORATION */}
+          <div className="w-full max-w-[850px] min-h-[90px] h-auto perspective">
+            <div className="flip-inner">
+              <div className="flip-front"
+                style={{
+                  border: '1.5px solid rgba(157,0,255,0.45)',
+                  boxShadow: '0 0 18px rgba(157,0,255,0.2) inset, 0 0 18px rgba(157,0,255,0.15)'
+                }}>
+                <span className="flip-front-label" style={{ color: '#9d00ff', textShadow: '0 0 12px rgba(157,0,255,0.7)' }}>
+                  Industry Collaboration
+                </span>
+              </div>
+              <div className="flip-back"
+                style={{
+                  border: '1.5px solid rgba(157,0,255,0.45)',
+                  boxShadow: '0 0 25px rgba(157,0,255,0.3) inset'
+                }}>
+                <p>Connect with future tech leaders and create opportunities</p>
+                <p style={{ color: '#9d00ff' }}>for collaborative projects and internships.</p>
+              </div>
+            </div>
           </div>
 
         </div>
 
-        
-    <div
-      className="sponsor-cta text-fuchsia-200  text-6xl p-4 bg-pink-500 rounded-3xl pt-4"
-    >
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSclbHWh3OGFRJP31Zic5KFtvQ1QSQ-wOyAnJLbhBM3huR39hw/viewform?pli=1"> BE OUR SPONSORS </a>
-    </div>
-        
-      </main>
+        {/* ── DOWNLOAD BROCHURE ── */}
+        <div className="download-brochure">
+          <a href="/sponsorship_brochure.pdf" className="download-btn">
+            ↓ Download Brochure
+          </a>
+        </div>
 
-<div className="flex justify-center mt-20">
-  <div className="max-w-3xl text-center space-y-4">
-    <h2 className="text-6xl font-bold ">
-      Be at the forefront of innovation!
-    </h2>
-    <p className="leading-relaxed text-2xl">
-      SCSE, the premier event of NIT Jamshedpur, where creativity meets
-      cutting-edge technology. By sponsoring us, you align your brand with
-      groundbreaking innovations, vibrant competitions, and a community of
-      future leaders.
-    </p>
-    <p className="leading-relaxed text-2xl">
-      Partner with us to drive progress, inspire excellence, and be a part of
-      the legacy that shapes tomorrow.
-    </p>
-  </div>
-</div>
+        {/* ── FOOTER ── */}
+        <div className="flex flex-wrap justify-evenly items-stretch w-full px-8 gap-12 footer">
 
+          {/* BANK DETAILS */}
+          <div className="bank-card w-full max-w-[720px] rounded-2xl overflow-hidden"
+               style={{
+                 background: 'linear-gradient(160deg, rgba(0,22,35,0.97) 0%, rgba(0,8,16,0.99) 100%)',
+                 border: '1.5px solid rgba(0,247,255,0.35)',
+                 boxShadow: '0 0 60px rgba(0,247,255,0.12) inset, 0 0 40px rgba(0,247,255,0.1), 0 20px 60px rgba(0,0,0,0.5)',
+               }}>
+            {/* Header */}
+            <div className="flex items-center gap-4 px-10 py-6"
+                 style={{ borderBottom: '1.5px solid rgba(0,247,255,0.18)', background: 'rgba(0,247,255,0.06)' }}>
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: 'var(--cyan)', boxShadow: '0 0 12px var(--cyan), 0 0 24px var(--cyan)', flexShrink: 0 }}></div>
+              <span className="bank-card-title">Our Bank Details</span>
+            </div>
+            {/* Rows */}
+            <div className="flex flex-col px-10 py-4">
+              {[
+                { label: 'Account Name',   value: 'Society of Computer Application' },
+                { label: 'Bank Branch',    value: 'NIT Campus Adityapur' },
+                { label: 'Account Number', value: '35637764271' },
+                { label: 'IFSC Code',      value: 'SBIN0001882' },
+                { label: 'CIF',            value: '88953256160' },
+              ].map(({ label, value }, i, arr) => (
+                <div key={label}
+                     className="bank-row flex items-center justify-between gap-8 py-5"
+                     style={i < arr.length - 1 ? { borderBottom: '1px solid rgba(0,247,255,0.1)' } : {}}>
+                  <span className="bank-label">{label}</span>
+                  <span className="bank-value">{value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
+          {/* CONTACT */}
+          <div className="contact-card-inner flex flex-col items-center justify-center w-full max-w-[300px]
+                          bg-black/70 border border-fuchsia-400/40 text-fuchsia-200
+                          rounded-2xl p-10
+                          shadow-[0_0_30px_rgba(255,0,255,0.25)_inset,0_0_30px_rgba(255,0,255,0.15)]
+                          space-y-5 cursor-pointer transition-transform duration-300
+                          hover:scale-105 hover:shadow-[0_0_45px_rgba(255,0,255,0.5),0_0_70px_rgba(0,247,255,0.2)]">
+            <div className="text-fuchsia-200/80 tracking-widest uppercase text-sm">For more enquiries</div>
+            <div className="contact-label text-fuchsia-300">Contact Us</div>
+          </div>
 
-<div className="flex flex-col items-center mb-12 mt-20 why-sponsor-margin">
-  <h2 className="glitch !text-[3.5rem] md:!text-[5rem] text-center text-fuchsia-600" data-text="WHY SPONSOR US ?" style={{textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'}}>
-    WHY SPONSOR US ?
-  </h2>
-  {/* Subtle gradient divider matching the top section */}
-  <div className="h-1 w-48 bg-gradient-to-r from-blue-500 to-purple-500 mt-2 rounded-full shadow-[0_0_10px_#00f7ff]"></div>
-</div>
+        </div>
 
-<div className="flex flex-col gap-8 p-6 items-center w-full mt-7">
-
-  {/* BRAND EXPOSURE (CYAN) */}
-  <div className="w-[850px] h-[100px] perspective max-w-full">
-    <div className="relative w-full h-full transition-transform duration-500 transform-style preserve-3d hover:rotate-y-180 cursor-pointer">
-
-      <div className="absolute w-full h-full bg-black/80 border-[2px] border-[#00f7ff] text-[#00f7ff] rounded-xl 
-                      flex items-center justify-center font-bold text-3xl tracking-widest uppercase
-                      shadow-[0_0_15px_rgba(0,247,255,0.4)_inset,0_0_15px_rgba(0,247,255,0.4)] backface-hidden">
-        Brand Exposure
       </div>
-
-      <div className="absolute w-full h-full bg-black flex flex-col items-center justify-center text-center p-6 
-                      text-[#00f7ff] border-[2px] border-[#00f7ff] rounded-xl text-lg font-medium 
-                      shadow-[0_0_20px_rgba(0,247,255,0.6)_inset,0_0_20px_rgba(0,247,255,0.6)] rotate-y-180 backface-hidden">
-        <p className="text-white">Get visibility on social media, event banners, and official merchandise.</p>
-        <p>Connect with top-tier tech talent and future innovators.</p>
-      </div>
-
-    </div>
-  </div>
-
-  {/* RECRUITMENT EDGE (PINK) */}
-  <div className="w-[850px] h-[100px] perspective max-w-full">
-    <div className="relative w-full h-full transition-transform duration-500 transform-style preserve-3d hover:rotate-y-180 cursor-pointer">
-
-      <div className="absolute w-full h-full bg-black/80 border-[2px] border-[#ff00ff] text-[#ff00ff] rounded-xl 
-                      flex items-center justify-center font-bold text-3xl tracking-widest uppercase
-                      shadow-[0_0_15px_rgba(255,0,255,0.4)_inset,0_0_15px_rgba(255,0,255,0.4)] backface-hidden">
-        Recruitment Edge
-      </div>
-
-      <div className="absolute w-full h-full bg-black flex flex-col items-center justify-center text-center p-6 
-                      text-[#ff00ff] border-[2px] border-[#ff00ff] rounded-xl text-lg font-medium 
-                      shadow-[0_0_20px_rgba(255,0,255,0.6)_inset,0_0_20px_rgba(255,0,255,0.6)] rotate-y-180 backface-hidden">
-        <p className="text-white">Targeted Reach:</p>
-        <p>Access a pool of skilled students for internships and job opportunities.</p>
-      </div>
-
-    </div>
-  </div>
-
-  {/* CAMPUS PRESENCE (YELLOW) */}
-  <div className="w-[850px] h-[100px] perspective max-w-full">
-    <div className="relative w-full h-full transition-transform duration-500 transform-style preserve-3d hover:rotate-y-180 cursor-pointer">
-
-      <div className="absolute w-full h-full bg-black/80 border-[2px] border-[#fce436] text-[#fce436] rounded-xl 
-                      flex items-center justify-center font-bold text-3xl tracking-widest uppercase
-                      shadow-[0_0_15px_rgba(252,228,54,0.4)_inset,0_0_15px_rgba(252,228,54,0.4)] backface-hidden">
-        Campus Presence
-      </div>
-
-      <div className="absolute w-full h-full bg-black flex flex-col items-center justify-center text-center p-6 
-                      text-[#fce436] border-[2px] border-[#fce436] rounded-xl text-lg font-medium 
-                      shadow-[0_0_20px_rgba(252,228,54,0.6)_inset,0_0_20px_rgba(252,228,54,0.6)] rotate-y-180 backface-hidden">
-        <p className="text-white">Strengthen your presence in the academic ecosystem of NIT Jamshedpur.</p>
-      </div>
-
-    </div>
-  </div>
-
-  {/* CREDIBILITY BOOST (GREEN) */}
-  <div className="w-[850px] h-[100px] perspective max-w-full">
-    <div className="relative w-full h-full transition-transform duration-500 transform-style preserve-3d hover:rotate-y-180 cursor-pointer">
-
-      <div className="absolute w-full h-full bg-black/80 border-[2px] border-[#0f0] text-[#0f0] rounded-xl 
-                      flex items-center justify-center font-bold text-3xl tracking-widest uppercase
-                      shadow-[0_0_15px_rgba(0,255,0,0.4)_inset,0_0_15px_rgba(0,255,0,0.4)] backface-hidden">
-        Credibility Boost
-      </div>
-
-      <div className="absolute w-full h-full bg-black flex flex-col items-center justify-center text-center p-6 
-                      text-[#0f0] border-[2px] border-[#0f0] rounded-xl text-lg font-medium 
-                      shadow-[0_0_20px_rgba(0,255,0,0.6)_inset,0_0_20px_rgba(0,255,0,0.6)] rotate-y-180 backface-hidden">
-        <p className="text-white">Associate your brand with a prestigious technical society.</p>
-      </div>
-
-    </div>
-  </div>
-
-  {/* INDUSTRY COLLABORATION (PURPLE) */}
-  <div className="w-[850px] h-[100px] perspective max-w-full">
-    <div className="relative w-full h-full transition-transform duration-500 transform-style preserve-3d hover:rotate-y-180 cursor-pointer">
-
-      <div className="absolute w-full h-full bg-black/80 border-[2px] border-[#9d00ff] text-[#9d00ff] rounded-xl 
-                      flex items-center justify-center font-bold text-3xl tracking-widest uppercase
-                      shadow-[0_0_15px_rgba(157,0,255,0.4)_inset,0_0_15px_rgba(157,0,255,0.4)] backface-hidden">
-        Industry Collaboration
-      </div>
-
-      <div className="absolute w-full h-full bg-black flex flex-col items-center justify-center text-center p-6 
-                      text-[#9d00ff] border-[2px] border-[#9d00ff] rounded-xl text-lg font-medium 
-                      shadow-[0_0_20px_rgba(157,0,255,0.6)_inset,0_0_20px_rgba(157,0,255,0.6)] rotate-y-180 backface-hidden">
-        <p className="text-white">Connect with future tech leaders and create opportunities</p>
-        <p>for collaborative projects and internships.</p>
-      </div>
-
-    </div>
-  </div>
-
-</div>
-
-<div className="flex justify-center mt-12 download-brochure">
-  <a
-    href="https://www.scse-nitjsr.in/SCSE_brochure.pdf"
-    className="inline-block text-fuchsia-200 text-6xl px-6 py-4 bg-pink-500 rounded-3xl pt-2"
-  >
-    Download Brochure
-  </a>
-</div>
-
-<div className="flex justify-evenly items-start w-full px-16 mt-20 gap-12 footer">
-
-  {/* BANK DETAILS CARD */}
-  <div className="flex flex-col w-[900px] text-3xl p-10 rounded-xl 
-                  bg-black/70 border-2 border-cyan-400 text-cyan-400 
-                  shadow-[0_0_25px_rgba(0,247,255,0.6)_inset,0_0_25px_rgba(0,247,255,0.6)] 
-                  space-y-4">
-    <h2 className="text-4xl font-bold pb-4 pt-4 tracking-widest uppercase bank">
-      Our Bank Details
-    </h2>
-
-    <p><span className="font-semibold bdetail">Account Name:</span> Society of Computer Application</p>
-    <p><span className="font-semibold bdetail">Bank Branch:</span> NIT Campus Adityapur</p>
-    <p><span className="font-semibold bdetail">Account Number:</span> 35637764271</p>
-    <p><span className="font-semibold bdetail">IFSC Code:</span> SBIN0001882</p>
-    <p><span className="font-semibold bdetail">CIF:</span> 88953256160</p>
-  </div>
-
-  {/* CONTACT US CARD */}
-  <div className="flex flex-col items-center justify-center 
-                  bg-black/70 border-2 border-fuchsia-400 text-fuchsia-400 
-                  rounded-xl p-10 text-2xl font-semibold 
-                  shadow-[0_0_25px_rgba(255,0,255,0.6)_inset,0_0_25px_rgba(255,0,255,0.6)] 
-                  space-y-6 cursor-pointer transition-transform duration-300 
-                  hover:scale-105 hover:shadow-[0_0_35px_#ff00ff,0_0_55px_#00f7ff] bank">
-    <div>For more enquiries</div>
-    <div className="uppercase tracking-widest bdetail">Contact Us</div>
-  </div>
-
-</div>
-
-
     </>
   )
 }

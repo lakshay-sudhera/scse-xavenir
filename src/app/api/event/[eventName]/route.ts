@@ -10,19 +10,19 @@ export async function GET(
   try {
     await connectDB();
 
-     const { eventName: rawName } = await params;
+    const { eventName: rawName } = await params;
     const eventName = decodeURIComponent(rawName);
-
+    console.log(eventName);
     const event = await Event.findOne({ name: eventName });
 
     if (!event) {
       return NextResponse.json(
-        { message: "Event not found" },
+        { success: false,message: "Event not found" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({event}, { status: 200 });
+    return NextResponse.json({success:true,event}, { status: 200 });
 
   } catch (error) {
     return NextResponse.json(

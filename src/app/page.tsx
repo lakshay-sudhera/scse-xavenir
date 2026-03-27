@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import Link from "next/link";
 import InstagramEmbed from '../components/InstagramEmbed';
+import { UserContext } from "@/context/UserContext";
 
 // ── Count-up hook ──────────────────────────────────────
 function useCountUp(target: number, active: boolean, duration = 2200) {
@@ -37,7 +38,6 @@ function StatNum({ target, prefix = "", suffix = "" }: { target: number; prefix?
 }
 
 
-// ── Three.js 3D Scene ─────────────────────────────────
 // ── Three.js 3D Scene ─────────────────────────────────
 function ThreeScene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -372,11 +372,13 @@ function ThreeScene() {
       style={{
         position: "fixed",
         top: 0, right: 0,
-        width: "55%", height: "100vh",
+        width: "clamp(280px, 55%, 55%)",
+        height: "100vh",
         zIndex: 0,
         pointerEvents: "none",
         opacity: 0.82,
       }}
+      className="three-canvas"
     />
   );
 }
@@ -457,10 +459,10 @@ function CompRow({ index, comp }: { index: number; comp: { icon: string; title: 
 
 // ══════════════════════════════════════════════════════
 export default function LandingPage() {
+  const { userData } = useContext(UserContext);
   const [activeComp, setActiveComp] = useState(0);
   const [loaded, setLoaded]       = useState(false);
   const [loaderDone, setLoaderDone] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled]   = useState(false);
 
   //video autoplay
@@ -536,12 +538,6 @@ useEffect(() => {
       clearInterval(id);
     };
   }, []);
-  useEffect(() => {
-    const handler = () => { if (window.innerWidth > 900) setMobileOpen(false); };
-    window.addEventListener("resize", handler);
-    return () => window.removeEventListener("resize", handler);
-  }, []);
-
   const competitions = [
     { icon: "⌨", title: "Computer Fundamentals Quiz", desc: "Test your grasp on CS basics in a challenging quiz. Think fast, answer faster!", prize: "₹8,000 PRIZE" },
     { icon: "⚡", title: "Typing Speed Challenge",     desc: "Compete to type swiftly and accurately. The fastest fingers claim glory.",          prize: "₹3,000 PRIZE" },
@@ -587,65 +583,6 @@ useEffect(() => {
         <span className="ds-item">CSE // DEPT.NODE</span>
       </div>
 
-      {/* ══ NAVBAR ══════════════════════════════════ */}
-      <nav className={`nav ${scrolled ? "nav-scrolled" : ""}`}>
-        <Link href="/" className="logo">&lt;/SCSE&gt;</Link>
-
-        {/* Desktop links */}
-        <ul className="nav-links">
-          <li><a href="#hero">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#events">Events</a></li>
-          {/* <li><a href="#aftermovie">Media</a></li>
-          <li><a href="#competitions">Compete</a></li> */}
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="/gallery">Gallery</a></li>
-          <li><a href="/sponsors">Sponsors</a></li>
-        </ul>
-
-        <div className="nav-right">
-          <Link href="/register" className="nav-cta nav-cta-register">Register</Link>
-          <Link href="/login" className="nav-cta">Login</Link>
-          {/* Hamburger */}
-          <button
-            className={`hamburger ${mobileOpen ? "hamburger-open" : ""}`}
-            onClick={() => setMobileOpen(v => !v)}
-            aria-label="Toggle menu"
-          >
-            <span /><span /><span />
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile menu */}
-      <div className={`mobile-nav ${mobileOpen ? "mobile-nav-open" : ""}`}>
-        {[
-          ["#hero",         "Home"],
-          ["#about",        "About"],
-          ["#events",       "Events"],
-          ["#aftermovie",   "Media"],
-          ["#competitions", "Compete"],
-          ["#contact",      "Contact"],
-          ["/gallery",      "Gallery"],
-          ["/sponsors",     "Sponsors"],
-        ].map(([href, label], i) => (
-          <a
-            key={label}
-            href={href}
-            className="mob-link"
-            style={{ animationDelay: mobileOpen ? `${i * 55}ms` : "0ms" }}
-            onClick={() => setMobileOpen(false)}
-          >
-            <span className="mob-link-icon">◆</span>{label}
-            <span className="mob-link-arr">›</span>
-          </a>
-        ))}
-        <Link href="/dashboard" className="mob-cta" onClick={() => setMobileOpen(false)}>
-          ▶ &nbsp;DASHBOARD
-        </Link>
-      </div>
-      {mobileOpen && <div className="mob-backdrop" onClick={() => setMobileOpen(false)} />}
-
       {/* ══ HERO ════════════════════════════════════ */}
       <section id="hero" className="hero">
         <div className="hero-content">
@@ -655,7 +592,6 @@ useEffect(() => {
           </div>
 
           <h1 className="hero-title">
-            {/* Reduced neon on "SOCIETY OF" */}
             <span className="ht-society glitch" data-text="SOCIETY OF">SOCIETY OF</span>
             <span className="ht-cs glitch" data-text="COMPUTER SCIENCE">COMPUTER SCIENCE</span>
             <span className="ht-eng glitch" data-text="& ENGINEERING">&amp; ENGINEERING</span>
@@ -841,12 +777,7 @@ useEffect(() => {
       </section>
 
 {/* ══ COMPETITIONS ════════════════════════════════════ */}
-{/* 
-  REPLACE your existing competitions section JSX and CSS with the below.
-  The competitions array at the top of LandingPage() stays unchanged.
-*/}
  
-{/* ── JSX: replace the entire <section id="competitions"> block ── */}
  
 <section id="competitions" className="section comp-section">
   <span className="section-label">// competitions.load()</span>
@@ -891,65 +822,29 @@ useEffect(() => {
             <p className="cta-sub">Register now and be part of the biggest tech fest at NIT Jamshedpur.</p>
           </div>
           <div className="btn-group" style={{ justifyContent: "center" }}>
-            <Link href="/register" className="btn-primary"><span>/ Register /</span></Link>
-            <Link href="/dashboard" className="btn-outline"> / Login / </Link>
+            {userData ? (
+              <>
+                <Link href="/dashboard" className="btn-primary"><span>/ Dashboard /</span></Link>
+                <button
+                  className="btn-outline"
+                  onClick={async () => {
+                    await fetch("/api/auth/logout", { method: "POST" });
+                    window.location.href = "/";
+                  }}
+                >
+                  / Logout /
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/register" className="btn-primary"><span>/ Register /</span></Link>
+                <Link href="/login" className="btn-outline"> / Login / </Link>
+              </>
+            )}
           </div>
           <div className="cta-line cta-line-right" />
         </FadeIn>
       </section>
-
-      {/* ══ FOOTER ══════════════════════════════════ */}
-      <footer id="contact" className="footer">
-        <div className="footer-top-line" />
-
-        <FadeIn className="footer-grid">
-          {/* Brand */}
-          <div className="footer-brand">
-            <Link href="/" className="logo" style={{ fontSize: "1.4rem", display: "block", marginBottom: "1rem" }}>&lt;/SCSE&gt;</Link>
-            <p>Innovate. Create. Dominate.<br />Join the biggest tech event of the year.<br />Code to the Future.</p>
-            <div className="social-links">
-              <a href="https://www.instagram.com/scse.nitjsr" target="_blank" rel="noreferrer" className="social-link">IG</a>
-              <a href="https://www.youtube.com/channel/UChVrvyEjDkUEhqoBezJLxpw"   target="_blank" rel="noreferrer" className="social-link">YT</a>
-              <a href="https://www.linkedin.com/company/scse-nitjsr"  target="_blank" rel="noreferrer" className="social-link">IN</a>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="footer-col">
-            <h4>Quick Links</h4>
-            <Link href="/terms">Terms &amp; Conditions</Link>
-            <a href="#contact">Contact</a>
-            <Link href="/privacy">Privacy Policy</Link>
-            <Link href="/refund">Refund &amp; Cancellation</Link>
-            <Link href="/shipping">Shipping &amp; Delivery</Link>
-          </div>
-
-          {/* Navigate */}
-          <div className="footer-col">
-            <h4>Navigate</h4>
-            <a href="#hero">Home</a>
-            <a href="#about">About</a>
-            <a href="#events">Events</a>
-            <Link href="/gallery">Gallery</Link>
-            <Link href="/sponsors">Sponsors</Link>
-          </div>
-
-          {/* Contact */}
-          <div className="footer-col footer-contact-col">
-            <h4>Contact Us</h4>
-            <p>National Institute of Technology<br />Adityapur, Jamshedpur<br />Jharkhand <span>831014</span></p>
-            <p><span>+91 91188 41006</span></p>
-            <p><span>+91 97986 87024</span></p>
-            <p><span><a href="mailto:scse@nitjsr.ac.in" style={{ color: "var(--cyan)", textDecoration: "none" }}>scse@nitjsr.ac.in</a></span></p>
-          </div>
-        </FadeIn>
-
-        <div className="footer-bottom">
-          <p>© 2025 Xavenir. All rights reserved. | Designed &amp; Managed by SCSE Web Team</p>
-          <div className="visitors">⬡ VISITORS : 78,772</div>
-        </div>
-      </footer>
-
       <PageStyles />
     </>
   );
@@ -1380,30 +1275,86 @@ function PageStyles() {
         .nav-links { display: none; }
         .nav-cta { display: none; }
         .hamburger { display: flex; }
-        .hero { padding: 110px 2rem 80px; }
-        .section { padding: 70px 2rem; }
-        .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-        .timeline { grid-template-columns: 1fr; }
+        .hero { padding: 100px 1.8rem 60px; }
+        .hero-tag { font-size: 1rem; }
+        .hero-sub { font-size: 0.85rem; letter-spacing: 1px; }
+        .section { padding: 60px 1.8rem; }
+        .section-title { font-size: clamp(1.5rem,4vw,2.4rem); }
+        .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+        .timeline { grid-template-columns: 1fr; gap: 1.2rem; }
         .video-grid { grid-template-columns: 1fr; }
-        .footer { padding: 3rem 2rem 1.5rem; }
+        .footer { padding: 3rem 1.8rem 1.5rem; }
         .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
-        .cta-band { padding: 60px 2rem; }
+        .cta-band { padding: 50px 1.8rem; }
+        .cta-title { font-size: clamp(1.5rem,5vw,2.2rem); }
         .data-stream { display: none; }
         .nav-underglow { display: none; }
         .mob-blur { filter: blur(4px) brightness(0.7); transition: filter 0.6s ease; }
         .grid-bg, .scanlines, .noise-overlay { transition: filter 0.6s ease; }
+        .stats-bar { gap: 1.5rem; padding: 1.2rem 1.5rem; flex-wrap: wrap; }
+        .comp-row-body-inner { gap: 1.5rem; padding: 0.5rem 1.2rem 1.5rem 1.8rem; }
+        .comp-detail-right { min-width: 140px; }
+        .btn-primary { padding: 12px 24px; font-size: 0.7rem; }
+        .btn-outline  { padding: 11px 22px; font-size: 0.7rem; }
+        .three-canvas { width: 100% !important; opacity: 0.35 !important; }
       }
       @media (max-width: 600px) {
-        .hero-title { font-size: clamp(2rem,8vw,3.2rem); }
+        .hero { padding: 90px 1.2rem 50px; }
+        .hero-title { font-size: clamp(1.8rem,8vw,3rem); }
+        .hero-tag { font-size: 0.82rem; letter-spacing: 2px; }
+        .hero-sub { font-size: 0.8rem; line-height: 1.8; }
+        .section { padding: 50px 1.2rem; }
+        .section-title { font-size: clamp(1.3rem,6vw,2rem); }
         .footer-grid { grid-template-columns: 1fr; }
-        .stats-bar { gap: 1.5rem; }
+        .stats-bar { gap: 1rem; padding: 1rem; }
         .stat-divider { display: none; }
-        .btn-group { flex-direction: column; }
-        .btn-primary, .btn-outline { text-align: center; justify-content: center; }
-        .comp-row-header { padding: 1rem; gap: 0.8rem; }
-        .comp-row-body-inner { grid-template-columns: 1fr; gap: 1.2rem; padding: 0.5rem 1rem 1.5rem; }
-        .comp-detail-right { align-items: flex-start; }
+        .stat-num { font-size: 1.6rem; }
+        .btn-group { flex-direction: column; align-items: stretch; }
+        .btn-primary, .btn-outline { text-align: center; justify-content: center; width: 100%; }
+        .comp-row-header { padding: 0.9rem 1rem; gap: 0.7rem; }
+        .comp-row-name { font-size: 0.72rem; letter-spacing: 1px; }
+        .comp-row-body-inner { grid-template-columns: 1fr; gap: 1rem; padding: 0.5rem 1rem 1.2rem; }
+        .comp-detail-right { align-items: flex-start; min-width: unset; }
         .comp-row-prize { display: none; }
+        .cta-band { padding: 40px 1.2rem; }
+        .cta-sub { font-size: 0.78rem; }
+        .footer { padding: 2.5rem 1.2rem 1.2rem; }
+        .footer-col h4 { margin-bottom: 1rem; }
+        .footer-bottom { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+        .timeline-card { padding: 1.2rem; }
+        .tc-date { font-size: 0.65rem; }
+        .tc-title { font-size: 1rem; }
+      }
+      @media (max-width: 480px) {
+        .hero { padding: 85px 1rem 40px; }
+        .hero-title { font-size: clamp(1.5rem,9vw,2.4rem); line-height: 1.05; }
+        .hero-tag { font-size: 0.72rem; }
+        .hero-sub { font-size: 0.75rem; margin-bottom: 1.8rem; }
+        .section { padding: 40px 1rem; }
+        .section-label { font-size: 0.6rem; letter-spacing: 2px; }
+        .section-title { font-size: clamp(1.2rem,7vw,1.8rem); }
+        .stats-bar { flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 1rem; }
+        .stat-divider { display: none; }
+        .stat-num { font-size: 1.4rem; }
+        .btn-group { gap: 0.8rem; }
+        .btn-primary, .btn-outline { padding: 11px 18px; font-size: 0.65rem; letter-spacing: 1.5px; }
+        .comp-terminal { border-radius: 0; }
+        .comp-term-bar { padding: 0.6rem 1rem; }
+        .comp-term-title { font-size: 0.6rem; }
+        .comp-term-status { display: none; }
+        .comp-row-header { padding: 0.8rem; gap: 0.5rem; }
+        .comp-row-id { display: none; }
+        .comp-row-name { font-size: 0.68rem; }
+        .comp-row-body-inner { padding: 0.5rem 0.8rem 1rem; }
+        .comp-detail-prize-big { font-size: 1.1rem; }
+        .comp-detail-btn { padding: 8px 14px; font-size: 0.58rem; }
+        .cta-band { padding: 36px 1rem; }
+        .cta-title { font-size: clamp(1.2rem,7vw,1.8rem); }
+        .footer { padding: 2rem 1rem 1rem; }
+        .footer-grid { gap: 1.5rem; }
+        .footer-col h4 { font-size: 0.65rem; margin-bottom: 0.8rem; }
+        .footer-col a { font-size: 0.72rem; margin-bottom: 0.6rem; }
+        .loader-bar-wrap { width: min(280px, 80vw); }
       }
     `}</style>
   );

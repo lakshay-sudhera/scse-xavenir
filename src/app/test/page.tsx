@@ -13,7 +13,7 @@ export default function TestPage() {
       <h1>Testing UserContext</h1>
 
       {userData ? (
-        <p>{userData.fullName}</p>
+        <p>{userData.userID}</p>
       ) : (
         <p>No user found</p>
       )}

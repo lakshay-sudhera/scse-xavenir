@@ -66,12 +66,13 @@ function Page() {
       const data = response.data
       if (data.status === 200) {
         const userResponse = await axios.get("/api/users/getCurrent");
-        if (userResponse.data.data.status === 200) {
+        if (userResponse.data.data) {
           setUserData(userResponse.data.data);
         }
         setLoader(false);
         setStatus(data.error || data.message || "Successfully registered");
         router.push("/dashboard");
+        router.refresh()
       }
     } catch (error: any) {
       setLoader(false);

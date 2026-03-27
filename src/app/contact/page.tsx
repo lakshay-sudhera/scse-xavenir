@@ -1,285 +1,266 @@
 "use client";
-import "./styles.css"
+import './styles.css'
 import { useState } from "react";
+
 const contacts = [
   {
-    name: "Amrish Yadav",
-    role: "Payment Related Query",
-    phone: "+91 91188 41006",
-    email: "amrishrock2002@gmail.com",
-    image: "/contact/amrish.jpg",
-    // desc: "Payment failure, refund issues or finance-related queries.",
-  },
-  {
-    name: "Harshit Shrivastav",
-    role: "General Query",
-    phone: "+91 89571 44430",
-    email: "harshitshrivastav2609@gmail.com",
-    image: "/contact/harshit.jpg",
-    // desc: "General queries related to events or any help.",
-  },
-  {
     name: "Abhishek Kaushik",
-    role: "Registration Related Query",
+    role: "Event Related Query",
     phone: "+91 97986 87024",
     email: "abhishekkumar89647@gmail.com",
     image: "/contact/abhishek.jpg",
-    // desc: "Registration issues, PRIME or event registration.",
+    linkedin: "https://www.linkedin.com/in/abhishek-kaushik-836435282",
+    tag: "PRESIDENT.NODE",
+    color: "var(--pink)",
   },
   {
-    name: "Murli Dharan",
-    role: "Event Related Query",
-    phone: "+91 62016 68754",
-    email: "murlidharan93103@gmail.com",
-    image: "/contact/murli.jpg",
-    // desc: "All event-related queries and guidance.",
+    name: "Sujal Kumar",
+    role: "Payment Related Query",
+    phone: "+91 99693780078",
+    email: "sujalkumar@gmail.com",
+    image: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774475261/1707369959885_re1yjn.jpg",
+    linkedin: "https://www.linkedin.com/in/sujal-kumar-552a39237/",
+    tag: "FINANCE.NODE",
+    color: "var(--yellow)",
   },
+  {
+    name: "Priyanshu Raj",
+    role: "Registration Related Query",
+    phone: "+91 8789633693",
+    email: "priyanshuraj979837@gmail.com",
+    image: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774475067/WhatsApp_Image_2026-03-26_at_3.13.56_AM_yqltff.jpg",
+    linkedin: "https://www.linkedin.com/in/priyanshuraj-nitjsr/",
+    tag: "EVENTS.NODE",
+    color: "var(--cyan)",
+  },
+   {
+    name: "Ayush Verma",
+    role: "General Query",
+    phone: "+91 8936081707",
+    email: "ayush7610jsr@gmail.com",
+    image: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774474434/WhatsApp_Image_2026-03-26_at_3.03.23_AM_yi25nd.jpg",
+    linkedin: "https://www.linkedin.com/in/ayush-verma-jsr25",
+    tag: "RESGISTER.NODE",
+    color: "var(--purple)",
+  },
+ 
 ];
+
+         
+
 export default function ContactPage() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-    message: "",
-  });
-  
-  const handleChange = (e: any) => {
+  const [form, setForm] = useState({ name: "", email: "", mobile: "", message: "" });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setError("");
   };
 
-  const handleSubmit = (e: any) => {
+
+  const handleSubmit = async (e: React.MouseEvent) => {
     e.preventDefault();
-    alert("🚀 Feedback Sent!");
+
+    // Validation
+    if (!form.name || !form.email || !form.mobile || !form.message) {
+      setError("All fields are required.");
+      return;
+    }
+
+    const digitsOnly = form.mobile.replace(/\D/g, "");
+    if (digitsOnly.length !== 10) {
+      setError("Phone number must be exactly 10 digits.");
+      return;
+    }
+
+    if (form.message.length < 5) {
+      setError("Message must be at least 5 characters.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/contactUs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          number: digitsOnly,
+          content: form.message,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || data.message || "Something went wrong.");
+        return;
+      }
+
+      setSubmitted(true);
+      setForm({ name: "", email: "", mobile: "", message: "" });
+      setTimeout(() => setSubmitted(false), 4000);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
-    <div className="relative min-h-screen bg-black text-white px-6 py-12 font-mono overflow-hidden">
+    <>
 
-    {/* Background Image */}
-    <div
-      className="absolute inset-0 bg-contain bg-center opacity-30 "
-      style={{ backgroundImage: "url('/contact/cyberpunk-bg.jpeg')" }}
-    />
-  
-    {/* Glow Overlay */}
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#fffffff,transparent)] " />
-  
-    {/* Title */}
-    <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-10 cyber-clean relative z-10 tracking-tight">
-  SCSE CONTACTS
-</h1>
-      
-      {/* CONTACT CARDS */}
-      <div className="my-10 grid md:grid-cols-2 lg:grid-cols-4 gap-3 max-w-7xl mx-auto">
-  {/* {contacts.map((c, i) => ( */}
-    <div
-      // key={i}
-      className="relative rounded-2xl overflow-hidden group border border-purple-500/30 hover:border-pink-500 transition-all duration-300"
-    >
-      {/* Background Image */}
-      <img
-        src={contacts[0].image}
-        alt={contacts[0].name}
-        className="w-full h-105 object-cover group-hover:scale-110 transition duration-500"
-      />
+       <div className="contact-page">
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-transparent" />
+        <section className="contact-hero">
+          <span className="contact-hero-label">// contact.init()</span>
+          <h1 className="contact-hero-title">Contact <span>Us</span></h1>
+          <p className="contact-hero-sub">// REACH_OUT · COLLABORATE · CONNECT</p>
+        </section>
 
-      {/* Content */}
-      <div className="absolute bottom-0 p-4 space-y-2">
-        <h2 className="text-lg font-bold">{contacts[0].name}</h2>
-        <p className="text-purple-400 text-sm">{contacts[0].role}</p>
+        <section className="contact-cards-section">
+          <span className="contact-section-label">// team.contacts()</span>
+          <div className="contact-cards-grid">
+            {contacts.map((c, i) => (
+              <div
+                key={i}
+                className="contact-card"
+                style={{ "--card-accent": c.color, position: "relative" } as React.CSSProperties}
+              >
+                <div className="contact-card-img-wrap">
+                  <img src={c.image} alt={c.name} className="contact-card-img" />
+                  <div className="contact-card-corner tl" />
+                  <div className="contact-card-corner br" />
+                </div>
+                <div className="contact-card-sep" />
+                <div className="contact-card-body">
+                  <span className="contact-card-tag">// {c.tag}</span>
+                  <h3 className="contact-card-name">{c.name}</h3>
+                  <p className="contact-card-role">{c.role}</p>
+                  <div className="contact-card-details">
+                    <a href={`tel:${c.phone}`} className="contact-card-detail"><span>☎</span> {c.phone}</a>
+                    <a href={`mailto:${c.email}`} className="contact-card-detail"><span>✉</span> {c.email}</a>
+                    <a href={c.linkedin} target="_blank" rel="noopener noreferrer" className="contact-card-linkedin">
+                    <span>↗</span> LinkedIn Profile
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+        <section className="contact-bottom">
+          <span className="contact-section-label">// sys.connect()</span>
+          <div className="contact-bottom-grid">
 
-        {/* <p className="text-gray-300 text-sm mt-2">{c.desc}</p> */}
+            
 
-        <div className="text-sm mt-2 space-y-1">
-          <p>📞 {contacts[0].phone}</p>
-          <a href="mailto:amrishrock2002@gmail.com">📧 {contacts[0].email}</a><br/>
-          
-          <a href="https://www.linkedin.com/in/amrish-yadav-363b63289?utm_source=share&amp;utm_campaign=share_via&amp;utm_content=profile&amp;utm_medium=android_app" target="_blank"  className="text-purple-400 cursor-pointer hover:underline">
-            🔗 Linkedin Profile
-          </a>
-        </div>
-      </div>
-    </div>
+            <div className="info-stack">
+              <div className="info-block">
+                <div className="info-block-title">📍 Address</div>
+                <div className="info-block-text">
+                  Society of Computer Science and Engineering<br />
+                  National Institute of Technology<br />
+                  Adityapur, Jamshedpur, Jharkhand<br />
+                  831014, India
+                </div>
+              </div>
+              <div className="info-block">
+                <div className="info-block-title">💼 Sponsorship</div>
+                <div className="info-block-text">
+                  For sponsorship and collaboration:<br />
+                  <a href="mailto:scse.nit@gmail.com">scse.nit@gmail.com</a>
+                </div>
+              </div>
+              <div className="info-block">
+                <div className="info-block-title">🔗 Follow Us</div>
+                <div className="info-block-text">
+                  <a href="https://www.instagram.com/scse.nitjsr" target="_blank" rel="noreferrer">Instagram — @scse.nitjsr</a><br />
+                  <a href="https://www.linkedin.com/company/scse-nitjsr" target="_blank" rel="noreferrer">LinkedIn — SCSE NITJSR</a><br />
+                  <a href="https://www.youtube.com/channel/UChVrvyEjDkUEhqoBezJLxpw" target="_blank" rel="noreferrer">YouTube — SCSE Channel</a>
+                </div>
+              </div>
+            </div>
 
-    <div
-      // key={i}
-      className="relative rounded-2xl overflow-hidden group border border-purple-500/30 hover:border-pink-500 transition-all duration-300"
-    >
-      {/* Background Image */}
-      <img
-        src={contacts[1].image}
-        alt={contacts[1].name}
-        className="w-full h-105 object-cover group-hover:scale-110 transition duration-500"
-      />
-
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-transparent" />
-
-      {/* Content */}
-      <div className="absolute bottom-0 p-4 space-y-2">
-        <h2 className="text-lg font-bold">{contacts[1].name}</h2>
-        <p className="text-purple-400 text-sm">{contacts[1].role}</p>
-
-        {/* <p className="text-gray-300 text-sm mt-2">{c.desc}</p> */}
-
-        <div className="text-sm mt-2 space-y-1">
-          <p>📞 {contacts[1].phone}</p>
-          <a href="mailto:harshitshrivastav2609@gmail.com">📧 {contacts[1].email}</a><br/>
-          
-          <a href="https://www.linkedin.com/in/harshit-shrivastav-8b513127a" target="_blank"  className="text-purple-400 cursor-pointer hover:underline">
-            🔗 Linkedin Profile
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div
-      // key={i}
-      className="relative rounded-2xl overflow-hidden group border border-purple-500/30 hover:border-pink-500 transition-all duration-300"
-    >
-      {/* Background Image */}
-      <img
-        src={contacts[2].image}
-        alt={contacts[2].name}
-        className="w-full h-105 object-cover group-hover:scale-110 transition duration-500"
-      />
-
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-transparent" />
-
-      {/* Content */}
-      <div className="absolute bottom-0 p-4 space-y-2">
-        <h2 className="text-lg font-bold">{contacts[2].name}</h2>
-        <p className="text-purple-400 text-sm">{contacts[2].role}</p>
-
-        {/* <p className="text-gray-300 text-sm mt-2">{c.desc}</p> */}
-
-        <div className="text-sm mt-2 space-y-1">
-          <p>📞 {contacts[2].phone}</p>
-          <a href="mailto:abhishekkumar89647@gmail.com">📧 {contacts[2].email}</a><br/>
-          
-          <a href="https://www.linkedin.com/in/abhishek-kaushik-836435282" target="_blank"  className="text-purple-400 cursor-pointer hover:underline">
-            🔗 Linkedin Profile
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div
-      // key={i}
-      className="relative rounded-2xl overflow-hidden group border border-purple-500/30 hover:border-pink-500 transition-all duration-300"
-    >
-      {/* Background Image */}
-      <img
-        src={contacts[3].image}
-        alt={contacts[3].name}
-        className="w-full h-105 object-cover group-hover:scale-110 transition duration-500"
-      />
-
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-transparent" />
-
-      {/* Content */}
-      <div className="absolute bottom-0 p-4 space-y-2">
-        <h2 className="text-lg font-bold">{contacts[3].name}</h2>
-        <p className="text-purple-400 text-sm">{contacts[3].role}</p>
-
-        {/* <p className="text-gray-300 text-sm mt-2">{c.desc}</p> */}
-
-        <div className="text-sm mt-2 space-y-1">
-          <p>📞 {contacts[3].phone}</p>
-          <a href="mailto:murlidharan93103@gmail.com">📧 {contacts[3].email}</a><br/>
-          
-          <a href="https://www.linkedin.com/in/murli-dharan-614b89298?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank"  className="text-purple-400 cursor-pointer hover:underline">
-            🔗 Linkedin Profile
-          </a>
-        </div>
-      </div>
-    </div>
-  {/* ))} */}
+            <div className="contact-form-wrap">
+              <div className="contact-form-header">
+  <span className="contact-form-tag">// sys.message.send()</span>
+  <div className="contact-form-title">Send <span>Message</span></div>
 </div>
+            <div className="contact-form-inner">
 
-<div className="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto">
+  <div className="form-field">
+    <label className="form-field-label">Full Name</label>
+    <input type="text" name="name" placeholder="John Doe"
+      value={form.name} onChange={handleChange} className="contact-input" />
+  </div>
 
-        {/* Left Section - Info */}
-        <div className="space-y-6">
-          <div className="cyber-card">
-            <h2 className="text-2xl text-pink-400">📍 Address</h2>
-            <p className="text-gray-300 mt-2">
-              Society of Computer Science and Engineering<br />
-              National Institute of Technology<br/>
-              Jamshedpur, Jharkhand<br/>
-              831014, India<br/>
-            </p>
+  <div className="form-field">
+    <label className="form-field-label">Email Address</label>
+    <input type="email" name="email" placeholder="you@example.com"
+      value={form.email} onChange={handleChange} className="contact-input" />
+  </div>
+
+  <div className="form-field">
+    <label className="form-field-label">Phone Number</label>
+    <input name="mobile" placeholder="+91 98765 43210"
+      value={form.mobile} onChange={handleChange} className="contact-input" />
+  </div>
+
+  <div className="form-field">
+    <label className="form-field-label">Your Message</label>
+    <textarea name="message" placeholder="Describe your query..." rows={5}
+      value={form.message} onChange={handleChange} className="contact-input" />
+  </div>
+
+  {error && (
+    <p style={{
+      fontFamily: "'Share Tech Mono', monospace",
+      fontSize: "0.72rem", color: "#ff4d6d",
+      margin: "0", letterSpacing: "1px"
+    }}>
+      ⚠ {error}
+    </p>
+  )}
+
+  <button
+    onClick={handleSubmit}
+    disabled={loading}
+    className={`contact-submit ${submitted ? "contact-submit-success" : ""}`}
+    style={{ opacity: loading ? 0.7 : 1, cursor: loading ? "not-allowed" : "pointer" }}
+  >
+    <span>{submitted ? "✓ MESSAGE SENT" : loading ? "SENDING..." : "SEND MESSAGE"}</span>
+  </button>
+
+</div>
+            </div>
+
           </div>
+        </section>
 
-          <div className="cyber-card">
-            <h2 className="text-2xl text-blue-400">💰 Sponsers</h2>
-            <p className="text-gray-300 mt-2">
-              
-              Email: scse.nit@gmail.com<br/>
-            </p>
+        <section className="contact-map-section">
+          <span className="contact-section-label">// location.render()</span>
+          <div className="contact-map-wrap">
+            <div className="contact-map-bar">
+              <div className="form-dots"><span /><span /><span /></div>
+              <span>maps@nitjsr:~/location$ get_coordinates --nit-jamshedpur</span>
+              <span className="map-status"><span className="map-dot" /> SIGNAL LOCKED</span>
+            </div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14714.846067448243!2d86.1446394!3d22.77608485!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e4daa475a5cd%3A0xd87b53fadcd771a1!2sNational%20Institute%20of%20Technology%20Jamshedpur%20(NIT%20Jamshedpur)!5e0!3m2!1sen!2sin!4v1774279951019!5m2!1sen!2sin"
+              loading="lazy"
+              title="NIT Jamshedpur Map"
+            />
           </div>
+        </section>
 
-          <div className="cyber-card">
-            <h2 className="text-2xl text-purple-400">🕒 Office Hours</h2>
-            <p className="text-gray-300 mt-2">
-              Mon - Fri: 9:00 AM - 5:00 PM<br/>
-              Sat - Sun: Holiday<br/>
-            </p>
-          </div>
-        </div>
-
-        {/* Right Section - Form */}
-        <form onSubmit={handleSubmit} className="cyber-card space-y-4">
-          <h2 className="text-2xl text-cyan-400 mb-4">Send Message</h2>
-
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            onChange={handleChange}
-            className="cyber-input"
-            required
-          />
-
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-            className="cyber-input"
-            required
-          />
-          <input
-            name="mobile"
-            placeholder="eg.: +91 9876543210"
-            className="cyber-input"
-            onChange={handleChange}
-          />
-          <textarea
-            name="message"
-            placeholder="Your Query..."
-            rows={4}
-            onChange={handleChange}
-            className="cyber-input"
-            required
-          />
-
-          <button type="submit" className="cyber-button">
-            SEND MESSAGE
-          </button>
-        </form>
       </div>
-
-      {/* Map Section */}
-      <div className="mt-16 max-w-6xl mx-auto cyber-card">
-        <h2 className="text-2xl text-green-400 mb-4">📡 Location Map</h2>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14714.846067448243!2d86.1446394!3d22.77608485!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e4daa475a5cd%3A0xd87b53fadcd771a1!2sNational%20Institute%20of%20Technology%20Jamshedpur%20(NIT%20Jamshedpur)!5e0!3m2!1sen!2sin!4v1774279951019!5m2!1sen!2sin" className="w-full h-72 rounded-lg border border-cyan-500" loading="lazy" ></iframe>
-      </div>
-    </div>
+    </>
   );
 }

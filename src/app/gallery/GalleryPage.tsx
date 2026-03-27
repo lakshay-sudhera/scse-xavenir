@@ -15,50 +15,112 @@ type EventItem = {
 
 const EVENTS: EventItem[] = [
   {
-    id: "EV-SQUID-GAME-2025",
-    src: "https://picsum.photos/seed/scse-squid-game/900/700",
-    title: "Squid Game",
-    date: "9 FEB, 2025",
-    desc: "Intense 2-round challenge where both tech & non-tech questions will push your limits!",
+    id: "EV-INAUGURATION-2025",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361397/WhatsApp_Image_2026-03-24_at_7.18.09_PM_2_m8hmaq.jpg",
+    title: "Xavenir 2025 Inauguration",
+    date: "FEB, 2025",
+    desc: "The grand inauguration of Xavenir marks the the beginning of innovation, energy and cutting-edge brilliance!",
   },
   {
     id: "EV-SCSE-PL2-2025",
-    src: "https://picsum.photos/seed/scse-premier-league-2/900/700",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361258/cricket2024_xckxnt.webp",
     title: "SCSE Premier League - Season 2",
     date: "FEB, 2025",
     desc: "Ultimate cricket showdown as teams compete for glory in the second season of the SCSE Premier League!",
   },
   {
-    id: "EV-SCAVENGER-HUNT-2024",
-    src: "https://picsum.photos/seed/scse-scavenger-hunt/900/700",
-    title: "Scavenger Hunt",
+    id: "EV-LSA-2024",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361434/WhatsApp_Image_2026-03-24_at_7.18.10_PM_1_avh04v.jpg",
+    title: "Lights, Stage, Action",
     date: "2024",
-    desc: "A thrilling adventure where participants solve clues, explore the campus, and race against time to win exciting rewards.",
+    desc: "An electrifying eveining where talent took the spotlight.",
   },
   {
     id: "EV-DODGEBALL-2024",
-    src: "https://picsum.photos/seed/scse-dodgeball/900/700",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361271/Dodgeball_y5jbvu.jpg",
     title: "Dodgeball",
     date: "2024",
     desc: "Fast-paced and action-packed dodgeball tournament where agility and teamwork lead to victory.",
   },
   {
     id: "EV-SCSE-PL1-2024",
-    src: "https://picsum.photos/seed/scse-premier-league-1/900/700",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361178/Cricket2023.jpg_lrjj8s.jpg",
     title: "SCSE Premier League - Season 1",
     date: "2024",
     desc: "The inaugural season of our highly anticipated cricket tournament, bringing intense competition and unforgettable moments.",
   },
   {
     id: "EV-KODI-YATAVA-2024",
-    src: "https://picsum.photos/seed/scse-kodi-yatava/900/700",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361293/kodi_yatava.jpg_senx53.jpg",
     title: "Kodi Yatava",
     date: "2024",
     desc: "Beyond coding.",
   },
+  {
+    id: "EV-XAVENIR-2025-01",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361484/WhatsApp_Image_2026-03-24_at_7.18.11_PM_2_rhwkgd.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-02",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361419/WhatsApp_Image_2026-03-24_at_7.18.09_PM_e28coy.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-03",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361448/WhatsApp_Image_2026-03-24_at_7.18.10_PM_2_i3644x.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-04",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361500/WhatsApp_Image_2026-03-24_at_7.18.11_PM_xvjd1g.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-05",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361459/WhatsApp_Image_2026-03-24_at_7.18.10_PM_vpqebr.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-06",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361324/WhatsApp_Image_2026-03-24_at_7.18.08_PM_o3zlcu.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-07",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361335/WhatsApp_Image_2026-03-24_at_7.18.09_PM_1_y1iuxb.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-08",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361473/WhatsApp_Image_2026-03-24_at_7.18.11_PM_1_jt0xsg.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
+  {
+    id: "EV-XAVENIR-2025-09",
+    src: "https://res.cloudinary.com/dzewgmuty/image/upload/v1774361307/WhatsApp_Image_2026-03-24_at_7.18.07_PM_i2htrr.jpg",
+    title: "",
+    date: "",
+    desc: "",
+  },
 ];
 
-/** Deterministic “telemetry” per frame id (checksum, signal bars, load bar). */
 type Telemetry = {
   checksum: string;
   bars: number;
@@ -78,16 +140,11 @@ export default function GalleryPage() {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const items: EventItem[] = EVENTS;
 
-  const openAt = useCallback((idx: number) => {
-    setLightbox(idx);
-  }, []);
-
+  const openAt = useCallback((idx: number) => setLightbox(idx), []);
   const closeLb = useCallback(() => setLightbox(null), []);
-
   const goPrev = useCallback(() => {
     setLightbox((i) => (i === null ? null : i <= 0 ? items.length - 1 : i - 1));
   }, [items.length]);
-
   const goNext = useCallback(() => {
     setLightbox((i) => (i === null ? null : i >= items.length - 1 ? 0 : i + 1));
   }, [items.length]);
@@ -107,13 +164,9 @@ export default function GalleryPage() {
     const cursor = document.getElementById("gal-cursor");
     const trail = document.getElementById("gal-cursor-trail");
     if (!cursor || !trail) return;
-    let mx = 0,
-      my = 0,
-      tx = 0,
-      ty = 0;
+    let mx = 0, my = 0, tx = 0, ty = 0;
     const onMove = (e: MouseEvent) => {
-      mx = e.clientX;
-      my = e.clientY;
+      mx = e.clientX; my = e.clientY;
       cursor.style.left = `${mx}px`;
       cursor.style.top = `${my}px`;
     };
@@ -134,7 +187,25 @@ export default function GalleryPage() {
   const lbTel = lbItem ? telemetryForId(lbItem.id) : null;
 
   return (
-    <div className="gal-root min-h-screen text-white overflow-x-hidden">
+    <div
+      className="gal-root min-h-screen text-white overflow-x-hidden"
+      style={{
+        /* ── BACKGROUND IMAGE ───────────────────────────────────────
+           Replace the URL below with your own image path, e.g.:
+           backgroundImage: "url('/gallery-bg.jpg')"
+           The dark overlays (scanlines, noise, corner glow) sit on
+           top, so any detailed photo works well here.
+        ──────────────────────────────────────────────────────────── */
+        backgroundImage: `
+          linear-gradient(rgba(0,4,12,0.72) 0%, rgba(0,8,20,0.68) 100%),
+          url('/contact/cyberpunk-bg.jpeg')
+        `,
+        backgroundSize: "cover",
+        backgroundPosition: "center top",
+        backgroundAttachment: "fixed",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <div id="gal-cursor" className="gal-cursor" aria-hidden />
       <div id="gal-cursor-trail" className="gal-cursor-trail" aria-hidden />
 
@@ -143,45 +214,40 @@ export default function GalleryPage() {
       <div className="gal-noise" />
       <div className="gal-corner-glow" />
 
-      <div className="gal-data-stream" aria-hidden>
-        <span className="gal-ds-item">GALLERY.VISUAL_DB // READ_ONLY</span>
-        <span className="gal-ds-item">XAVENIR.26 // ARCHIVE</span>
-        <span className="gal-ds-item">NIT JAMSHEDPUR // SCSE</span>
-      </div>
-
+      {/* ── HERO ── */}
       <header className="gal-hero">
         <div className="gal-hero-left">
-          <p className="gal-hero-tag">
+          <p className="gal-hero-tag" style={{ fontSize: '1rem', letterSpacing: '0.2em' }}>
             <span className="gal-hero-tag-line" />
             NIT Jamshedpur // CSE
           </p>
-          <h1 className="gal-hero-title">
-            <span className="gal-glitch" data-text="EVENTS">
-              EVENTS
+          <h1 className="gal-hero-title" style={{ lineHeight: 1.05 }}>
+            <span className="gal-glitch" data-text="GALLERY" style={{ fontSize: 'clamp(4rem, 9vw, 8rem)', display: 'block' }}>
+              GALLERY
             </span>
-            <span className="gal-glitch gal-glitch-pink" data-text="ARCHIVE">
+            <span className="gal-glitch gal-glitch-pink" data-text="ARCHIVE" style={{ fontSize: 'clamp(4rem, 9vw, 8rem)', display: 'block' }}>
               ARCHIVE
             </span>
           </h1>
-          <p className="gal-hero-sub">
-            Encrypted event frames from XAVENIR &amp; SCSE ops. Hover to decrypt details. Click to open a node.
+          <p className="gal-hero-sub" style={{ fontSize: '1.1rem', lineHeight: 1.8, maxWidth: '480px', opacity: 0.85 }}>
+            Encrypted visual frames from XAVENIR &amp; SCSE ops. Hover to decrypt details. Click to open a node.
           </p>
         </div>
 
         <aside className="gal-hero-right" aria-label="Gallery instructions">
           <div className="gal-ops-panel">
-            <div className="gal-ops-title">OPS.CONSOLE</div>
-            <div className="gal-ops-line">
+            <div className="gal-ops-title" style={{ fontSize: '0.8rem', letterSpacing: '0.3em' }}>OPS.CONSOLE</div>
+            <div className="gal-ops-line" style={{ fontSize: '1rem' }}>
               <span className="gal-ops-k">HOVER</span>
               <span className="gal-ops-slash">//</span>
               <span>DECRYPT</span>
             </div>
-            <div className="gal-ops-line">
+            <div className="gal-ops-line" style={{ fontSize: '1rem' }}>
               <span className="gal-ops-k">CLICK</span>
               <span className="gal-ops-slash">//</span>
               <span>OPEN NODE</span>
             </div>
-            <div className="gal-ops-line">
+            <div className="gal-ops-line" style={{ fontSize: '1rem' }}>
               <span className="gal-ops-k">ESC</span>
               <span className="gal-ops-slash">//</span>
               <span>CLOSE</span>
@@ -189,33 +255,38 @@ export default function GalleryPage() {
             <div className="gal-ops-divider" />
             <div className="gal-ops-kv">
               <div>
-                <div className="gal-ops-num">{String(items.length).padStart(2, "0")}</div>
-                <div className="gal-ops-lbl">ACTIVE NODES</div>
+                <div className="gal-ops-num" style={{ fontSize: '2rem' }}>{String(items.length).padStart(2, "0")}</div>
+                <div className="gal-ops-lbl" style={{ fontSize: '0.75rem', letterSpacing: '0.18em' }}>ACTIVE NODES</div>
               </div>
               <div>
-                <div className="gal-ops-num gal-ops-num-pink">{String(items.length)}</div>
-                <div className="gal-ops-lbl">EVENT FRAMES</div>
+                <div className="gal-ops-num gal-ops-num-pink" style={{ fontSize: '2rem' }}>{String(items.length)}</div>
+                <div className="gal-ops-lbl" style={{ fontSize: '0.75rem', letterSpacing: '0.18em' }}>VISUAL FRAMES</div>
               </div>
             </div>
           </div>
         </aside>
       </header>
 
+      {/* ── EVENTS GRID ── */}
       <section className="gal-section cyberpunk-events" aria-label="Events grid">
         <div className="gal-section-head">
-          <span className="gal-section-label glitch">// events.archive()</span>
+          <span className="gal-section-label glitch" style={{ fontSize: '1.1rem', letterSpacing: '0.15em' }}>
+            // gallery.log()
+          </span>
           <div className="gal-cyber-panel neon-border">
             <div className="gal-cp-corner gal-tl pulse" />
             <div className="gal-cp-corner gal-br pulse" />
-            <div className="gal-cp-status hologram">EVENTS // READY</div>
+            <div className="gal-cp-status hologram" style={{ fontSize: '0.8rem', letterSpacing: '0.2em' }}>
+              MOMENTS // READY
+            </div>
             <div className="gal-cp-row matrix-rain">
               <div className="data-node">
-                <div className="gal-cp-big gal-cyan flicker">SCSE</div>
-                <div className="gal-cp-small">CYBER WORLD</div>
+                <div className="gal-cp-big gal-cyan flicker" style={{ fontSize: '2.2rem' }}>SCSE</div>
+                <div className="gal-cp-small" style={{ fontSize: '0.8rem', letterSpacing: '0.2em' }}>CYBER WORLD</div>
               </div>
               <div className="data-node">
-                <div className="gal-cp-big gal-pink scanline">ARCHIVE</div>
-                <div className="gal-cp-small">SELECTION</div>
+                <div className="gal-cp-big gal-pink scanline" style={{ fontSize: '2.2rem' }}>ARCHIVE</div>
+                <div className="gal-cp-small" style={{ fontSize: '0.8rem', letterSpacing: '0.2em' }}>SELECTION</div>
               </div>
             </div>
             <div className="cyber-grid-overlay" />
@@ -227,84 +298,79 @@ export default function GalleryPage() {
             {items.map((item, idx) => {
               const tel = telemetryForId(item.id);
               return (
-              <motion.div
-                key={item.id}
-                layout
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.25 }}
-                className="gal-card-wrap"
-              >
-                <button type="button" className="gal-card" onClick={() => openAt(idx)}>
-                  <div className="gal-card-hud">
-                    <span className="gal-hud-corner gal-hud-tl" aria-hidden />
-                    <span className="gal-hud-corner gal-hud-tr" aria-hidden />
-                    <span className="gal-hud-corner gal-hud-bl" aria-hidden />
-                    <span className="gal-hud-corner gal-hud-br" aria-hidden />
+                <motion.div
+                  key={item.id}
+                  layout
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ duration: 0.25 }}
+                  className="gal-card-wrap"
+                >
+                  <button type="button" className="gal-card" onClick={() => openAt(idx)}>
+                    <div className="gal-card-hud">
+                      <span className="gal-hud-corner gal-hud-tl" aria-hidden />
+                      <span className="gal-hud-corner gal-hud-tr" aria-hidden />
+                      <span className="gal-hud-corner gal-hud-bl" aria-hidden />
+                      <span className="gal-hud-corner gal-hud-br" aria-hidden />
 
-                    <div className="gal-card-tel" aria-hidden>
-                      <span className="gal-tel-lbl">BUF.STREAM</span>
-                      <div className="gal-tel-sig">
-                        {[0, 1, 2, 3, 4].map((i) => (
-                          <span key={i} className={`gal-tel-dot${i < tel.bars ? " gal-tel-dot-on" : ""}`} />
-                        ))}
+                      <div className="gal-card-tel" aria-hidden>
+                        <span className="gal-tel-lbl" style={{ fontSize: '0.72rem', letterSpacing: '0.12em' }}>BUF.STREAM</span>
+                        <div className="gal-tel-sig">
+                          {[0,1,2,3,4].map((i) => (
+                            <span key={i} className={`gal-tel-dot${i < tel.bars ? " gal-tel-dot-on" : ""}`} />
+                          ))}
+                        </div>
+                        <span className="gal-tel-chk" style={{ fontSize: '0.72rem' }}>0x{tel.checksum}</span>
                       </div>
-                      <span className="gal-tel-chk">0x{tel.checksum}</span>
+
+                      <div className="gal-card-screen">
+                        <div className="gal-card-bezel">
+                          <div className="gal-card-img-shell">
+                            <img src={item.src} alt="" loading="lazy" />
+                          </div>
+                          <div className="gal-card-vignette" aria-hidden />
+                          <div className="gal-card-microgrid" aria-hidden />
+                          <div className="gal-card-scan" aria-hidden />
+                          <div className="gal-card-shimmer" aria-hidden />
+                          <div className="gal-card-meta">
+                            <span className="gal-card-id" style={{ fontSize: '0.72rem' }}>{item.id}</span>
+                            <span className="gal-card-year" style={{ fontSize: '0.72rem' }}>{item.date}</span>
+                          </div>
+                          <div className="gal-card-hover">
+                            <FaExpand className="gal-card-icon" style={{ fontSize: '1.5rem' }} aria-hidden />
+                            <span className="gal-card-hover-label" style={{ fontSize: '0.95rem', letterSpacing: '0.25em' }}>VIEW DETAILS</span>
+                            <span className="gal-card-desc" style={{ fontSize: '0.92rem', lineHeight: 1.6 }}>{item.desc}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="gal-card-tel-foot" aria-hidden>
+                        <span className="gal-tf-lbl" style={{ fontSize: '0.72rem', letterSpacing: '0.12em' }}>DECRYPT</span>
+                        <div className="gal-tf-track">
+                          <span className="gal-tf-fill" style={{ width: `${tel.loadPct}%` }} />
+                        </div>
+                        <span className="gal-tf-st" style={{ fontSize: '0.72rem' }}>CLR // OK</span>
+                      </div>
                     </div>
 
-                    <div className="gal-card-screen">
-                      <div className="gal-card-bezel">
-                        <div className="gal-card-img-shell">
-                          <img src={item.src} alt="" loading="lazy" />
-                        </div>
-                        <div className="gal-card-vignette" aria-hidden />
-                        <div className="gal-card-microgrid" aria-hidden />
-                        <div className="gal-card-scan" aria-hidden />
-                        <div className="gal-card-shimmer" aria-hidden />
-                        <div className="gal-card-meta">
-                          <span className="gal-card-id">{item.id}</span>
-                          <span className="gal-card-year">{item.date}</span>
-                        </div>
-                        <div className="gal-card-hover">
-                          <FaExpand className="gal-card-icon" aria-hidden />
-                          <span className="gal-card-hover-label">VIEW DETAILS</span>
-                          <span className="gal-card-desc">{item.desc}</span>
-                        </div>
-                      </div>
+                    {/* Card caption */}
+                    <div className="gal-card-cap">
+                      <span className="gal-cap-ticks" aria-hidden>
+                        <span /><span /><span />
+                      </span>
+                      <span className="gal-card-title" style={{ fontSize: '1.05rem', letterSpacing: '0.08em' }}>{item.title}</span>
+                      <span className="gal-card-cat" style={{ fontSize: '0.82rem', letterSpacing: '0.18em' }}>{item.date}</span>
                     </div>
-
-                    <div className="gal-card-tel-foot" aria-hidden>
-                      <span className="gal-tf-lbl">DECRYPT</span>
-                      <div className="gal-tf-track">
-                        <span className="gal-tf-fill" style={{ width: `${tel.loadPct}%` }} />
-                      </div>
-                      <span className="gal-tf-st">CLR // OK</span>
-                    </div>
-                  </div>
-                  <div className="gal-card-cap">
-                    <span className="gal-cap-ticks" aria-hidden>
-                      <span /><span /><span />
-                    </span>
-                    <span className="gal-card-title">{item.title}</span>
-                    <span className="gal-card-cat">{item.date}</span>
-                  </div>
-                </button>
-              </motion.div>
-            );
+                  </button>
+                </motion.div>
+              );
             })}
           </AnimatePresence>
         </motion.div>
       </section>
 
-      <footer className="gal-footer">
-        <div className="gal-footer-inner">
-          <span>SCSE © {new Date().getFullYear()} // NIT Jamshedpur</span>
-          <span className="gal-footer-sep">│</span>
-          <span>GALLERY_STREAM // END_OF_FILE</span>
-        </div>
-      </footer>
-
+      {/* ── LIGHTBOX ── */}
       <AnimatePresence>
         {lbItem && (
           <motion.div
@@ -318,14 +384,15 @@ export default function GalleryPage() {
             onClick={closeLb}
           >
             <button type="button" className="gal-lb-close" onClick={closeLb} aria-label="Close">
-              <FaTimes />
+              <FaTimes style={{ fontSize: '1.2rem' }} />
             </button>
             <button type="button" className="gal-lb-nav gal-lb-prev" onClick={(e) => { e.stopPropagation(); goPrev(); }} aria-label="Previous">
-              <FaChevronLeft />
+              <FaChevronLeft style={{ fontSize: '1.4rem' }} />
             </button>
             <button type="button" className="gal-lb-nav gal-lb-next" onClick={(e) => { e.stopPropagation(); goNext(); }} aria-label="Next">
-              <FaChevronRight />
+              <FaChevronRight style={{ fontSize: '1.4rem' }} />
             </button>
+
             <motion.div
               className="gal-lb-panel"
               initial={{ scale: 0.94, opacity: 0 }}
@@ -341,13 +408,13 @@ export default function GalleryPage() {
                 <span className="gal-hud-corner gal-hud-br" aria-hidden />
 
                 <div className="gal-card-tel gal-lb-tel" aria-hidden>
-                  <span className="gal-tel-lbl">FULL_RES // NODE</span>
+                  <span className="gal-tel-lbl" style={{ fontSize: '0.82rem', letterSpacing: '0.14em' }}>FULL_RES // NODE</span>
                   <div className="gal-tel-sig">
-                    {[0, 1, 2, 3, 4].map((i) => (
+                    {[0,1,2,3,4].map((i) => (
                       <span key={i} className={`gal-tel-dot${i < lbTel!.bars ? " gal-tel-dot-on" : ""}`} />
                     ))}
                   </div>
-                  <span className="gal-tel-chk">0x{lbTel!.checksum}</span>
+                  <span className="gal-tel-chk" style={{ fontSize: '0.82rem' }}>0x{lbTel!.checksum}</span>
                 </div>
 
                 <div className="gal-lb-frame">
@@ -363,22 +430,12 @@ export default function GalleryPage() {
                 </div>
 
                 <div className="gal-card-tel-foot gal-lb-tel-foot" aria-hidden>
-                  <span className="gal-tf-lbl">BUFFER</span>
+                  <span className="gal-tf-lbl" style={{ fontSize: '0.82rem', letterSpacing: '0.14em' }}>BUFFER</span>
                   <div className="gal-tf-track">
                     <span className="gal-tf-fill" style={{ width: `${lbTel!.loadPct}%` }} />
                   </div>
-                  <span className="gal-tf-st">LIVE</span>
+                  <span className="gal-tf-st" style={{ fontSize: '0.82rem' }}>LIVE</span>
                 </div>
-              </div>
-
-              <div className="gal-lb-info">
-                <div className="gal-lb-id">{lbItem.id}</div>
-                <h2 className="gal-lb-title">{lbItem.title}</h2>
-                <div className="gal-lb-tags">
-                  <span>EVENT</span>
-                  <span>{lbItem.date}</span>
-                </div>
-                <p className="gal-lb-desc">{lbItem.desc}</p>
               </div>
             </motion.div>
           </motion.div>
