@@ -75,6 +75,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
   const [annTitle,  setAnnTitle]  = useState("");
   const [annMsg,    setAnnMsg]    = useState("");
   const [annTarget, setAnnTarget] = useState("");
+  const [annEvent,  setAnnEvent]  = useState("");
   const [announcing,setAnnouncing]= useState(false);
   const [annResult, setAnnResult] = useState("");
 
@@ -486,35 +487,81 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
         {/* ANNOUNCE */}
         {panel === "announce" && (
           <div className="content-panel">
-            <div className="page-header"><h1 className="page-title">📢 Broadcast Announcement</h1></div>
+            <div className="page-header">
+              <h1 className="page-title">📢 Broadcast Announcement</h1>
+              <p className="page-sub">Send to all users, a specific event's participants, or a single user.</p>
+            </div>
             <div className="form-stack">
               <div className="form-field">
                 <label className="form-label">TITLE *</label>
-                <input className="s-input" style={{borderRight:"1px solid rgba(0,180,255,0.2)"}} placeholder="Announcement title" value={annTitle} onChange={e => setAnnTitle(e.target.value)} />
+                <input className="s-input" style={{borderRight:"1px solid #1e2535"}} placeholder="Announcement title" value={annTitle} onChange={e => setAnnTitle(e.target.value)} />
               </div>
               <div className="form-field">
                 <label className="form-label">MESSAGE *</label>
-                <textarea className="s-input" style={{borderRight:"1px solid rgba(0,180,255,0.2)",minHeight:100,resize:"vertical"}} placeholder="Announcement message..." value={annMsg} onChange={e => setAnnMsg(e.target.value)} />
+                <textarea className="s-input" style={{minHeight:100,resize:"vertical"}} placeholder="Announcement message..." value={annMsg} onChange={e => setAnnMsg(e.target.value)} />
               </div>
+
+              {/* Target selector */}
               <div className="form-field">
-                <label className="form-label">TARGET USER ID <span style={{opacity:0.4}}>(blank = broadcast to all)</span></label>
-                <input className="s-input" style={{borderRight:"1px solid rgba(0,180,255,0.2)"}} placeholder="SCSE-XXXXXXX (optional)" value={annTarget} onChange={e => setAnnTarget(e.target.value)} />
+                <label className="form-label">TARGET</label>
+                <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+                  {["all", "event", "user"].map(t => (
+                    <button key={t} type="button"
+                      style={{padding:"6px 16px",borderRadius:6,border:"1px solid",fontSize:12,fontWeight:600,cursor:"pointer",
+                        background: (annEvent === "" && annTarget === "" && t === "all") || (t === "event" && annEvent !== "") || (t === "user" && annTarget !== "") ? "rgba(99,102,241,0.15)" : "transparent",
+                        borderColor: (annEvent === "" && annTarget === "" && t === "all") || (t === "event" && annEvent !== "") || (t === "user" && annTarget !== "") ? "#6366f1" : "#2a3347",
+                        color: (annEvent === "" && annTarget === "" && t === "all") || (t === "event" && annEvent !== "") || (t === "user" && annTarget !== "") ? "#818cf8" : "#64748b",
+                      }}
+                      onClick={() => { setAnnEvent(""); setAnnTarget(""); }}>
+                      {t === "all" ? "🌐 All Users" : t === "event" ? "◉ Event Participants" : "� Single User"}
+                    </button>
+                  ))}
+                </div>
               </div>
+
+              {/* Event picker */}
+              <div className="form-field">
+                <label className="form-label">EVENT <span style={{opacity:0.4}}>(select to target event participants)</span></label>
+                <select className="s-input" style={{borderRight:"1px solid #1e2535"}}
+                  value={annEvent} onChange={e => { setAnnEvent(e.target.value); setAnnTarget(""); }}>
+                  <option value="">— All users (no event filter) —</option>
+                  {stats.eventRegsByName.map(e => (
+                    <option key={e._id} value={e._id}>{e._id} ({e.participants} participants)</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Single user override */}
+              <div className="form-field">
+                <label className="form-label">SINGLE USER ID <span style={{opacity:0.4}}>(overrides event filter)</span></label>
+                <input className="s-input" style={{borderRight:"1px solid #1e2535"}} placeholder="SCSE-XXXXXXX (optional)"
+                  value={annTarget} onChange={e => { setAnnTarget(e.target.value); if (e.target.value) setAnnEvent(""); }} />
+              </div>
+
+              {/* Preview */}
+              <div style={{padding:"10px 14px",background:"rgba(99,102,241,0.06)",border:"1px solid rgba(99,102,241,0.2)",borderRadius:6,fontSize:12,color:"#94a3b8"}}>
+                {annTarget ? `→ Sending to user: ${annTarget}` : annEvent ? `→ Sending to all participants of: ${annEvent}` : `→ Broadcasting to all ${stats.totalUsers} users`}
+              </div>
+
               <button className="s-btn" style={{alignSelf:"flex-start"}} disabled={announcing || !annTitle || !annMsg}
                 onClick={async () => {
                   setAnnouncing(true); setAnnResult("");
                   const res = await fetch("/api/admin/announce", {
                     method:"POST", headers:{"Content-Type":"application/json"},
-                    body: JSON.stringify({ title: annTitle, message: annMsg, targetUserID: annTarget || undefined }),
+                    body: JSON.stringify({
+                      title: annTitle, message: annMsg,
+                      targetUserID: annTarget || undefined,
+                      eventName: annEvent || undefined,
+                    }),
                   });
                   const d = await res.json();
-                  setAnnResult(d.message || "Sent");
-                  if (res.ok) { setAnnTitle(""); setAnnMsg(""); setAnnTarget(""); }
+                  setAnnResult(res.ok ? d.message : (d.error || "Failed"));
+                  if (res.ok) { setAnnTitle(""); setAnnMsg(""); setAnnTarget(""); setAnnEvent(""); }
                   setAnnouncing(false);
                 }}>
                 {announcing ? <span className="spin" /> : "📢 SEND"}
               </button>
-              {annResult && <p style={{color:"#00ffb3",fontFamily:"'Inter',sans-serif",fontSize:13}}>{annResult}</p>}
+              {annResult && <p style={{color: annResult.includes("Sent") || annResult.includes("sent") ? "#22c55e" : "#ef4444", fontFamily:"'Inter',sans-serif",fontSize:13}}>{annResult}</p>}
             </div>
           </div>
         )}
@@ -637,6 +684,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
         .s-input{flex:1;background:#161b27;border:none;color:#f1f5f9;font-family:'Inter',sans-serif;font-size:14px;padding:11px 14px;outline:none;}
         .s-input::placeholder{color:#334155;}
         textarea.s-input{resize:vertical;min-height:100px;}
+        select.s-input{appearance:none;cursor:pointer;}
         .s-btn{background:#6366f1;border:none;color:#fff;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.3px;padding:11px 20px;cursor:pointer;transition:background 0.15s;white-space:nowrap;display:flex;align-items:center;gap:6px;}
         .s-btn:hover:not(:disabled){background:#4f46e5;}
         .s-btn:disabled{opacity:0.4;cursor:not-allowed;}
