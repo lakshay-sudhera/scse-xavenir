@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Payment = {
   _id: string; email: string; scseId: string; paymentProof: string;
@@ -45,7 +45,19 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
   const [panel, setPanel] = useState<Panel>("stats");
   const [loadingId,  setLoadingId]  = useState<string | null>(null);
   const [lightboxUrl,setLightboxUrl]= useState<string | null>(null);
-  const [sideOpen,   setSideOpen]   = useState(true);
+  const [sideOpen, setSideOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      setSideOpen(!mobile);
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   // search
   const [searchId,     setSearchId]     = useState("");
@@ -139,7 +151,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
 
         <nav className="sb-nav">
           {NAV.map(n => (
-            <button key={n.key} className={`sb-item${panel === n.key ? " sb-item-active" : ""}`} onClick={() => setPanel(n.key)}>
+            <button key={n.key} className={`sb-item${panel === n.key ? " sb-item-active" : ""}`} onClick={() => { setPanel(n.key); if (isMobile) setSideOpen(false); }}>
               <span className="sb-icon">{n.icon}</span>
               {sideOpen && <span className="sb-label">{n.label}</span>}
               {panel === n.key && <span className="sb-active-bar" />}
@@ -153,6 +165,20 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
 
       {/* ── MAIN ── */}
       <main className="main-area">
+        {/* Mobile top bar */}
+        {isMobile && (
+          <div className="mob-topbar">
+            <button className="mob-menu-btn" onClick={() => setSideOpen(o => !o)}>
+              <span /><span /><span />
+            </button>
+            <span className="mob-title">Xavenir Admin</span>
+          </div>
+        )}
+
+        {/* Backdrop for mobile sidebar */}
+        {isMobile && sideOpen && (
+          <div className="sb-backdrop" onClick={() => setSideOpen(false)} />
+        )}
 
         {/* STATS */}
         {panel === "stats" && (
@@ -606,7 +632,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
         @keyframes sp{to{transform:rotate(360deg)}}
 
         /* SEARCH / FORMS */
-        .search-box{display:flex;margin-bottom:20px;border-radius:8px;overflow:hidden;border:1px solid #1e2535;}
+        .search-box{display:flex;flex-wrap:wrap;margin-bottom:20px;border-radius:8px;overflow:hidden;border:1px solid #1e2535;}
         .s-prefix{background:#1e2535;color:#818cf8;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:11px 14px;display:flex;align-items:center;white-space:nowrap;border-right:1px solid #2a3347;}
         .s-input{flex:1;background:#161b27;border:none;color:#f1f5f9;font-family:'Inter',sans-serif;font-size:14px;padding:11px 14px;outline:none;}
         .s-input::placeholder{color:#334155;}
@@ -656,10 +682,30 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
         @media(max-width:768px){
           .sidebar{position:fixed;z-index:200;top:70px;height:calc(100vh - 70px);}
           .sidebar-collapsed{width:0;overflow:hidden;border:none;}
-          .cards-grid,.content-panel{padding:16px;}
-          .page-header{padding:20px 16px;}
+          .cards-grid,.content-panel{padding:12px;}
+          .page-header{padding:16px 12px;}
           .card-actions{grid-template-columns:1fr;}
           .stat-grid{grid-template-columns:1fr 1fr;}
+          .card-header{flex-direction:column;gap:10px;}
+          .search-box{flex-wrap:wrap;}
+          .s-prefix{border-right:1px solid #2a3347;border-bottom:none;}
+          .s-input{min-width:0;flex:1 1 120px;}
+          .s-btn{width:100%;justify-content:center;}
+          .proof-img{height:120px;}
+          .result-card{max-width:100%;}
+          .form-stack{max-width:100%;}
+          .tab-row{flex-wrap:wrap;}
+          .ptab{flex:1 1 auto;justify-content:center;}
+          .evt-thead,.evt-row{grid-template-columns:1fr 60px 80px;font-size:11px;}
+          .mob-topbar{display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid #1e2535;background:#161b27;position:sticky;top:0;z-index:10;}
+          .mob-menu-btn{background:transparent;border:1px solid #2a3347;border-radius:6px;width:36px;height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;flex-shrink:0;}
+          .mob-menu-btn span{display:block;width:16px;height:2px;background:#94a3b8;border-radius:2px;}
+          .mob-title{font-size:15px;font-weight:700;color:#f1f5f9;}
+          .sb-backdrop{position:fixed;inset:0;top:70px;z-index:199;background:rgba(0,0,0,0.5);}
+        }
+        @media(min-width:769px){
+          .mob-topbar{display:none;}
+          .sb-backdrop{display:none;}
         }
       `}</style>
     </div>

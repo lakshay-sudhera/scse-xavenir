@@ -2003,10 +2003,10 @@ useEffect(() => {
           </p>
 
           <div className="btn-group">
-            <a href="#events" className="btn-primary">
-              <span>// Explore</span>
+            <a href="events" className="btn-primary">
+              <span>Events</span>
             </a>
-            <a href="#about" className="btn-outline">Know More</a>
+            <a href="#competitions" className="btn-outline">Competitions</a>
           </div>
         </div>
 
@@ -2051,7 +2051,7 @@ useEffect(() => {
                 shaping the architects of tomorrow's technology landscape.
               </p>
               <Link href="/about" className="btn-primary" style={{ display: "inline-flex", marginTop: "0.5rem" }}>
-                <span>// Archives</span>
+                <span>// Know More</span>
               </Link>
             </div>
           </div>

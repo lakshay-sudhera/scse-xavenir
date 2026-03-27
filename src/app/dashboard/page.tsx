@@ -1376,7 +1376,7 @@ export default function Dashboard() {
           {/* EVENTS */}
           {tab === "events" && (
             <div className="db-section">
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }} className="db-events-teams-grid">
+              <div className="db-events-teams-grid">
 
                 {/* Events column */}
                 <div>
@@ -1976,8 +1976,8 @@ export default function Dashboard() {
                   <div className="db-section-label" style={{ marginBottom: 16 }}>// support.contacts()</div>
                   <div className="db-contact-list">
                     {[
-                      { type: "GENERAL ENQUIRY", name: "Organizer Team", phone: "+91 XXXXXXXXXX", desc: "Event information and general inquiries" },
-                      { type: "PORTAL SUPPORT",  name: "Tech Team",      phone: "+91 XXXXXXXXXX", desc: "Technical support and portal-related queries" },
+                      { type: "GENERAL ENQUIRY", name: "Organizer Team", phone: "+91 97986 87024", desc: "Event information and general inquiries" },
+                      { type: "PORTAL SUPPORT",  name: "Tech Team",      phone: "+91 8936081707", desc: "Technical support and portal-related queries" },
                     ].map((c, i) => (
                       <div key={i} className="db-contact-item">
                         <span className="db-contact-type">{c.type}</span>

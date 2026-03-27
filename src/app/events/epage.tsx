@@ -489,7 +489,7 @@ export default function EventsPage() {
               <h1 className="h-title">
                 <span className="ht-c">EVENTS</span>
                 <br/>
-                <span className="ht-m">ARCHIVE</span>
+                {/* <span className="ht-m">ARCHIVE</span> */}
               </h1>
               <p className="h-tagline">// events.archive()</p>
             </div>

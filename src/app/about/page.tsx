@@ -150,7 +150,7 @@ const MEMBERS: Member[] = [
     img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774474434/WhatsApp_Image_2026-03-26_at_3.03.23_AM_yi25nd.jpg",
     phone: "8936081707",
     email: "ayush7610jsr@gmail.com",
-    linkedin: "https://www.linkedin.com/ayush-verma-jsr25",
+    linkedin: "https://www.linkedin.com/in/ayush-verma-jsr25",
   },
 
     {
