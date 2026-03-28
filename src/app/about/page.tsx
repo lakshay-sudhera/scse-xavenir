@@ -89,7 +89,7 @@ const MEMBERS: Member[] = [
     {
     name: "Anurag Sharma ",
     role: "Tech Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
+    img: "/our-member-photo/Anurag sharma.jpeg",
     phone: "7263047411",
     email: "ojhavinay7602@gmail.com",
     linkedin: "https://www.linkedin.com/in/vinay-ojha-9910a831a",
@@ -114,7 +114,7 @@ const MEMBERS: Member[] = [
  {
     name: "Keshav Trivedi",
     role: "Web Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
+    img: "/our-member-photo/Keshav Trivedi.jpeg",
     phone: "9845920244",
     email: "2023ugcs120@nitjsr.ac.in",
     linkedin: "https://linkedin.com/in/shivapreetham",
@@ -139,7 +139,7 @@ const MEMBERS: Member[] = [
  {
     name: "Vignesh Chaurasia",
     role: "App Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
+    img: "/our-member-photo/Vignesh Chaurasia.jpeg",
     phone: "9152657366",
     email: "vigneshchaurasia@gmail.com",
     linkedin: "http://www.linkedin.com/in/vignesh-chaurasia-nitjsr",
@@ -172,7 +172,7 @@ const MEMBERS: Member[] = [
   {
     name: "Akash Jaiswal",
     role: "CA Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
+    img: "/our-member-photo/Akash Jaiswal.jpeg",
     phone: "9572991083",
     email: "jaisakash9341@gmail.com",
     linkedin: "https://www.linkedin.com/in/akash-jaiswal-042305291",
@@ -189,7 +189,7 @@ const MEMBERS: Member[] = [
    {
     name: "Ankit Yadav",
     role: "CA Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
+    img: "/our-member-photo/Ankit Yadav.jpeg",
     phone: "7061960920",
     email: "2023ugcs097@nitjsr.ac.in",
     linkedin: "https://www.linkedin.com/in/harsh-agarwal-2a9922283",
@@ -231,7 +231,7 @@ const MEMBERS: Member[] = [
    {
     name: "Siya",
     role: "PR Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
+    img: "/our-member-photo/siya.jpeg",
     phone: "6232681526",
     email: "rajputriya887@gmail.com",
     linkedin: "https://www.linkedin.com/in/riya-kachere-730b68151",
@@ -257,7 +257,7 @@ const MEMBERS: Member[] = [
   {
     name: "Shubham Pandey",
     role: "EM Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
+    img: "/our-member-photo/Shubham Pandey.jpeg",
     phone: "9205120803",
     email: "adityaprakash91111@gmail.com",
     linkedin: "https://in.linkedin.com/in/aditya-prakash-985739327",
@@ -274,7 +274,7 @@ const MEMBERS: Member[] = [
   {
     name: "Udit pandey",
     role: "EM Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
+    img: "/our-member-photo/Udit Pandey.jpeg",
     phone: "8800699180",
     email: "uditpandey8800@gmail.com",
     linkedin: "https://www.linkedin.com/in/udit-pandey-351417328",
