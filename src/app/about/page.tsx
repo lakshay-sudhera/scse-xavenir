@@ -60,7 +60,7 @@ const CORE_TEAM: Member[] = [
   },
 ];
 
-const MEMBERS: Member[] = [
+const MEMBERS: Member[] = [ 
    {
     name: "Tanishq Gupta",
     role: "Tech Head",
@@ -92,7 +92,7 @@ const MEMBERS: Member[] = [
     img: "/our-member-photo/Anurag sharma.jpeg",
     phone: "7263047411",
     email: "ojhavinay7602@gmail.com",
-    linkedin: "https://www.linkedin.com/in/vinay-ojha-9910a831a",
+    linkedin: "https://www.linkedin.com/in/anurag-sharma-63xxx?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
   },
    {
     name: "Vinay Ojha",
@@ -117,7 +117,7 @@ const MEMBERS: Member[] = [
     img: "/our-member-photo/Keshav Trivedi.jpeg",
     phone: "9845920244",
     email: "2023ugcs120@nitjsr.ac.in",
-    linkedin: "https://linkedin.com/in/shivapreetham",
+    linkedin: "https://www.linkedin.com/in/keshav-trivedi-49283b275?utm_source=share_via&utm_content=profile&utm_medium=member_android",
   },
     
     {
@@ -192,7 +192,7 @@ const MEMBERS: Member[] = [
     img: "/our-member-photo/Ankit Yadav.jpeg",
     phone: "7061960920",
     email: "2023ugcs097@nitjsr.ac.in",
-    linkedin: "https://www.linkedin.com/in/harsh-agarwal-2a9922283",
+    linkedin: "https://www.linkedin.com/in/ankit-yadav-691306259?utm_source=share_via&utm_content=profile&utm_medium=member_android",
   },
 
     {
@@ -234,7 +234,7 @@ const MEMBERS: Member[] = [
     img: "/our-member-photo/siya.jpeg",
     phone: "6232681526",
     email: "rajputriya887@gmail.com",
-    linkedin: "https://www.linkedin.com/in/riya-kachere-730b68151",
+    linkedin: "https://www.linkedin.com/in/siyaa?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
   },
    {
     name: "Aameya Devansh",
@@ -260,7 +260,7 @@ const MEMBERS: Member[] = [
     img: "/our-member-photo/Shubham Pandey.jpeg",
     phone: "9205120803",
     email: "adityaprakash91111@gmail.com",
-    linkedin: "https://in.linkedin.com/in/aditya-prakash-985739327",
+    linkedin: "https://www.linkedin.com/in/shubham-pandey-a71951344?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
   },
   {
     name: "Sachin Kumar",
