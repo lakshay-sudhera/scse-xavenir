@@ -54,7 +54,6 @@ const WEB_TEAM: WebMember[] = [
   {name:  "Harshit Sharma",          role: "Web Team",  img: "/web-team-photo/ Harshit Sharma.jpg" , github:"https://github.com/HarshitSharma-h8",    linkedin:"https://www.linkedin.com/in/harshit-sharma-fullstack-dev/"},
   {name:  "Ganesh Gundawar",         role: "Web Team",  img: "/web-team-photo/IMG_20250727_174200 - Ganesh Gundawar.jpg" , github:"https://github.com/ganeshgundawar",    linkedin:"https://www.linkedin.com/in/ganesh-gundawar-2b681926a?utm_source=share_via&utm_content=profile&utm_medium=member_android"},
 
-  
 ];
 
 const EDITIONS: Edition[] = [
