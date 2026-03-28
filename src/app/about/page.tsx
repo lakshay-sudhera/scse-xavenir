@@ -50,7 +50,10 @@ const WEB_TEAM: WebMember[] = [
   
   { name: "Ayush Sarkar",            role: "Web Team",  img: "/web-team-photo/IMG_20260102_194028 - Ayush Sarkar.jpg",         github: "https://github.com/ayushsarkar314",           linkedin: "https://www.linkedin.com/in/ayush-sarkar-441b9a39b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   { name: "Darshita Maheshwari",     role: "Web Team",  img: "/web-team-photo/Screenshot_20260325_084115_Photos - DARSHITA MAHESHWARI.jpg", github: "https://github.com/darshita44",           linkedin: "https://www.linkedin.com/in/darshita-maheshwari-836980383" },
-  
+  {name:  "Sumit Kapoor",            role: "Web Team",  img: "/web-team-photo/IMG_20260301_105017 - Sumit.jpg" , github:"https://github.com/Sumitkapoor129",    linkedin:"https://www.linkedin.com/in/sumitkapoor001"},
+  {name:  "Harshit Sharma",          role: "Web Team",  img: "/web-team-photo/ Harshit Sharma.jpg" , github:"https://github.com/HarshitSharma-h8",    linkedin:"https://www.linkedin.com/in/harshit-sharma-fullstack-dev/"},
+  {name:  "Ganesh Gundawar",         role: "Web Team",  img: "/web-team-photo/IMG_20250727_174200 - Ganesh Gundawar.jpg" , github:"https://github.com/ganeshgundawar",    linkedin:"https://www.linkedin.com/in/ganesh-gundawar-2b681926a?utm_source=share_via&utm_content=profile&utm_medium=member_android"},
+
   
 ];
 
