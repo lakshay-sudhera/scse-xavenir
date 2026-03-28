@@ -175,6 +175,11 @@ export default function RegisterPage() {
           0%,100% { box-shadow: 0 0 18px rgba(0,245,255,0.08); }
           50%     { box-shadow: 0 0 36px rgba(0,245,255,0.18); }
         }
+        @media (max-width: 480px) {
+          .reg-body { padding: 1.2rem 1.2rem 1.8rem !important; }
+          .reg-title-main { font-size: 1.5rem !important; }
+          .reg-title-sub  { font-size: 1rem !important; }
+        }
       `}</style>
     </div>
   );
@@ -190,7 +195,7 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Rajdhani', sans-serif",
     position: "relative",
     overflow: "hidden",
-    padding: "2rem",
+    padding: "calc(70px + 2rem) 1rem 2rem",
   },
   grid: {
     position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
@@ -265,7 +270,7 @@ const s: Record<string, React.CSSProperties> = {
   },
 
   body: {
-    padding: "2rem 2.2rem 2.4rem",
+    padding: "1.6rem 1.6rem 2rem",
     display: "flex", flexDirection: "column",
     alignItems: "center", gap: "1rem",
   },

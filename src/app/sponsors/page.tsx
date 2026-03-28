@@ -230,7 +230,7 @@ function Sponsors() {
 
         {/* ── DOWNLOAD BROCHURE ── */}
         <div className="download-brochure">
-          <a href="https://www.scse-nitjsr.in/SCSE_brochure.pdf" className="download-btn">
+          <a href="/sponsorship_brochure.pdf" className="download-btn">
             ↓ Download Brochure
           </a>
         </div>

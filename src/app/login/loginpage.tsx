@@ -321,6 +321,11 @@ export default function Login() {
         input::placeholder { color: rgba(180,200,255,0.25); }
         input:focus { outline: none; }
         button { border: none; }
+        @media (max-width: 480px) {
+          .login-body { padding: 1.2rem 1.2rem 1.8rem !important; }
+          .login-title-main { font-size: 1.5rem !important; }
+          .login-title-sub  { font-size: 1rem !important; }
+        }
       `}</style>
     </div>
   );
@@ -333,7 +338,7 @@ const s: Record<string, React.CSSProperties> = {
     display: "flex", alignItems: "center", justifyContent: "center",
     fontFamily: "'Rajdhani', sans-serif",
     position: "relative", overflow: "hidden",
-    padding: "2rem",
+    padding: "calc(70px + 2rem) 1rem 2rem",
   },
   grid: {
     position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
@@ -406,7 +411,7 @@ const s: Record<string, React.CSSProperties> = {
   },
 
   body: {
-    padding: "1.8rem 2.2rem 2.4rem",
+    padding: "1.6rem 1.6rem 2rem",
     display: "flex", flexDirection: "column",
     alignItems: "center", gap: "1rem",
   },

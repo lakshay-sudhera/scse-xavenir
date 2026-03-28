@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    const user = await User.findById(userID).lean();
+    const user = await User.findOne({ userID }).lean();
     if (!user) {
       return NextResponse.json(
         { message: "User not found" },

@@ -950,6 +950,13 @@ export default function Dashboard() {
   const mountTime = useRef(Date.now());
   const [tab, setTab] = useState<Tab>("overview");
   const [events, setEvents] = useState<any[]>([]);
+  const [teams, setTeams] = useState<any[]>([]);
+  const [expandedTeam, setExpandedTeam] = useState<string | null>(null);
+  const [teamMembers, setTeamMembers] = useState<Record<string, any[]>>({});
+  const [invites, setInvites] = useState<any[]>([]);
+  const [sentInvites, setSentInvites] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [respondingInvite, setRespondingInvite] = useState<string | null>(null);
   const [glitch, setGlitch] = useState(false);
 
   // profile edit
@@ -1011,7 +1018,24 @@ export default function Dashboard() {
       body: JSON.stringify({ userID: user.userID }),
     })
       .then(r => r.json())
-      .then(d => setEvents(d.data || []))
+      .then(d => {
+        const data = d.data || [];
+        setEvents(data);
+        // teams are registrations where the user is a member and teamName exists
+        setTeams(data.filter((ev: any) => ev.teamName && ev.members?.length > 1));
+      })
+      .catch(() => {});
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+    fetch("/api/team-invites")
+      .then(r => r.json())
+      .then(d => { setInvites(d.data || []); setSentInvites(d.sent || []); })
+      .catch(() => {});
+    fetch("/api/notifications")
+      .then(r => r.json())
+      .then(d => setNotifications(d.data || []))
       .catch(() => {});
   }, [user]);
 
@@ -1105,6 +1129,50 @@ export default function Dashboard() {
     router.push("/");
   };
 
+  const handleTeamClick = async (team: any) => {
+    const key = team._id || team.teamName;
+    if (expandedTeam === key) { setExpandedTeam(null); return; }
+    setExpandedTeam(key);
+    if (teamMembers[key]) return;
+    try {
+      const res = await fetch("/api/users/byUserIDs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userIDs: team.members }),
+      });
+      const d = await res.json();
+      setTeamMembers(prev => ({ ...prev, [key]: d.data || [] }));
+    } catch { setTeamMembers(prev => ({ ...prev, [key]: [] })); }
+  };
+
+  const handleInviteRespond = async (inviteId: string, action: "accept" | "reject") => {
+    setRespondingInvite(inviteId);
+    try {
+      const res = await fetch("/api/team-invites/respond", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ inviteId, action }),
+      });
+      const d = await res.json();
+      // Refresh invites list
+      setInvites(prev => prev.map(inv => inv._id === inviteId ? { ...inv, status: action === "accept" ? "accepted" : "rejected" } : inv));
+      if (action === "accept" && d.message?.includes("registered")) {
+        // Refresh events/teams and sent invites too
+        fetch("/api/team-invites").then(r => r.json()).then(d2 => { setInvites(d2.data || []); setSentInvites(d2.sent || []); }).catch(() => {});
+        fetch("/api/users/eventRegistrations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userID: user?.userID }),
+        }).then(r => r.json()).then(d2 => {
+          const data = d2.data || [];
+          setEvents(data);
+          setTeams(data.filter((ev: any) => ev.teamName && ev.members?.length > 1));
+        }).catch(() => {});
+      }
+    } catch { /* ignore */ }
+    setRespondingInvite(null);
+  };
+
   if (!ready) return <Loading />;
 
   const tabs: { key: Tab; label: string; icon: string }[] = [
@@ -1171,7 +1239,14 @@ export default function Dashboard() {
               >
                 <span className="db-tab-icon">{t.icon}</span>
                 {t.label}
-              </button>
+                {t.key === "notifications" && (() => {
+                  const count = invites.filter(inv => inv.status === "pending").length + notifications.filter(n => !n.read).length;
+                  return count > 0 ? (
+                    <span style={{ marginLeft: 6, background: "var(--pink)", color: "#fff", borderRadius: "50%", fontSize: "0.6rem", fontWeight: 700, padding: "1px 5px", fontFamily: "'Inter',sans-serif" }}>
+                      {count}
+                    </span>
+                  ) : null;
+                })()}              </button>
             ))}
           </div>
         </div>
@@ -1301,35 +1376,225 @@ export default function Dashboard() {
           {/* EVENTS */}
           {tab === "events" && (
             <div className="db-section">
-              <div className="db-section-label">// events.registered()</div>
-              {events.length === 0 ? (
-                <div className="db-empty">
-                  <div className="db-card" style={{ alignItems: "center", textAlign: "center", padding: "3rem 2rem" }}>
-                    <div className="db-card-corner tl" /><div className="db-card-corner br" />
-                    <div style={{ fontSize: "2.5rem", opacity: 0.4, marginBottom: 16 }}>📅</div>
-                    <h3 style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.85rem", letterSpacing: 3, color: "var(--cyan)", marginBottom: 10 }}>
-                      NO REGISTERED EVENTS
-                    </h3>
-                    <p style={{ fontFamily: "'Rajdhani',sans-serif", color: "rgba(180,200,255,0.5)", maxWidth: 380, marginBottom: 24 }}>
-                      You haven't registered for any events yet. Explore our events and join the action!
-                    </p>
-                    <Link href="/events" className="db-btn-outline">
-                      ◆ EXPLORE OTHER EVENTS ⚡
-                    </Link>
-                  </div>
-                </div>
-              ) : (
-                <div className="db-events-list">
-                  {events.map((ev, i) => (
-                    <div key={i} className="db-event-row">
+              <div className="db-events-teams-grid">
+
+                {/* Events column */}
+                <div>
+                  <div className="db-section-label" style={{ marginBottom: 16 }}>// events.registered()</div>
+                  {events.length === 0 && sentInvites.length === 0 ? (
+                    <div className="db-card" style={{ alignItems: "center", textAlign: "center", padding: "3rem 2rem" }}>
                       <div className="db-card-corner tl" /><div className="db-card-corner br" />
-                      <span className="db-event-id">[{String(i + 1).padStart(2, "0")}]</span>
-                      <span className="db-event-name">{ev.eventName || ev.name || "Event"}</span>
-                      <span className="db-event-status">◉ REGISTERED</span>
+                      <div style={{ fontSize: "2.5rem", opacity: 0.4, marginBottom: 16 }}>📅</div>
+                      <h3 style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.85rem", letterSpacing: 3, color: "var(--cyan)", marginBottom: 10 }}>
+                        NO REGISTERED EVENTS
+                      </h3>
+                      <p style={{ fontFamily: "'Rajdhani',sans-serif", color: "rgba(180,200,255,0.5)", maxWidth: 380, marginBottom: 24 }}>
+                        You haven't registered for any events yet.
+                      </p>
+                      <Link href="/events" className="db-btn-outline">
+                        ◆ EXPLORE EVENTS ⚡
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="db-events-list">
+                      {events.map((ev, i) => {
+                        const evKey = `ev-${ev._id || i}`;
+                        const isOpen = expandedTeam === evKey;
+                        const members = teamMembers[evKey];
+                        const hasTeam = ev.teamName && ev.members?.length > 1;
+                        return (
+                          <div key={i} className="db-event-row" style={{ flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+                            <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                            <div style={{ display: "flex", alignItems: "center", gap: 10, width: "100%" }}>
+                              <span className="db-event-id">[{String(i + 1).padStart(2, "0")}]</span>
+                              <Link
+                                href={`/eventDetails/${encodeURIComponent(ev.eventName || ev.name || "")}`}
+                                style={{ textDecoration: "none" }}
+                                onClick={e => e.stopPropagation()}
+                              >
+                                <span className="db-event-name" style={{ cursor: "pointer" }}>{ev.eventName || ev.name || "Event"}</span>
+                              </Link>
+                              {hasTeam && (
+                                <span
+                                  style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.72rem", color: "var(--purple)", cursor: "pointer", marginLeft: 6, textDecoration: "underline dotted" }}
+                                  onClick={() => handleTeamClick({ ...ev, _id: evKey, members: ev.members })}
+                                >
+                                  ⬡ {ev.teamName}
+                                </span>
+                              )}
+                              <span className="db-event-status" style={{ marginLeft: "auto" }}>◉ REGISTERED</span>
+                            </div>
+                            {isOpen && (
+                              <div style={{ paddingLeft: "2.5rem", width: "100%", marginTop: 4, display: "flex", flexDirection: "column", gap: 4 }}>
+                                {!members ? (
+                                  <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.78rem", color: "rgba(0,245,255,0.4)" }}>// loading...</span>
+                                ) : members.length === 0 ? (
+                                  <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.78rem", color: "rgba(180,200,255,0.3)" }}>// no member data</span>
+                                ) : (
+                                  members.map((m: any, mi: number) => (
+                                    <div key={mi} style={{ display: "flex", alignItems: "center", gap: 10, padding: "5px 10px", background: "rgba(0,245,255,0.04)", border: "1px solid rgba(0,245,255,0.1)" }}>
+                                      <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.7rem", color: "var(--cyan)", opacity: 0.5 }}>{String(mi + 1).padStart(2, "0")}</span>
+                                      <span style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 600, fontSize: "0.88rem", color: "rgba(220,230,255,0.85)" }}>{m.fullName}</span>
+                                      <span style={{ marginLeft: "auto", fontFamily: "'Share Tech Mono',monospace", fontSize: "0.72rem", color: "rgba(180,200,255,0.35)" }}>{m.userID}</span>
+                                    </div>
+                                  ))
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                      {/* Pending teams created by this user (awaiting member approvals) */}
+                      {(() => {
+                        // Group sent invites by teamName+eventName
+                        const grouped: Record<string, any[]> = {};
+                        sentInvites.forEach(inv => {
+                          const key = `${inv.teamName}||${inv.eventName}`;
+                          if (!grouped[key]) grouped[key] = [];
+                          grouped[key].push(inv);
+                        });
+                        // Filter out teams that are already fully registered (all accepted = EventRegistration exists)
+                        const pendingGroups = Object.entries(grouped).filter(([, invs]) => {
+                          const allAccepted = invs.every(inv => inv.status === "accepted");
+                          // If all accepted, the EventRegistration was created — it'll appear in events list above
+                          return !allAccepted;
+                        });
+                        return pendingGroups.map(([key, invs], gi) => {
+                          const anyRejected = invs.some(inv => inv.status === "rejected");
+                          const overallStatus = anyRejected ? "REJECTED" : "PENDING";
+                          const statusColor = anyRejected ? "var(--pink)" : "var(--yellow)";
+                          const isOpen = expandedTeam === `sent-${key}`;
+                          return (
+                            <div
+                              key={`sent-${gi}`}
+                              className="db-event-row"
+                              style={{ flexDirection: "column", alignItems: "flex-start", gap: 6, cursor: "pointer" }}
+                              onClick={() => setExpandedTeam(isOpen ? null : `sent-${key}`)}
+                            >
+                              <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                              <div style={{ display: "flex", alignItems: "center", gap: 10, width: "100%" }}>
+                                <span className="db-event-id">[{String(events.length + gi + 1).padStart(2, "0")}]</span>
+                                <span className="db-event-name">{invs[0].teamName} <span style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "0.75rem", color: "rgba(180,200,255,0.4)", fontWeight: 400 }}>({invs[0].eventName})</span></span>
+                                <span style={{ marginLeft: "auto", fontFamily: "'Share Tech Mono',monospace", fontSize: "0.7rem", color: statusColor }}>
+                                  ◉ {overallStatus}
+                                </span>
+                                <span style={{ color: "rgba(180,200,255,0.4)", fontSize: "0.8rem", marginLeft: 4 }}>{isOpen ? "▲" : "▼"}</span>
+                              </div>
+                              {isOpen && (
+                                <div style={{ paddingLeft: "2.5rem", width: "100%", marginTop: 4, display: "flex", flexDirection: "column", gap: 4 }}>
+                                  {invs.map((inv, ii) => (
+                                    <div key={ii} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 10px", background: "rgba(0,245,255,0.03)", border: "1px solid rgba(0,245,255,0.08)" }}>
+                                      <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.7rem", color: "var(--cyan)", opacity: 0.5 }}>{String(ii + 1).padStart(2, "0")}</span>
+                                      <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.75rem", color: "rgba(220,230,255,0.7)" }}>{inv.invitedUser}</span>
+                                      <span style={{ marginLeft: "auto", fontFamily: "'Share Tech Mono',monospace", fontSize: "0.68rem",
+                                        color: inv.status === "accepted" ? "#00ff88" : inv.status === "rejected" ? "var(--pink)" : "var(--yellow)" }}>
+                                        {inv.status === "accepted" ? "✓ ACCEPTED" : inv.status === "rejected" ? "✕ REJECTED" : "◌ PENDING"}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        });
+                      })()}
+                    </div>
+                  )}
+                </div>
+
+                {/* Teams column */}
+                <div>
+                  <div className="db-section-label" style={{ marginBottom: 16 }}>// teams.formed()</div>
+                  {/* Pending invites shown at top of teams column */}
+                  {invites.filter(inv => inv.status === "pending").map((inv, i) => (
+                    <div key={i} className="db-event-row" style={{ flexDirection: "column", alignItems: "flex-start", gap: 8, marginBottom: 10, borderColor: "rgba(191,0,255,0.3)" }}>
+                      <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", flexWrap: "wrap" }}>
+                        <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.68rem", color: "var(--yellow)" }}>⚡ INVITE</span>
+                        <span className="db-event-name" style={{ color: "var(--purple)" }}>{inv.teamName}</span>
+                        <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.7rem", color: "var(--cyan)", marginLeft: "auto" }}>◈ {inv.eventName}</span>
+                      </div>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <button
+                          className="db-btn-primary"
+                          style={{ padding: "4px 14px", fontSize: "0.75rem" }}
+                          disabled={respondingInvite === inv._id}
+                          onClick={() => handleInviteRespond(inv._id, "accept")}
+                        >
+                          <span>{respondingInvite === inv._id ? "◌" : "✓ ACCEPT"}</span>
+                        </button>
+                        <button
+                          className="db-btn-outline"
+                          style={{ padding: "4px 14px", fontSize: "0.75rem" }}
+                          disabled={respondingInvite === inv._id}
+                          onClick={() => handleInviteRespond(inv._id, "reject")}
+                        >
+                          ✕ REJECT
+                        </button>
+                      </div>
                     </div>
                   ))}
+                  {teams.length === 0 ? (
+                    <div className="db-card" style={{ alignItems: "center", textAlign: "center", padding: "3rem 2rem" }}>
+                      <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                      <div style={{ fontSize: "2.5rem", opacity: 0.4, marginBottom: 16 }}>👥</div>
+                      <h3 style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.85rem", letterSpacing: 3, color: "var(--purple)", marginBottom: 10 }}>
+                        NO TEAMS YET
+                      </h3>
+                      <p style={{ fontFamily: "'Rajdhani',sans-serif", color: "rgba(180,200,255,0.5)", maxWidth: 380, marginBottom: 24 }}>
+                        Register for a team event to see your teams here.
+                      </p>
+                      <Link href="/events" className="db-btn-outline">
+                        ⬡ EXPLORE EVENTS ⚡
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="db-events-list">
+                      {teams.map((team, i) => {
+                        const key = team._id || team.teamName;
+                        const isOpen = expandedTeam === key;
+                        const members = teamMembers[key];
+                        return (
+                          <div key={i} className="db-event-row db-team-row" style={{ flexDirection: "column", alignItems: "flex-start", gap: 6, cursor: "pointer" }} onClick={() => handleTeamClick(team)}>
+                            <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                            <div style={{ display: "flex", alignItems: "center", gap: 10, width: "100%" }}>
+                              <span className="db-event-id">[{String(i + 1).padStart(2, "0")}]</span>
+                              <span className="db-event-name" style={{ color: "var(--purple)" }}>{team.teamName}</span>
+                              <span className="db-event-status" style={{ marginLeft: "auto", color: "var(--cyan)", fontSize: "0.72rem" }}>
+                                ◈ {team.eventName}
+                              </span>
+                              <span style={{ color: "rgba(180,200,255,0.4)", fontSize: "0.8rem", marginLeft: 6 }}>{isOpen ? "▲" : "▼"}</span>
+                            </div>
+                            <div style={{ paddingLeft: "2.5rem", fontFamily: "'Rajdhani',sans-serif", fontSize: "0.8rem", color: "rgba(180,200,255,0.45)" }}>
+                              {team.members?.length} member{team.members?.length !== 1 ? "s" : ""}
+                            </div>
+                            {isOpen && (
+                              <div style={{ paddingLeft: "2.5rem", width: "100%", marginTop: 4 }}>
+                                {!members ? (
+                                  <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.78rem", color: "rgba(0,245,255,0.4)" }}>// loading...</span>
+                                ) : members.length === 0 ? (
+                                  <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.78rem", color: "rgba(180,200,255,0.3)" }}>// no member data</span>
+                                ) : (
+                                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                                    {members.map((m, mi) => (
+                                      <div key={mi} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 10px", background: "rgba(0,245,255,0.04)", border: "1px solid rgba(0,245,255,0.1)" }}>
+                                        <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.72rem", color: "var(--cyan)", opacity: 0.5 }}>{String(mi + 1).padStart(2, "0")}</span>
+                                        <span style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 600, fontSize: "0.88rem", color: "rgba(220,230,255,0.85)" }}>{m.fullName}</span>
+                                        <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.72rem", color: "rgba(180,200,255,0.35)", marginLeft: "auto" }}>{m.userID}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
-              )}
+
+              </div>
             </div>
           )}
 
@@ -1585,18 +1850,100 @@ export default function Dashboard() {
           {/* NOTIFICATIONS */}
           {tab === "notifications" && (
             <div className="db-section">
-              <div className="db-section-label">// notifications.load()</div>
-              <div className="db-card">
-                <div className="db-card-corner tl" /><div className="db-card-corner br" />
-                <div className="db-card-top-bar" style={{ background: "var(--purple)" }} />
-                <div className="db-empty-state">
-                  <div className="db-empty-icon">🔔</div>
-                  <div className="db-empty-title">ALL CAUGHT UP</div>
-                  <p className="db-empty-desc">
-                    No new notifications. Updates about your registrations and events will appear here.
-                  </p>
-                </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                <div className="db-section-label">// notifications.load()</div>
+                {(notifications.some(n => !n.read) || invites.some(inv => inv.status === "pending")) && (
+                  <button
+                    className="db-btn-outline"
+                    style={{ padding: "4px 14px", fontSize: "0.72rem" }}
+                    onClick={() => {
+                      fetch("/api/notifications", { method: "PATCH" }).catch(() => {});
+                      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+                    }}
+                  >
+                    ✓ MARK ALL READ
+                  </button>
+                )}
               </div>
+              {invites.length === 0 && notifications.length === 0 ? (
+                <div className="db-card">
+                  <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                  <div className="db-card-top-bar" style={{ background: "var(--purple)" }} />
+                  <div className="db-empty-state">
+                    <div className="db-empty-icon">🔔</div>
+                    <div className="db-empty-title">ALL CAUGHT UP</div>
+                    <p className="db-empty-desc">No notifications yet.</p>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {/* Team invites (actionable) */}
+                  {invites.map((inv, i) => (
+                    <div key={`inv-${i}`} className="db-card" style={{ gap: 10, borderColor: inv.status === "pending" ? "rgba(191,0,255,0.35)" : undefined }}>
+                      <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                      <div className="db-card-top-bar" style={{ background: inv.status === "pending" ? "var(--purple)" : inv.status === "accepted" ? "#00ff88" : "var(--pink)" }} />
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                        <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.68rem", color: "var(--purple)" }}>⬡ TEAM INVITE</span>
+                        <span style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.78rem", color: "var(--cyan)" }}>{inv.teamName}</span>
+                        <span style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "0.78rem", color: "rgba(180,200,255,0.4)" }}>· {inv.eventName}</span>
+                        <span style={{ marginLeft: "auto", fontFamily: "'Share Tech Mono',monospace", fontSize: "0.68rem",
+                          color: inv.status === "pending" ? "var(--yellow)" : inv.status === "accepted" ? "#00ff88" : "var(--pink)" }}>
+                          ◉ {inv.status.toUpperCase()}
+                        </span>
+                      </div>
+                      <p style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "0.85rem", color: "rgba(180,200,255,0.55)" }}>
+                        You have been invited to join team <span style={{ color: "var(--cyan)" }}>{inv.teamName}</span> for <span style={{ color: "var(--cyan)" }}>{inv.eventName}</span>.
+                      </p>
+                      {inv.status === "pending" && (
+                        <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
+                          <button className="db-btn-primary" style={{ padding: "6px 18px", fontSize: "0.8rem" }}
+                            disabled={respondingInvite === inv._id} onClick={() => handleInviteRespond(inv._id, "accept")}>
+                            <span>{respondingInvite === inv._id ? "◌..." : "✓ ACCEPT"}</span>
+                          </button>
+                          <button className="db-btn-outline" style={{ padding: "6px 18px", fontSize: "0.8rem" }}
+                            disabled={respondingInvite === inv._id} onClick={() => handleInviteRespond(inv._id, "reject")}>
+                            ✕ REJECT
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  {/* System notifications */}
+                  {notifications.map((n, i) => {
+                    const iconMap: Record<string, string> = {
+                      team_invite_response: "👥",
+                      team_confirmed: "✅",
+                      payment_verified: "💳",
+                      prime_granted: "★",
+                      announcement: "📢",
+                    };
+                    const colorMap: Record<string, string> = {
+                      team_invite_response: "var(--cyan)",
+                      team_confirmed: "#00ff88",
+                      payment_verified: "#00ff88",
+                      prime_granted: "var(--yellow)",
+                      announcement: "var(--pink)",
+                    };
+                    return (
+                      <div key={`notif-${i}`} className="db-card" style={{ gap: 8, opacity: n.read ? 0.6 : 1, borderColor: n.read ? undefined : colorMap[n.type] + "44" }}>
+                        <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                        <div className="db-card-top-bar" style={{ background: colorMap[n.type] }} />
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <span style={{ fontSize: "1.1rem" }}>{iconMap[n.type] || "🔔"}</span>
+                          <span style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.78rem", color: colorMap[n.type], letterSpacing: 1 }}>{n.title}</span>
+                          {!n.read && <span style={{ marginLeft: "auto", width: 7, height: 7, borderRadius: "50%", background: "var(--pink)", boxShadow: "0 0 6px var(--pink)", display: "inline-block" }} />}
+                          <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.65rem", color: "rgba(180,200,255,0.3)", marginLeft: n.read ? "auto" : 0 }}>
+                            {new Date(n.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "0.88rem", color: "rgba(180,200,255,0.65)", paddingLeft: "2rem" }}>
+                          {n.message}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 
@@ -1629,8 +1976,8 @@ export default function Dashboard() {
                   <div className="db-section-label" style={{ marginBottom: 16 }}>// support.contacts()</div>
                   <div className="db-contact-list">
                     {[
-                      { type: "GENERAL ENQUIRY", name: "Organizer Team", phone: "+91 XXXXXXXXXX", desc: "Event information and general inquiries" },
-                      { type: "PORTAL SUPPORT",  name: "Tech Team",      phone: "+91 XXXXXXXXXX", desc: "Technical support and portal-related queries" },
+                      { type: "GENERAL ENQUIRY", name: "Organizer Team", phone: "+91 97986 87024", desc: "Event information and general inquiries" },
+                      { type: "PORTAL SUPPORT",  name: "Tech Team",      phone: "+91 8936081707", desc: "Technical support and portal-related queries" },
                     ].map((c, i) => (
                       <div key={i} className="db-contact-item">
                         <span className="db-contact-type">{c.type}</span>
