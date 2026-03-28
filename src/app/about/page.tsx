@@ -77,6 +77,7 @@ function useTypingEffect(text: string, speed = 40, startDelay = 0) {
       return () => clearInterval(interval);
     }, startDelay);
     return () => clearTimeout(timeout);
+    
   }, [text, speed, startDelay]);
   return displayed;
 }
