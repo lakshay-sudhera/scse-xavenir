@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { UserContext } from "@/context/UserContext";
 
 // ── Types ──────────────────────────────────────────────
 interface Professor { name: string; role: string; img: string; }
@@ -12,289 +11,49 @@ interface WebMember { name: string; role: string; img: string; github?: string; 
 
 // ── Data ───────────────────────────────────────────────
 const PROFESSORS: Professor[] = [
-  { name: "Dr. Danish Ali Khan",  role: "Head of Department", img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774629413/h_gtptll.jpg" },
-  { name: "Dr. Jitesh Pradhan",   role: "Prof. In-Charge",    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774629413/j_cnec4m.jpg" },
-  { name: "Dr. Dinesh Kumar", role: "Associate Professor", img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774629414/ds_mvxrrv.jpg" },
+  { name: "Dr. Danish Ali Khan",  role: "Head of Department", img: "/images/danishalisir.png" },
+  { name: "Dr. Jitesh Pradhan",   role: "Prof. In-Charge",    img: "" },
+  { name: "Dr. Dilip Kumar Shaw", role: "Associate Professor", img: "" },
 ];
 
 const CORE_TEAM: Member[] = [
-    {
-    name: "Abhishek kumar",
-    role: "President",
-    img: "/images/Screenshot_20260220_093211 - Abhishek Kumar.jpg",
-    phone: "+91 9798687024",
-    email: "2023ugcs048@nitjsr.ac.in",
-    linkedin: "https://www.linkedin.com/in/abhishek-kaushik47",
-  },
-  {
-    name: "Shahnwaz Khan",
-    role: "Vice President",
-    img: "/images/IMG-20240926-WA0020 - Shahnwaz Khan.jpg",
-    phone: "+91 9142277970",
-    email: "shahnwazkhan2007@gmail.com",
-    linkedin: "https://www.linkedin.com/in/khanshahnwaz",
-  },
-  {
-    name: "Aman Singh",
-    role: "Joint Secretary",
-    img: "/images/IMG_5241 - Aman Singh.jpg",
-    phone: "+91 7348762674",
-    email: "aman734876@gmail.com",
-    linkedin: "https://www.linkedin.com/in/aman-singh-webdev",
-  },
-  {
-    name: "Roshni Kumari",
-    role: "General Secretary",
-    img: "/images/IMG_20260220_013432.jpg (1) - Roshni Kumari.jpeg",
-    phone: "8709758581",
-    email: "roshnikumari212004@gmail.com",
-    linkedin: "https://www.linkedin.com/in/roshni-kumari-2aa61928a",
-  },
-  {
-    name: "Sujal Kumar",
-    role: "Treasurer",
-    img: "/images/IMG-20250720-WA0008~2 - Sujal Kumar.jpg",
-    phone: "9693780078",
-    email: "sujalpas62@gmail.com",
-    linkedin: "https://www.linkedin.com/in/sujal-kumar-552a39237",
-  },
+  { name: "Harshit Shrivastav", role: "President",      img: "/images/harshit.jpg",  phone: "+91 89571 44430", email: "harshitshrivastav2609@gmail.com", linkedin: "https://www.linkedin.com/in/harshit-shrivastav-8b513127a" },
+  { name: "Harish Kumar",       role: "Vice President", img: "/images/harish.jpg",   phone: "+91 8178800344",  email: "harrythe454@gmail.com",            linkedin: "https://www.linkedin.com/in/harish-kumar-b7b739218/" },
+  { name: "Sunil Kumar Behera", role: "Joint Secretary",img: "/images/sunilbehra.jpg",phone: "+91 7992752573", email: "sunilbehera672@gmail.com",         linkedin: "https://www.linkedin.com/in/sunil-kumar07/" },
 ];
 
 const MEMBERS: Member[] = [
-   {
-    name: "Tanishq Gupta",
-    role: "Tech Head",
-    img: "/images/WhatsApp Image 2026-03-24 at 18.42.47 - Tanishq Gupta.jpeg",
-    phone: "6299354348",
-    email: "2023ugcs074@nitjsr.ac.in",
-    linkedin: "https://www.linkedin.com/in/tanishq-gupta-77237a282",
-  },
-  {
-    name: "Harsh Raj",
-    role: "Tech Head",
-    img: "/images/IMG_20260108_004533 - Harsh Raj.jpg",
-    phone: "9234661377",
-    email: "rajharsh0204@gmail.com",
-    linkedin: "https://www.linkedin.com/in/harsh-raj-9447812ba",
-  },
-  {
-    name: "Aprajita",
-    role: "Tech Head",
-    img: "/images/IMG-20250615-WA0015 - Aprajita Thakur.jpg",
-    phone: "9142765159",
-    email: "aprajitathakur964@gmail.com",
-    linkedin: "https://www.linkedin.com/in/aprajita-thakur-1317a1223",
-  },
-
-    {
-    name: "Anurag Sharma ",
-    role: "Tech Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
-    phone: "7263047411",
-    email: "ojhavinay7602@gmail.com",
-    linkedin: "https://www.linkedin.com/in/vinay-ojha-9910a831a",
-  },
-   {
-    name: "Vinay Ojha",
-    role: "Tech Head",
-    img: "/images/1740010495918 - Vinay Ojha.jpeg",
-    phone: "7263047411",
-    email: "ojhavinay7602@gmail.com",
-    linkedin: "https://www.linkedin.com/in/vinay-ojha-9910a831a",
-  },
-  {
-    name: "Shivapreetham H S",
-    role: "Web Head",
-    img: "/images/linkedin - Shiva Preetham.jpg",
-    phone: "9845920244",
-    email: "2023ugcs120@nitjsr.ac.in",
-    linkedin: "https://linkedin.com/in/shivapreetham",
-  },
-
- {
-    name: "Keshav Trivedi",
-    role: "Web Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
-    phone: "9845920244",
-    email: "2023ugcs120@nitjsr.ac.in",
-    linkedin: "https://linkedin.com/in/shivapreetham",
-  },
-    
-    {
-    name: "Krrish Kumar",
-    role: "Web Head",
-    img: "/images/20230101_104901_Original - KRRISH KUMAR.jpeg",
-    phone: "9110123553",
-    email: "2024ugcs050@nitjsr.ac.in",
-    linkedin: "https://www.linkedin.com/in/krrish-kumar-bb2aaa328",
-  },
-  {
-    name: "Naveen Kushawaha",
-    role: "Web Head",
-    img: "/images/WhatsApp Image 2026-02-20 at 11.32.50 AM - Naveen Kushawaha.jpeg",
-    phone: "9198511333",
-    email: "naveenkushawaha2003@gmail.com",
-    linkedin: "https://www.linkedin.com/in/naveen-kushawaha-310921212",
-  },
- {
-    name: "Vignesh Chaurasia",
-    role: "App Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
-    phone: "9152657366",
-    email: "vigneshchaurasia@gmail.com",
-    linkedin: "http://www.linkedin.com/in/vignesh-chaurasia-nitjsr",
-  },
-  {
-    name: "Ayush Verma",
-    role: "App Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774474434/WhatsApp_Image_2026-03-26_at_3.03.23_AM_yi25nd.jpg",
-    phone: "8936081707",
-    email: "ayush7610jsr@gmail.com",
-    linkedin: "https://www.linkedin.com/in/ayush-verma-jsr25",
-  },
-
-    {
-    name: "Nandini Rathod",
-    role: "Creative Head",
-    img: "/images/WhatsApp Image 2026-02-20 at 14.42.06 - Nandini Rathod.jpeg",
-    phone: "8500721504",
-    email: "2023ugcs079@gmail.com",
-    linkedin: "https://www.linkedin.com/in/nandini-rathod-67080928a",
-  },
-  {
-    name: "Shreehari Kalundia",
-    role: "Creative Head",
-    img: "/images/IMG_1376.JPG - Shreehari Kalundia.jpeg",
-    phone: "7033558339",
-    email: "kalundia7@gmail.com",
-    linkedin: "https://www.linkedin.com/in/shreehari-kalundia-31a58a22a",
-  },
-  {
-    name: "Akash Jaiswal",
-    role: "CA Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
-    phone: "9572991083",
-    email: "jaisakash9341@gmail.com",
-    linkedin: "https://www.linkedin.com/in/akash-jaiswal-042305291",
-  },
-
-    {
-    name: "Harsh Agarwal",
-    role: "CA Head",
-    img: "/images/WhatsApp Image 2026-03-24 at 5.09.42 PM - Harsh Agarwal.jpeg",
-    phone: "7061960920",
-    email: "2023ugcs097@nitjsr.ac.in",
-    linkedin: "https://www.linkedin.com/in/harsh-agarwal-2a9922283",
-  },
-   {
-    name: "Ankit Yadav",
-    role: "CA Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
-    phone: "7061960920",
-    email: "2023ugcs097@nitjsr.ac.in",
-    linkedin: "https://www.linkedin.com/in/harsh-agarwal-2a9922283",
-  },
-
-    {
-    name: "Raj Singh",
-    role: "PR Head",
-    img: "/images/image - Raj Singh.webp",
-    phone: "9305360368",
-    email: "rajs73635@gmail.com",
-    linkedin: "https://www.linkedin.com/in/raj-singh-b10226294",
-  },
-
-   {
-    name: "Sankarsharn Rastogi ",
-    role: "PR Head",
-    img: "/images/IMG_20260325_104836 - Sankarsharn Rastogi.png",
-    phone: "8081252928",
-    email: "sankarsharnrastogi@gmail.com",
-    linkedin: "https://www.linkedin.com/in/sankarsharn-rastogi-117544217",
-  },
-  {
-    name: "Srijan Swapnil",
-    role: "PR Head",
-    img: "/images/IMG_6119~2 - Srijan Swapnil.jpg",
-    phone: "9162780885",
-    email: "srijanswapnil246@gmail.com",
-    linkedin: "https://www.linkedin.com/in/srijan-swapnil-a2910827b",
-  },
-   {
-    name: "Riya",
-    role: "PR Head",
-    img: "/images/IMG_20240922_225030_779 - Riya Rajput.jpg",
-    phone: "6232681526",
-    email: "rajputriya887@gmail.com",
-    linkedin: "https://www.linkedin.com/in/riya-kachere-730b68151",
-  },
-   {
-    name: "Siya",
-    role: "PR Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
-    phone: "6232681526",
-    email: "rajputriya887@gmail.com",
-    linkedin: "https://www.linkedin.com/in/riya-kachere-730b68151",
-  },
-   {
-    name: "Aameya Devansh",
-    role: "EM Head",
-    img: "/images/IMG_0015 (2) - Aameya Devansh.JPG",
-    phone: "9234102388",
-    email: "adevansh123@gmail.com",
-    linkedin: "https://www.linkedin.com/in/aameya-devansh",
-  },
-
-  {
-    name: "Aditya Prakash",
-    role: "EM Head",
-    img: "/images/IMG-20260217-WA0019_1 - ADITYA PRAKASH.jpg",
-    phone: "9205120803",
-    email: "adityaprakash91111@gmail.com",
-    linkedin: "https://in.linkedin.com/in/aditya-prakash-985739327",
-  },
-  
-  {
-    name: "Shubham Pandey",
-    role: "EM Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
-    phone: "9205120803",
-    email: "adityaprakash91111@gmail.com",
-    linkedin: "https://in.linkedin.com/in/aditya-prakash-985739327",
-  },
-  {
-    name: "Sachin Kumar",
-    role: "EM Head",
-    img: "/images/DSC_0129 (1) - Sachin Kumar.JPG",
-    phone: "8229860167",
-    email: "sachinljk376@gmail.com",
-    linkedin: "https://www.linkedin.com/in/sachin-kumar-206086265",
-  },
- 
-  {
-    name: "Udit pandey",
-    role: "EM Head",
-    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
-    phone: "8800699180",
-    email: "uditpandey8800@gmail.com",
-    linkedin: "https://www.linkedin.com/in/udit-pandey-351417328",
-  },
+  { name: "Abhijeet Kumar Rajput", role: "Web Lead",               img: "/images/20240616_222405_resized - Abhijeet kumar Trivedi.jpg",  phone: "6202076965",    email: "abhijeettrivedi3064@gmail.com",     linkedin: "https://www.linkedin.com/in/abhijeet-kumar-trivedi-329b90258" },
+  { name: "Hamad Ahmad Ansari",    role: "Creative Head",           img: "/images/profile_pic - Hamad Ansari.jpg",                       phone: "+91-74628-85920",email: "hamad.ansarif90@gmail.com",         linkedin: "https://www.linkedin.com/in/hamad-a-ansari/" },
+  { name: "Pronajit Sarkar",       role: "Corporate & Affairs",     img: "/images/20250117_151833 - Pronajit Sarkar.jpg",                 phone: "8617406246",    email: "spronajit@gmail.com",               linkedin: "https://www.linkedin.com/in/pronajit-sarkar-81b07321a" },
+  { name: "Subham Roy",            role: "Event Management Head",   img: "/images/Screenshot 2025-03-30 162229 - SUBHAM.png",            phone: "8125263711",    email: "2022ugcs019@nitjsr.ac.in",          linkedin: "https://www.linkedin.com/in/subham-roy-7712b8275" },
+  { name: "Ranvijay Singh",        role: "PR Head",                 img: "/images/best - Ranvijay Singh.jpg",                            phone: "7070790240",    email: "ranvijay255217@gmail.com",          linkedin: "https://www.linkedin.com/in/ranvijay-singh-b06966289" },
+  { name: "Sahil Kumar Das",       role: "App Team",                img: "/images/IMG_20250330_164353 - Sahil Kumar Das.jpg",             phone: "9608959922",    email: "sahilkumardas96089@gmail.com",      linkedin: "https://www.linkedin.com/in/sahil-kumar-das-a3974528a" },
+  { name: "Manish Dhakad",         role: "PR Head",                 img: "/images/1707223269257 - MANISH DHAKAD.jpg",                    phone: "8269782105",    email: "manishdhakad1105@gmail.com",        linkedin: "https://www.linkedin.com/in/manish-dhakad-51a42528a" },
+  { name: "Shubhra Kanti Roy",     role: "Event Head",              img: "/images/IMG-20240610-WA0170 - Shubhra kanti Roy.jpg",          phone: "7001054760",    email: "royshubhrakanti@gmail.com",         linkedin: "https://www.linkedin.com/in/shubhra-kanti-roy-0520222a0" },
+  { name: "Suryansh Singh",        role: "Event Management Head",   img: "/images/IMG-20240614-WA0024 - Suryansh Singh.jpg",             phone: "9005199878",    email: "singh.suryansh064@gmail.com",       linkedin: "https://www.linkedin.com/in/suryansh-singh-8932062aa/" },
+  { name: "Shivam Kumar",          role: "Tech Team",               img: "/images/20241225_162806 - Shivam Kumar.jpg",                   phone: "7488542587",    email: "2022ugcs030@nitjsr.ac.in",          linkedin: "https://www.linkedin.com/in/shivam-nit" },
+  { name: "Sulochan Khadka",       role: "Web Team Lead",           img: "/images/Screenshot_2025-03-31 - sulochan khadka.jpg",          phone: "7480831843",    email: "sulochankhadka25@gmail.com",        linkedin: "https://www.linkedin.com/in/sulochan-khadka" },
+  { name: "Pratap Kumar",          role: "Technical Team",          img: "/images/IMG_20250129_194206 - PRATAP KUMAR.jpg",               phone: "7061400771",    email: "2022ugcs076@nitjsr.ac.in",          linkedin: "https://www.linkedin.com/in/pratap-kr" },
+  { name: "Ramavath Devender",     role: "Public Relation",         img: "/images/devendersir.jpg",                                      phone: "6302385671",    email: "devendernaik211@gmail.com",         linkedin: "http://linkedin.com/in/ramavath-devender-6548a9260/" },
+  { name: "Khushbu Rani",          role: "Public Relation",         img: "/images/khusboomam.jpg",                                       phone: "7250347857",    email: "rkhushbu793@gmail.com",             linkedin: "https://www.linkedin.com/in/khushbu-rani-a58895265" },
+  { name: "Hitanshu Gavri",        role: "Technical Team",          img: "/images/hitanshusir.jpg",                                      phone: "8601103675",    email: "2022ugcs093@nitjsr.ac.in",          linkedin: "https://www.linkedin.com/in/hitanshu-gavri-ba164028a/" },
 ];
 
-
-// ── Replace these with real web team members ──────────
 const WEB_TEAM: WebMember[] = [
-  { name: "Ayush Verma",             role: "Web Lead",  img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774474434/WhatsApp_Image_2026-03-26_at_3.03.23_AM_yi25nd.jpg", github: "https://github.com/ayushv-nitj", linkedin: "https://www.linkedin.com/in/ayush-verma-jsr25" },
-  { name: "Priyanshu Raj",           role: "Web Lead",  img: "/web-team-photo/IMG_20260326_022402 - Priyanshu Raj.jpg", github: "https://github.com/priyanshuraj-dev", linkedin: "https://www.linkedin.com/in/priyanshuraj-nitjsr/" },
-  { name: "Vivek Mishra",            role: "Web Team",  img: "/web-team-photo/WhatsApp Image 2026-03-26 -Vivek Mishra.jpeg", github: "https://github.com/vivekrtx-lang", linkedin: "https://www.linkedin.com/in/vivek-mishra-9735a3386" },
-  { name: "Deeptanshu Singh Negi",   role: "Web Team",  img: "/web-team-photo/IMG-20260215-WA0048 - Deeptanshu Singh Negi.jpg", github: "https://github.com/deeptanshu-glitch", linkedin: "https://www.linkedin.com/in/deeptanshu-singh-negi" },
-  { name: "Lakshay Sudhera",         role: "Web Team",  img: "/web-team-photo/profile - Lakshay Sudhera.jpeg", github: "https://github.com/lakshay-sudhera", linkedin: "https://www.linkedin.com/in/lakshay-kumar-sudhera-133b35389/" },
-  { name: "Aditya Agrawal",          role: "Web Team",  img: "/web-team-photo/aditya photo - ADITYA AGARWAL.jpg", github: "https://github.com/AdityaAgarwal18122006", linkedin: "https://www.linkedin.com/in/aditya-agarwal-844493386" },
-  { name: "Ayush Sarkar",            role: "Web Team",  img: "/web-team-photo/IMG_20260102_194028 - Ayush Sarkar.jpg", github: "https://github.com/ayushsarkar314", linkedin: "https://www.linkedin.com/in/ayush-sarkar-441b9a39b" },
-  { name: "Darshita Maheshwari",     role: "Web Team",  img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774629414/d_foqjqk.jpg", github: "https://github.com/darshita44", linkedin: "https://www.linkedin.com/in/darshita-maheshwari-836980383" },
-    {name:  "Sumit Kapoor",            role: "Web Team",  img: "/web-team-photo/IMG_20260301_105017 - Sumit.jpg" , github:"https://github.com/Sumitkapoor129",    linkedin:"https://www.linkedin.com/in/sumitkapoor001"},
+  { name: "Ayush Verma",             role: "Web Lead",  img: "/web-team-photo/IMG-20251202-WA0009 - Ayush Verma.jpg", github: "https://github.com/ayushv-nitj", linkedin: "https://www.linkedin.com/ayushverma-25" },
+  { name: "Priyanshu Raj",           role: "Web Lead",  img: "/web-team-photo/IMG_20260326_022402 - Priyanshu Raj.jpg",github: "https://github.com/",           linkedin: "https://www.linkedin.com/in/priyanshuraj-nitjsr/" },
+  { name: "Vivek Mishra",            role: "Web Team",  img: "/web-team-photo/WhatsApp Image 2026-03-26 -Vivek Mishra.jpeg", github: "https://github.com/vivekrtx-lang",           linkedin: "https://www.linkedin.com/in/vivek-mishra-9735a3386?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
+  { name: "Deeptanshu Singh Negi",   role: "Web Team",  img: "/web-team-photo/IMG-20260215-WA0048 - Deeptanshu Singh Negi.jpg", github: "https://github.com/deeptanshu-glitch",           linkedin: "https://www.linkedin.com/in/deeptanshu-singh-negi" },
+  { name: "Lakshay Sudhera",         role: "Web Team",  img: "/web-team-photo/profile - Lakshay Sudhera.jpeg", github: " https://github.com/lakshay-sudhera",           linkedin: "https://www.linkedin.com/in/lakshay-kumar-sudhera-133b35389/" },
+  { name: "Aditya Agrawal",          role: "Web Team",  img: "/web-team-photo/aditya photo - ADITYA AGARWAL.jpg",         github: "https://github.com/AdityaAgarwal18122006",           linkedin: "https://www.linkedin.com/in/aditya-agarwal-844493386?utm_source=share_via&utm_connect=profile&utm_medium=member_android" },
+  
+  { name: "Ayush Sarkar",            role: "Web Team",  img: "/web-team-photo/IMG_20260102_194028 - Ayush Sarkar.jpg",         github: "https://github.com/ayushsarkar314",           linkedin: "https://www.linkedin.com/in/ayush-sarkar-441b9a39b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
+  { name: "Darshita Maheshwari",     role: "Web Team",  img: "/web-team-photo/Screenshot_20260325_084115_Photos - DARSHITA MAHESHWARI.jpg", github: "https://github.com/darshita44",           linkedin: "https://www.linkedin.com/in/darshita-maheshwari-836980383" },
+  {name:  "Sumit Kapoor",            role: "Web Team",  img: "/web-team-photo/IMG_20260301_105017 - Sumit.jpg" , github:"https://github.com/Sumitkapoor129",    linkedin:"https://www.linkedin.com/in/sumitkapoor001"},
   {name:  "Harshit Sharma",          role: "Web Team",  img: "/web-team-photo/ Harshit Sharma.jpg" , github:"https://github.com/HarshitSharma-h8",    linkedin:"https://www.linkedin.com/in/harshit-sharma-fullstack-dev/"},
   {name:  "Ganesh Gundawar",         role: "Web Team",  img: "/web-team-photo/IMG_20250727_174200 - Ganesh Gundawar.jpg" , github:"https://github.com/ganeshgundawar",    linkedin:"https://www.linkedin.com/in/ganesh-gundawar-2b681926a?utm_source=share_via&utm_content=profile&utm_medium=member_android"},
+
 ];
 
 const EDITIONS: Edition[] = [
@@ -318,6 +77,7 @@ function useTypingEffect(text: string, speed = 40, startDelay = 0) {
       return () => clearInterval(interval);
     }, startDelay);
     return () => clearTimeout(timeout);
+    
     
   }, [text, speed, startDelay]);
   return displayed;
@@ -506,7 +266,6 @@ function WebCard({ member, idx }: { member: WebMember; idx: number }) {
 
 // ── Main ───────────────────────────────────────────────
 export default function AboutPage() {
-  const { userData } = useContext(UserContext);
   const bootLine = useTypingEffect("Initializing SCSE.archive() → Loading member database... OK", 30, 300);
   const { ref: aboutRef, inView: aboutIn } = useInView();
   const { ref: profRef,  inView: profIn  } = useInView();
@@ -555,6 +314,7 @@ export default function AboutPage() {
           pointer-events: none;
           z-index: 0;
         }
+
         .about-page::after {
           content: '';
           position: fixed; inset: 0;
@@ -1272,7 +1032,7 @@ export default function AboutPage() {
                 this fest is for YOU! Connect with like-minded enthusiasts and recruiters,
                 and attend workshops and guest talks from top industry professionals.
               </p>
-              <a href="/sponsorship_brochure.pdf" target="_blank" rel="noopener noreferrer" className="xav-btn">
+              <a href="/SCSE_brochure.pdf" target="_blank" rel="noopener noreferrer" className="xav-btn">
                 ▶ View Brochure
               </a>
             </div>
@@ -1340,25 +1100,8 @@ export default function AboutPage() {
             Register now and be part of the biggest tech fest at NIT Jamshedpur.
           </p>
           <div className="cta-btns">
-            {userData ? (
-              <>
-                <Link href="/dashboard" className="cta-btn-primary">▶ Dashboard</Link>
-                <button
-                  className="cta-btn-secondary"
-                  onClick={async () => {
-                    await fetch("/api/auth/logout", { method: "POST" });
-                    window.location.href = "/";
-                  }}
-                >
-                  ◆ Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link href="/register" className="cta-btn-primary">▶ Register Now</Link>
-                <Link href="/#events" className="cta-btn-secondary">◆ View Events</Link>
-              </>
-            )}
+            <Link href="/register" className="cta-btn-primary">▶ Register Now</Link>
+            <Link href="/#events" className="cta-btn-secondary">◆ View Events</Link>
           </div>
         </section>
 
