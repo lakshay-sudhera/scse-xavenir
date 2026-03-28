@@ -92,6 +92,7 @@ const MEMBERS: Member[] = [
     img: "/our-member-photo/Anurag sharma.jpeg",
     phone: "7263047411",
     email: "ojhavinay7602@gmail.com",
+    
     linkedin: "https://www.linkedin.com/in/anurag-sharma-63xxx?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
   },
    {
