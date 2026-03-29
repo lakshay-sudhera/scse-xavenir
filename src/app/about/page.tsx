@@ -21,7 +21,7 @@ const CORE_TEAM: Member[] = [
     {
     name: "Abhishek kumar",
     role: "President",
-    img: "/images/Screenshot_20260220_093211 - Abhishek Kumar.jpg",
+    img: "/images/abhishek_sir.png",
     phone: "+91 9798687024",
     email: "2023ugcs048@nitjsr.ac.in",
     linkedin: "https://www.linkedin.com/in/abhishek-kaushik47",
@@ -833,7 +833,7 @@ export default function AboutPage() {
           background: linear-gradient(90deg, var(--cyan), var(--pink), var(--purple));
         }
         .core-card:hover { border-color: rgba(0,245,255,0.5); box-shadow: 0 0 45px rgba(0,245,255,0.11); }
-        .core-img-wrap { position: relative; height: 260px; overflow: hidden; }
+        .core-img-wrap { position: relative; height: 280px; overflow: hidden; }
         .core-img {
           width: 100%; height: 100%; object-fit: cover; object-position: top;
           filter: grayscale(15%) brightness(0.85);
@@ -898,9 +898,9 @@ export default function AboutPage() {
           color: var(--cyan); background: rgba(0,3,20,0.82);
           padding: 2px 7px; z-index: 2; letter-spacing: 0.08em;
         }
-        .mem-img-wrap { position: relative; height: 170px; overflow: hidden; }
+        .mem-img-wrap { position: relative; height: 190px; overflow: hidden; }
         .mem-img {
-          width: 100%; height: 100%; object-fit: cover; object-position: top;
+          width: 100%; height: 100%; object-fit: cover; object-position: center 15%;
           filter: grayscale(20%) brightness(0.85);
           transition: filter 0.3s, transform 0.3s;
         }
@@ -1081,9 +1081,9 @@ export default function AboutPage() {
           font-family: var(--f-mono); font-size: 0.62rem;
           color: rgba(0,245,255,0.35); letter-spacing: 0.08em; z-index: 3;
         }
-        .web-card-img-wrap { position: relative; height: 170px; overflow: hidden; }
+        .web-card-img-wrap { position: relative; height: 190px; overflow: hidden; }
         .web-card-img {
-          width: 100%; height: 100%; object-fit: cover; object-position: top;
+          width: 100%; height: 100%; object-fit: cover; object-position: center 15%;
           filter: grayscale(30%) brightness(0.8);
           transition: filter 0.4s, transform 0.4s;
         }
