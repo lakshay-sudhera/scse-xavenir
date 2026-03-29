@@ -173,7 +173,7 @@ function Page() {
               <div style={s.fieldWrap}>
                 <label style={s.label}>SCAN_TO_PAY</label>
                 <div style={s.qrWrap}>
-                  <img src="/scseqr.png" alt="SCSE QR" style={s.qrImg} />
+                  <img src="https://res.cloudinary.com/dtieuimsz/image/upload/v1774813669/Screenshot_2026-03-30_011644_ymfpe2.png" alt="SCSE QR" style={s.qrImg} />
                 </div>
               </div>
               <div style={s.amountWrap}>

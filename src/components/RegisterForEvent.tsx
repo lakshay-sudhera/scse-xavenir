@@ -837,7 +837,7 @@ export default function RegisterForEvent({
                 </div>
 
                 <div className="rfe-qr-wrap">
-                  <img src="/scseqr.png" alt="SCSE QR" className="rfe-qr"/>
+                  <img src="https://res.cloudinary.com/dtieuimsz/image/upload/v1774813669/Screenshot_2026-03-30_011644_ymfpe2.png" alt="SCSE QR" className="rfe-qr"/>
                   <p className="rfe-pay-amount">PAY ₹{regFees}</p>
                 </div>
 

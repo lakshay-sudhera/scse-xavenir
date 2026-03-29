@@ -75,6 +75,11 @@ export default function ContactPage() {
       return;
     }
 
+    if (!form.email.endsWith("@gmail.com")) {
+      setError("Only Gmail addresses (@gmail.com) are accepted.");
+      return;
+    }
+
     if (form.message.length < 5) {
       setError("Message must be at least 5 characters.");
       return;
