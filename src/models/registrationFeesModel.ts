@@ -5,6 +5,8 @@ export interface Rverify extends Document {
   razorpay_order_id: string;
   razorpay_payment_id: string;
   razorpay_signature: string;
+  createdAt: Date; // ← added: timestamps:true writes this but interface was missing it
+  updatedAt: Date; // ← added: good practice to declare both
 }
 
 const RverifySchema: Schema<Rverify> = new Schema(

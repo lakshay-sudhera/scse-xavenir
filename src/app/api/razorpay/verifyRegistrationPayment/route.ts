@@ -1,4 +1,3 @@
-import Razorpay from "razorpay";
 import { NextResponse, NextRequest } from "next/server";
 import { connectDB } from "@/dbConfig/dbConfig";
 import jwt from "jsonwebtoken";
@@ -114,7 +113,7 @@ export async function POST(request: NextRequest) {
         message: "Your registration payment has been verified. You now have Prime access — all events and features are unlocked.",
         meta: { razorpay_payment_id },
       });
-      return NextResponse.json({ success: true, message: "Payment successfully completed" });
+      return NextResponse.json({ success: true, message: "Payment successfully completed",paymentId: razorpay_payment_id});
     } else {
       return NextResponse.json(
         {
