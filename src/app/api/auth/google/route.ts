@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   try {
     await connectDB();
 
-    // Extract the "code" from the query params
+    // Extract the "code" from the query params , which is sent by google act as temporary authorization token
     const { searchParams } = new URL(req.url);
     const code = searchParams.get("code");
 
@@ -25,6 +25,7 @@ export async function GET(req: NextRequest) {
     );
 
     // Exchange code for tokens
+    // through the tokens, server fetch user data from google
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
 
@@ -64,7 +65,7 @@ export async function GET(req: NextRequest) {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           path: "/",
-          maxAge: 60 * 60 * 2 , // 2 hours in seconds
+          maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
         });
         return response;
     }
@@ -81,7 +82,7 @@ export async function GET(req: NextRequest) {
 
     const payload = { email, token: instance.token };
     const secret = process.env.JWT_SECRET || "def";
-    const jwtToken = jwt.sign(payload, secret, { expiresIn: "2d" });
+    const jwtToken = jwt.sign(payload, secret, { expiresIn: "2h" });
 
     const response = NextResponse.redirect(
       new URL("/fillCredentials", req.url)

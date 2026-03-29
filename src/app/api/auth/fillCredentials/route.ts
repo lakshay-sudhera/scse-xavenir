@@ -146,7 +146,7 @@ export async function POST(req: NextRequest) {
     };
 
     const logtok = await jwt.sign(logtokPayload, process.env.JWT_SECRET!, {
-      expiresIn: "60d",
+      expiresIn: "7d",
     });
     // Set the logtok as a cookie and remove the eAuthToken cookie
     const response = NextResponse.json(
@@ -159,7 +159,7 @@ export async function POST(req: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 24 * 60 * 60, // 7 days in seconds
+      maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
     });
     response.cookies.delete("eAuthToken");
     return response;
