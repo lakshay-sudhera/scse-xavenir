@@ -14,7 +14,7 @@ interface WebMember { name: string; role: string; img: string; github?: string; 
 const PROFESSORS: Professor[] = [
   { name: "Dr. Danish Ali Khan",  role: "Head of Department", img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774629413/h_gtptll.jpg" },
   { name: "Dr. Jitesh Pradhan",   role: "Prof. In-Charge",    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774629413/j_cnec4m.jpg" },
-  { name: "Dr. Dinesh Kumar", role: "Associate Professor", img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774629414/ds_mvxrrv.jpg" },
+  { name: "Dr. Deepak Rai", role: "Prof. In-Charge", img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774896826/Screenshot_2026-03-31_002317_x6lmqr.png" },
 ];
 
 const CORE_TEAM: Member[] = [
@@ -256,12 +256,12 @@ const MEMBERS: Member[] = [
   },
   
   {
-    name: "Shubham Pandey",
+    name: "Anuj Kumar",
     role: "EM Head",
-    img: "/our-member-photo/Shubham Pandey.jpeg",
-    phone: "9205120803",
-    email: "adityaprakash91111@gmail.com",
-    linkedin: "https://www.linkedin.com/in/shubham-pandey-a71951344?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
+    phone: "7858927896",
+    email: "anujkumar@gmail.com",
+    linkedin: "https://www.linkedin.com/in/anuj-kumar-14878b28a",
   },
   {
     name: "Sachin Kumar",
@@ -1184,8 +1184,12 @@ export default function AboutPage() {
           .sec-label { font-size: 0.68rem; letter-spacing: 0.18em; }
           .about-term-body { padding: 1rem; font-size: 0.78rem; line-height: 1.75; }
           .core-card { flex-direction: column; }
-          .core-img-wrap { width: 100%; height: 200px; }
-          .core-img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+          .core-img-wrap { width: 100%; height: 240px; }
+          .core-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+          .mem-img-wrap { height: 160px; }
+          .mem-img { object-position: center top; }
+          .web-card-img-wrap { height: 160px; }
+          .web-card-img { object-position: center top; }
           .xav-title { font-size: 1.1rem; }
           .xav-text { font-size: 0.95rem; }
         }
@@ -1193,8 +1197,10 @@ export default function AboutPage() {
           .about-hero { padding: 85px 1rem 36px; }
           .about-section { padding: 36px 1rem; }
           .about-hero-title { font-size: clamp(1.4rem, 9vw, 2.2rem); line-height: 1.1; }
-          .prof-grid { grid-template-columns: 1fr; gap: 1rem; }
+          .prof-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
           .mem-grid, .web-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+          .mem-img-wrap { height: 140px; }
+          .web-card-img-wrap { height: 140px; }
           .mem-name, .web-card-name { font-size: 0.82rem; }
           .mem-role, .web-card-role { font-size: 0.7rem; }
           .edition-year { font-size: 1rem; }
@@ -1202,6 +1208,8 @@ export default function AboutPage() {
           .edition-stat-val { font-size: 1.2rem; }
           .prof-name { font-size: 0.9rem; }
           .prof-role { font-size: 0.72rem; }
+          .prof-img-wrap { width: 100px; height: 100px; }
+          .prof-img { width: 100px; height: 100px; }
         }
       `}</style>
 

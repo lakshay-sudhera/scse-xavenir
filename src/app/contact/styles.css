@@ -634,7 +634,8 @@ textarea.contact-input {
           .contact-cards-grid { grid-template-columns: 1fr; }
           .contact-hero-title { font-size: clamp(1.6rem, 8vw, 2.8rem); letter-spacing: 2px; }
           .contact-hero-sub { font-size: 0.8rem; letter-spacing: 1px; }
-          .contact-card-img-wrap { height: 180px; }
+          .contact-card-img-wrap { height: auto; aspect-ratio: 4 / 3; padding: 0.6rem 0.6rem 0; }
+          .contact-card-img { border-radius: 4px; object-position: center top; }
           .contact-card-name { font-size: 1.4rem; }
           .contact-card-role { font-size: 0.85rem; }
           .contact-card-detail { font-size: 0.95rem; }
@@ -647,7 +648,7 @@ textarea.contact-input {
           .contact-cards-section { padding: 28px 1rem; }
           .contact-bottom { padding: 28px 1rem; }
           .contact-hero-title { font-size: clamp(1.3rem, 9vw, 2.2rem); }
-          .contact-card-img-wrap { height: 160px; }
+          .contact-card-img-wrap { aspect-ratio: 3 / 2; padding: 0.5rem 0.5rem 0; }
           .contact-card-name { font-size: 1.2rem; }
           .contact-card-body { padding: 1rem 1.1rem 1.2rem; }
           .contact-input { padding: 11px 14px; font-size: 0.92rem; }

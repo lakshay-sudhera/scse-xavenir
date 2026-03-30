@@ -956,6 +956,8 @@ export default function Dashboard() {
   const [invites, setInvites] = useState<any[]>([]);
   const [sentInvites, setSentInvites] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [certificates, setCertificates] = useState<any[]>([]);
+  const [certsLoading, setCertsLoading] = useState(false);
   const [respondingInvite, setRespondingInvite] = useState<string | null>(null);
   const [glitch, setGlitch] = useState(false);
 
@@ -1038,6 +1040,16 @@ export default function Dashboard() {
       .then(d => setNotifications(d.data || []))
       .catch(() => {});
   }, [user]);
+
+  useEffect(() => {
+    if (!user || tab !== "certificates") return;
+    setCertsLoading(true);
+    fetch("/api/certificates")
+      .then(r => r.json())
+      .then(d => setCertificates(d.certificates || []))
+      .catch(() => {})
+      .finally(() => setCertsLoading(false));
+  }, [user, tab]);
 
   const handleSave = async () => {
     setSaving(true); setSaveMsg("");
@@ -1601,14 +1613,14 @@ export default function Dashboard() {
           {/* PROFILE */}
           {tab === "profile" && (
             <div className="db-section">
-              <div className="db-section-label">// profile.edit()</div>
+              <div className="db-section-label"> profile.edit()</div>
               <div className="db-profile-grid">
 
                 {/* Pic upload card */}
                 <div className="db-card" style={{ alignItems: "center" }}>
                   <div className="db-card-corner tl" /><div className="db-card-corner br" />
                   <div className="db-card-top-bar" />
-                  <div className="db-section-label" style={{ marginBottom: 16, alignSelf: "flex-start" }}>// avatar.upload()</div>
+                  <div className="db-section-label" style={{ marginBottom: 16, alignSelf: "flex-start" }}>avatar.upload()</div>
                   <div className="db-avatar-wrap db-avatar-lg" onClick={() => fileRef.current?.click()}>
                     {picPreview
                       ? <img src={picPreview} alt="avatar" className="db-avatar-img" />
@@ -1620,7 +1632,7 @@ export default function Dashboard() {
                     <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePicUpload} />
                   </div>
                   <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "0.85rem", fontWeight: 500, color: "rgba(0,245,255,0.45)", marginTop: 12, textAlign: "center" }}>
-                    {uploading ? "// UPLOADING..." : "// CLICK TO CHANGE PHOTO"}
+                    {uploading ? "// UPLOADING..." : " CLICK TO CHANGE PHOTO"}
                   </p>
                 </div>
 
@@ -1830,20 +1842,72 @@ export default function Dashboard() {
           {tab === "certificates" && (
             <div className="db-section">
               <div className="db-section-label">// certificates.fetch()</div>
-              <div className="db-card">
-                <div className="db-card-corner tl" /><div className="db-card-corner br" />
-                <div className="db-card-top-bar" style={{ background: "var(--yellow)" }} />
-                <div className="db-empty-state">
-                  <div className="db-empty-icon">🏆</div>
-                  <div className="db-empty-title">NO CERTIFICATES YET</div>
-                  <p className="db-empty-desc">
-                    Certificates will be issued after the event concludes. Participate in events to earn yours.
-                  </p>
-                  <Link href="/events" className="db-btn-outline" style={{ marginTop: 8 }}>
-                    EXPLORE EVENTS →
-                  </Link>
+
+              {certsLoading ? (
+                <div className="db-card">
+                  <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                  <div className="db-empty-state">
+                    <div className="db-empty-icon" style={{animation:"spin 1s linear infinite"}}>⟳</div>
+                    <div className="db-empty-title">LOADING...</div>
+                  </div>
                 </div>
-              </div>
+              ) : certificates.length === 0 ? (
+                <div className="db-card">
+                  <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                  <div className="db-card-top-bar" style={{ background: "var(--yellow)" }} />
+                  <div className="db-empty-state">
+                    <div className="db-empty-icon">🏆</div>
+                    <div className="db-empty-title">NO CERTIFICATES YET</div>
+                    <p className="db-empty-desc">
+                      Certificates will be issued after the event concludes. Participate in events to earn yours.
+                    </p>
+                    <Link href="/events" className="db-btn-outline" style={{ marginTop: 8 }}>
+                      EXPLORE EVENTS →
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                  {certificates.map((cert: any) => {
+                    const typeColor =
+                      cert.type === "winner"    ? "var(--yellow)" :
+                      cert.type === "runner_up" ? "#c0c0c0"       :
+                      "var(--cyan)";
+                    const typeLabel =
+                      cert.type === "winner"    ? `🥇 WINNER${cert.position ? ` · POSITION ${cert.position}` : ""}` :
+                      cert.type === "runner_up" ? `🥈 RUNNER UP${cert.position ? ` · POSITION ${cert.position}` : ""}` :
+                      "🎖 PARTICIPATION";
+                    return (
+                      <div key={cert._id} className="db-card" style={{ padding: "1.2rem 1.5rem" }}>
+                        <div className="db-card-corner tl" /><div className="db-card-corner br" />
+                        <div className="db-card-top-bar" style={{ background: typeColor }} />
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+                          <div>
+                            <div style={{ fontFamily: "var(--f-mono)", fontSize: "0.68rem", color: "rgba(0,245,255,0.45)", letterSpacing: "0.15em", marginBottom: 4 }}>
+                              // {cert.eventName}
+                            </div>
+                            <div style={{ fontFamily: "var(--f-head)", fontSize: "1rem", color: typeColor, letterSpacing: "0.1em" }}>
+                              {typeLabel}
+                            </div>
+                            <div style={{ fontFamily: "var(--f-mono)", fontSize: "0.7rem", color: "rgba(200,220,255,0.4)", marginTop: 4 }}>
+                              Issued: {new Date(cert.issuedAt).toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" })}
+                            </div>
+                          </div>
+                          <a
+                            href={cert.certificateUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="db-btn-outline"
+                            style={{ color: typeColor, borderColor: typeColor, whiteSpace: "nowrap" }}
+                          >
+                            ↗ VIEW CERTIFICATE
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 
@@ -1878,7 +1942,7 @@ export default function Dashboard() {
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   {/* Team invites (actionable) */}
-                  {invites.map((inv, i) => (
+                  {[...invites].reverse().map((inv, i) => (
                     <div key={`inv-${i}`} className="db-card" style={{ gap: 10, borderColor: inv.status === "pending" ? "rgba(191,0,255,0.35)" : undefined }}>
                       <div className="db-card-corner tl" /><div className="db-card-corner br" />
                       <div className="db-card-top-bar" style={{ background: inv.status === "pending" ? "var(--purple)" : inv.status === "accepted" ? "#00ff88" : "var(--pink)" }} />
@@ -1909,7 +1973,7 @@ export default function Dashboard() {
                     </div>
                   ))}
                   {/* System notifications */}
-                  {notifications.map((n, i) => {
+                  {[...notifications].reverse().map((n, i) => {
                     const iconMap: Record<string, string> = {
                       team_invite_response: "👥",
                       team_confirmed: "✅",
