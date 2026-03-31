@@ -1391,6 +1391,27 @@ function useCountUp(target: number, active: boolean, duration = 2200) {
   return val;
 }
 
+// ── Countdown hook ─────────────────────────────────────
+function useCountdown(target: Date) {
+  const calc = () => {
+    const diff = target.getTime() - Date.now();
+    if (diff <= 0) return { d: 0, h: 0, m: 0, s: 0 };
+    return {
+      d: Math.floor(diff / 86400000),
+      h: Math.floor((diff % 86400000) / 3600000),
+      m: Math.floor((diff % 3600000) / 60000),
+      s: Math.floor((diff % 60000) / 1000),
+    };
+  };
+  const [time, setTime] = useState({ d: 0, h: 0, m: 0, s: 0 });
+  useEffect(() => {
+    setTime(calc());
+    const id = setInterval(() => setTime(calc()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return time;
+}
+
 // ── Stat counter component ─────────────────────────────
 function StatNum({ target, prefix = "", suffix = "" }: { target: number; prefix?: string; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -1828,6 +1849,7 @@ function CompRow({ index, comp }: { index: number; comp: { icon: string; title: 
 export default function LandingPage() {
   const { userData } = useContext(UserContext);
   const [activeComp, setActiveComp] = useState(0);
+  const countdown = useCountdown(new Date("2026-04-18T09:00:00+05:30"));
   const [loaded, setLoaded]       = useState(false);
   const [loaderDone, setLoaderDone] = useState(false);
   const [scrolled, setScrolled]   = useState(false);
@@ -1996,6 +2018,17 @@ useEffect(() => {
             <span className="ht-eng glitch" data-text="& ENGINEERING">&amp; ENGINEERING</span>
           </h1>
 
+          <div className="hero-countdown">
+            <span className="hcd-label">// XAVENIR &apos;26 LAUNCHES IN</span>
+            <div className="hcd-units">
+              {[["d", countdown.d], ["h", countdown.h], ["m", countdown.m], ["s", countdown.s]].map(([u, v]) => (
+                <div key={u as string} className="hcd-unit">
+                  <span className="hcd-num">{String(v).padStart(2, "0")}</span>
+                  <span className="hcd-u">{u}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <p className="hero-sub">
             <span>CODE</span> | <span>CREATE</span> | <span>CONQUER</span><br />
@@ -2193,7 +2226,7 @@ useEffect(() => {
         <span /><span /><span />
       </div>
       <div className="comp-term-title">xavenir@nitjsr:~/competitions$</div>
-      <div className="comp-term-status">16 PROCESSES LOADED</div>
+      <div className="comp-term-status">{competitions.length} PROCESSES LOADED</div>
     </div>
  
     {/* Competition rows */}
@@ -2519,6 +2552,14 @@ function PageStyles() {
       }
       .hero-sub span { color: var(--cyan); }
 
+      /* ── COUNTDOWN ── */
+      .hero-countdown { margin: 1.2rem 0 1.6rem; }
+      .hcd-label { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; letter-spacing: 3px; color: var(--pink); display: block; margin-bottom: 0.7rem; }
+      .hcd-units { display: flex; gap: 1rem; align-items: center; }
+      .hcd-unit { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 52px; background: rgba(0,245,255,0.04); border: 1px solid rgba(0,245,255,0.18); padding: 8px 10px; position: relative; clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px)); }
+      .hcd-num { font-family: 'Orbitron', monospace; font-size: 1.5rem; font-weight: 900; color: var(--cyan); text-shadow: 0 0 12px rgba(0,245,255,0.5); line-height: 1; }
+      .hcd-u { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 2px; color: rgba(0,245,255,0.4); text-transform: uppercase; }
+
       /* ── STATS ── */
       .stats-bar { display: flex; gap: 2.5rem; align-items: center; margin-top: 4rem; flex-wrap: wrap; }
       .stat { text-align: center; }
@@ -2704,6 +2745,9 @@ function PageStyles() {
         .hero-title { font-size: clamp(1.8rem,7.5vw,2.6rem); }
         .hero-tag { font-size: 0.72rem; letter-spacing: 2px; margin-bottom: 1rem; }
         .hero-sub { font-size: 0.75rem; line-height: 1.7; margin-bottom: 1.6rem; letter-spacing: 1px; }
+        .hcd-num { font-size: 1.1rem; }
+        .hcd-unit { min-width: 40px; padding: 6px 8px; }
+        .hcd-units { gap: 0.6rem; }
         .section { padding: 50px 1.2rem; }
         .section-title { font-size: clamp(1.3rem,6vw,2rem); }
         .footer-grid { grid-template-columns: 1fr; }

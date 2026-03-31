@@ -7,10 +7,12 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { UserContext } from "@/context/UserContext";
 import Loading from "@/components/Loading";
+import { useToast } from "@/components/Toast";
 
 export default function Login() {
   const router = useRouter();
   const { setUserData } = useContext(UserContext);
+  const { toast } = useToast();
 
   const [loader, setLoader] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -46,15 +48,14 @@ export default function Login() {
         if (userResponse.data.data) {
           setUserData(userResponse.data.data);
         }
+        toast("Login successful! Welcome back.", "success");
         router.push("/dashboard");
       }
     } catch (err: any) {
       setLoader(false);
-      setError(
-        err.response?.data?.message ||
-          err.response?.data?.error ||
-          "Login failed. Please try again."
-      );
+      const msg = err.response?.data?.message || err.response?.data?.error || "Login failed. Please try again.";
+      setError(msg);
+      toast(msg, "error");
     }
   };
 

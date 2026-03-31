@@ -371,6 +371,31 @@ function ProfCard({ prof }: { prof: Professor }) {
   );
 }
 
+function CopyText({ text, display, className }: { text: string; display: React.ReactNode; className?: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    });
+  };
+  return (
+    <span onClick={handleCopy} className={className} style={{ cursor: "pointer", position: "relative" }}>
+      {display}
+      {copied && (
+        <span style={{
+          position: "absolute", bottom: "120%", left: "50%", transform: "translateX(-50%)",
+          background: "rgba(0,245,255,0.15)", border: "1px solid rgba(0,245,255,0.4)",
+          color: "var(--cyan)", fontSize: "0.6rem", letterSpacing: "0.1em",
+          padding: "3px 8px", whiteSpace: "nowrap", pointerEvents: "none",
+          fontFamily: "var(--f-mono)",
+        }}>COPIED</span>
+      )}
+    </span>
+  );
+}
+
 function CoreCard({ member }: { member: Member }) {
   return (
     <div className="core-card">
@@ -385,12 +410,8 @@ function CoreCard({ member }: { member: Member }) {
         <h3 className="core-name">{member.name}</h3>
         <p className="core-role">{member.role}</p>
         <div className="core-contacts">
-          <a href={`tel:${member.phone}`} className="core-contact-link">
-            <span className="core-contact-icon">☎</span> {member.phone}
-          </a>
-          <a href={`mailto:${member.email}`} className="core-contact-link">
-            <span className="core-contact-icon">✉</span> {member.email}
-          </a>
+          <CopyText text={member.phone} className="core-contact-link" display={<><span className="core-contact-icon">☎</span> {member.phone}</>} />
+          <CopyText text={member.email} className="core-contact-link" display={<><span className="core-contact-icon">✉</span> {member.email}</>} />
           <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="core-linkedin">
             ▶ LinkedIn Profile
           </a>
@@ -417,7 +438,7 @@ function MemberCard({ member, idx }: { member: Member; idx: number }) {
         <h3 className="mem-name">{member.name}</h3>
         <p className="mem-role">{member.role}</p>
         <div className={`mem-details ${hovered ? "mem-details-visible" : ""}`}>
-          <a href={`tel:${member.phone}`} className="mem-detail-item">☎ {member.phone}</a>
+          <CopyText text={member.phone} className="mem-detail-item" display={<>☎ {member.phone}</>} />
           <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="mem-detail-linkedin">▶ LinkedIn</a>
         </div>
       </div>

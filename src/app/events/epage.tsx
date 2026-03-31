@@ -431,6 +431,7 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetch("/api/events")
@@ -446,6 +447,9 @@ export default function EventsPage() {
   }, []);
 
   const count = events.length;
+  const filtered = search.trim()
+    ? events.filter(e => e.name.toLowerCase().includes(search.toLowerCase()))
+    : events;
 
   return (
     <>
@@ -591,14 +595,30 @@ export default function EventsPage() {
             <span className="ghl r"/>
             <div className="gh-corner r"/>
           </div>
+
+          {/* Search bar */}
+          <div className="ev-search-wrap">
+            <span className="ev-search-icon">⌕</span>
+            <input
+              className="ev-search-input"
+              type="text"
+              placeholder="SEARCH EVENTS..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+            {search && (
+              <button className="ev-search-clear" onClick={() => setSearch("")}>✕</button>
+            )}
+          </div>
+
           <div className="egrid">
             {loading
               ? Array.from({length:6}).map((_,i)=><SkeletonCard key={i}/>)
               : error
               ? <div className="serr">⚠ SYSTEM ERROR: {error}</div>
-              : events.length === 0
-              ? <div className="serr">NO EVENT NODES DETECTED</div>
-              : events.map((ev,i)=><EventCard key={ev._id} event={ev} index={i}/>)
+              : filtered.length === 0
+              ? <div className="serr">// NO MATCHES FOUND</div>
+              : filtered.map((ev,i)=><EventCard key={ev._id} event={ev} index={i}/>)
             }
           </div>
         </section>
@@ -838,6 +858,15 @@ export default function EventsPage() {
         .egrid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
         @media(max-width:1100px){.egrid{grid-template-columns:repeat(2,1fr)}}
         @media(max-width:580px){.egrid{grid-template-columns:1fr}}
+
+        /* Search bar */
+        .ev-search-wrap{display:flex;align-items:center;gap:10px;margin-bottom:24px;background:rgba(0,8,26,.85);border:1px solid rgba(0,255,240,.2);padding:8px 14px;position:relative}
+        .ev-search-wrap:focus-within{border-color:rgba(0,255,240,.55);box-shadow:0 0 14px rgba(0,255,240,.1)}
+        .ev-search-icon{color:rgba(0,255,240,.5);font-size:1.1rem;flex-shrink:0}
+        .ev-search-input{flex:1;background:transparent;border:none;outline:none;font-family:'Share Tech Mono',monospace;font-size:.78rem;letter-spacing:.1em;color:#e0e8ff;caret-color:#00fff0}
+        .ev-search-input::placeholder{color:rgba(0,255,240,.25);letter-spacing:.15em}
+        .ev-search-clear{background:transparent;border:none;color:rgba(255,45,120,.6);cursor:pointer;font-size:.8rem;padding:2px 6px;transition:color .2s}
+        .ev-search-clear:hover{color:#ff2d78}
         @media(max-width:960px){
           .hero-title-block{flex-direction:column;align-items:flex-start;padding:24px 20px}
           .htb-right{flex-direction:column;width:100%}
