@@ -1201,6 +1201,7 @@ export default function Dashboard() {
 
   return (
     <div className="db-root">
+      <DashStyles />
       {/* backgrounds matching home page */}
       <div className="db-grid-bg" />
       <div className="db-scanlines" />
@@ -1276,7 +1277,6 @@ export default function Dashboard() {
             </button>
           ))}
         </div>
-
         {/* ── CONTENT ── */}
         <div className="db-content">
 
@@ -2369,6 +2369,80 @@ function DashStyles() {
       @keyframes spin { to{transform:rotate(360deg)} }
       @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }
 
+      /* ════════════ TERMINAL TAB BAR ════════════ */
+      .db-root { min-height: 100vh; overflow-x: hidden; }
+      .db-wrap { position: relative; z-index: 1; padding: 0 2.5rem 3rem; max-width: 1400px; margin: 0 auto; }
+      .db-hero { padding: 3rem 0 2rem; }
+      .db-content { position: relative; }
+      .db-terminal {
+        margin: 0 0 1.5rem; border: 1px solid rgba(0,245,255,0.18);
+        background: rgba(0,3,20,0.85); position: relative; overflow: hidden;
+      }
+      .db-terminal::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, var(--cyan), var(--pink), transparent);
+      }
+      .db-term-bar {
+        display: flex; align-items: center; gap: 1rem;
+        padding: 0.7rem 1.2rem;
+        border-bottom: 1px solid rgba(0,245,255,0.1);
+        background: rgba(0,245,255,0.03);
+        overflow: hidden; min-width: 0;
+      }
+      .db-term-dots { display: flex; gap: 5px; flex-shrink: 0; }
+      .db-term-dots span { width: 9px; height: 9px; border-radius: 50%; }
+      .db-term-dots span:nth-child(1) { background: #ff5f57; box-shadow: 0 0 5px #ff5f57; }
+      .db-term-dots span:nth-child(2) { background: #febc2e; box-shadow: 0 0 5px #febc2e; }
+      .db-term-dots span:nth-child(3) { background: #28c840; box-shadow: 0 0 5px #28c840; }
+      .db-term-title {
+        font-family: 'Share Tech Mono', monospace; font-size: 0.7rem;
+        color: rgba(0,245,255,0.5); letter-spacing: 1px; flex: 1;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+      }
+      .db-term-status {
+        font-family: 'Share Tech Mono', monospace; font-size: 0.6rem;
+        letter-spacing: 2px; color: rgba(0,245,255,0.3); flex-shrink: 0; white-space: nowrap;
+      }
+      .db-tabs {
+        display: flex; overflow-x: auto; scrollbar-width: none; padding: 0 0.5rem;
+      }
+      .db-tabs::-webkit-scrollbar { display: none; }
+      .db-tab {
+        background: transparent; border: none; border-bottom: 2px solid transparent;
+        font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; letter-spacing: 2px;
+        color: rgba(200,220,255,0.5); padding: 0.75rem 1rem; cursor: pointer;
+        white-space: nowrap; text-transform: uppercase;
+        transition: color 0.2s, border-color 0.2s; flex-shrink: 0;
+        display: flex; align-items: center; gap: 6px;
+      }
+      .db-tab:hover { color: var(--cyan); }
+      .db-tab-active { color: var(--cyan) !important; border-bottom-color: var(--cyan) !important; }
+      .db-tab-icon { font-size: 10px; opacity: 0.7; }
+
+      /* Mobile bottom tab bar */
+      .db-mobile-tabs {
+        display: none;
+        position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
+        background: rgba(2,0,18,0.98);
+        border-top: 1px solid rgba(0,245,255,0.15);
+        backdrop-filter: blur(20px);
+        overflow-x: auto; scrollbar-width: none;
+      }
+      .db-mobile-tabs::-webkit-scrollbar { display: none; }
+      .db-mobile-tab {
+        background: transparent; border: none; border-top: 2px solid transparent;
+        font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 1.5px;
+        color: rgba(200,220,255,0.45); padding: 0.7rem 0.8rem; cursor: pointer;
+        white-space: nowrap; text-transform: uppercase;
+        display: flex; flex-direction: column; align-items: center; gap: 3px;
+        transition: color 0.2s, border-color 0.2s; flex-shrink: 0; flex: 1;
+        min-width: 60px;
+      }
+      .db-mobile-tab:hover { color: var(--cyan); }
+      .db-mobile-tab-active { color: var(--cyan) !important; border-top-color: var(--cyan) !important; }
+      .db-mobile-tab-icon { font-size: 16px; }
+      .db-mobile-tab-label { font-size: 0.48rem; letter-spacing: 1px; }
+
       /* ════════════ RESPONSIVE ════════════ */
 
       /* Hide desktop nav center and show hamburger under 1024px */
@@ -2382,6 +2456,11 @@ function DashStyles() {
       @media (max-width: 900px) {
         .stats-section { grid-template-columns: repeat(2,1fr); }
         .dash-main { padding: 0 1.2rem 2rem; }
+        .db-term-status { display: none; }
+        .db-term-title { font-size: 0.62rem; }
+        .db-tab { font-size: 0.75rem; letter-spacing: 1px; padding: 0.65rem 0.9rem; gap: 4px; }
+        .db-mobile-tabs { display: none; }
+        .db-wrap { padding-bottom: 1rem; }
       }
       @media (max-width: 600px) {
         .stats-section { grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -2389,6 +2468,10 @@ function DashStyles() {
         .logo-text { font-size: 1.1rem; }
         .dash-main { padding: 0 1rem 2rem; }
         .footer-text { display: none; }
+        .db-wrap { padding: 0 0.8rem 1rem; }
+        .db-term-bar { padding: 0.55rem 0.8rem; gap: 0.6rem; }
+        .db-tab { font-size: 0.72rem; padding: 0.6rem 0.8rem; }
+        .db-tab-icon { display: none; }
       }
     `}</style>
   );
