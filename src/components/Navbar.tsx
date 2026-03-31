@@ -85,7 +85,7 @@ export default function Navbar() {
           <li><a href="/contact">Contact</a></li>
           <li><a href="/gallery">Gallery</a></li>
           <li><a href="/sponsors">Sponsors</a></li>
-          <li><a href="/sponsors">Whatsapp</a></li>
+          <li><a href="https://www.whatsapp.com" target="_blank">Whatsapp</a></li>
         </ul>
 
         <div className="nav-right">
@@ -127,7 +127,7 @@ export default function Navbar() {
           ["/contact",       "Contact"],
           ["/gallery",       "Gallery"],
           ["/sponsors",      "Sponsors"],
-          ["/sponsors",      "Whatsapp"],
+          ["https://www.whatsapp.com",      "Whatsapp"],
         ].map(([href, label], i) => (
           <a
             key={label}

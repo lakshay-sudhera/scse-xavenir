@@ -1996,6 +1996,7 @@ useEffect(() => {
             <span className="ht-eng glitch" data-text="& ENGINEERING">&amp; ENGINEERING</span>
           </h1>
 
+
           <p className="hero-sub">
             <span>CODE</span> | <span>CREATE</span> | <span>CONQUER</span><br />
             The frontier where algorithms meet ambition.<br />
@@ -2051,7 +2052,7 @@ useEffect(() => {
                 shaping the architects of tomorrow's technology landscape.
               </p>
               <Link href="/about" className="btn-primary" style={{ display: "inline-flex", marginTop: "0.5rem" }}>
-                <span>// Know More</span>
+                <span> Know More</span>
               </Link>
             </div>
           </div>
@@ -2223,7 +2224,7 @@ useEffect(() => {
           <div className="btn-group" style={{ justifyContent: "center" }}>
             {userData ? (
               <>
-                <Link href="/dashboard" className="btn-primary"><span>/ Dashboard /</span></Link>
+                <Link href="/dashboard" className="btn-primary"><span> Dashboard </span></Link>
                 <button
                   className="btn-outline"
                   onClick={async () => {
@@ -2231,13 +2232,13 @@ useEffect(() => {
                     window.location.href = "/";
                   }}
                 >
-                  / Logout /
+                   Logout 
                 </button>
               </>
             ) : (
               <>
-                <Link href="/register" className="btn-primary"><span>/ Register /</span></Link>
-                <Link href="/login" className="btn-outline"> / Login / </Link>
+                <Link href="/register" className="btn-primary"><span> Register </span></Link>
+                <Link href="/login" className="btn-outline">  Login  </Link>
               </>
             )}
           </div>
@@ -2393,9 +2394,9 @@ function PageStyles() {
       /* ── NAV UNDERGLOW ── */
       .nav-underglow {
         position: fixed; top: 70px; left: 0; right: 0;
-        height: 220px; pointer-events: none; z-index: 1;
+        height: 60px; pointer-events: none; z-index: 1;
         background: linear-gradient(180deg,rgba(0,245,255,0.07) 0%,rgba(0,180,255,0.06) 25%,rgba(191,0,255,0.025) 55%,transparent 100%);
-        filter: blur(8px);
+        filter: blur(25px);
       }
 
       /* ── CORNER GLOW ── */
@@ -2483,8 +2484,7 @@ function PageStyles() {
         min-height: 100vh; padding: 120px 5rem 80px;
         display: flex; flex-direction: column; justify-content: center;
         position: relative; z-index: 1;
-      }
-      .hero-content { max-width: 700px; }
+      }      .hero-content { max-width: 700px; }
       .hero-tag {
         font-family: 'Share Tech Mono', monospace; font-size: 1.5rem; letter-spacing: 4px;
         color: var(--pink); text-transform: uppercase; margin-bottom: 1.5rem;
@@ -2492,12 +2492,13 @@ function PageStyles() {
       }
       .hero-tag-line { display: inline-block; width: 20px; height: 1px; background: var(--pink); box-shadow: 0 0 8px var(--pink); flex-shrink: 0; }
       .hero-title {
-        font-family: 'Orbitron', monospace; font-size: clamp(2.6rem,5.5vw,5.2rem);
-        font-weight: 900; line-height: 1; margin-bottom: 1.5rem;
+        font-family: 'Orbitron', monospace; font-size: clamp(1.8rem,3.6vw,3.6rem);
+        font-weight: 900; line-height: 1.08; margin-bottom: 1.5rem;
+        letter-spacing: 0.04em;
       }
-      .ht-society { display: block; color: var(--cyan); font-size: 0.94em; text-shadow: 0 0 18px rgba(0,245,255,0.55), 0 0 6px rgba(0,245,255,0.3); }
-      .ht-cs      { display: block; color: #fff; font-size: 0.66em; text-shadow: 0 0 20px rgba(0,245,255,0.15); }
-      .ht-eng     { display: block; color: var(--pink); font-size: 0.88em; text-shadow: 0 0 8px rgba(255,0,128,0.8), 0 0 25px rgba(255,0,128,0.2); }
+      .ht-society { display: block; color: var(--cyan); font-size: 1.35em; text-shadow: 0 0 12px rgba(0,245,255,0.6), 0 0 30px rgba(0,245,255,0.3); }
+      .ht-cs      { display: block; color: #fff; font-size: 0.8em; text-shadow: 0 0 10px rgba(255,255,255,0.15); white-space: nowrap; }
+      .ht-eng     { display: block; color: var(--pink); font-size: 1.18em; text-shadow: 0 0 12px rgba(255,0,128,0.7), 0 0 30px rgba(255,0,128,0.3); white-space: nowrap; }
 
       /* ── GLITCH ── */
       .glitch { position: relative; animation: glitch-base 8s infinite; }
@@ -2699,18 +2700,24 @@ function PageStyles() {
         .three-canvas { width: 100% !important; opacity: 0.35 !important; }
       }
       @media (max-width: 600px) {
-        .hero { padding: 90px 1.2rem 50px; }
-        .hero-title { font-size: clamp(1.8rem,8vw,3rem); }
-        .hero-tag { font-size: 0.82rem; letter-spacing: 2px; }
-        .hero-sub { font-size: 0.8rem; line-height: 1.8; }
+        .hero { padding: 100px 1.2rem 40px; min-height: unset; }
+        .hero-title { font-size: clamp(1.8rem,7.5vw,2.6rem); }
+        .hero-tag { font-size: 0.72rem; letter-spacing: 2px; margin-bottom: 1rem; }
+        .hero-sub { font-size: 0.75rem; line-height: 1.7; margin-bottom: 1.6rem; letter-spacing: 1px; }
         .section { padding: 50px 1.2rem; }
         .section-title { font-size: clamp(1.3rem,6vw,2rem); }
         .footer-grid { grid-template-columns: 1fr; }
-        .stats-bar { gap: 1rem; padding: 1rem; }
+        .stats-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 0; padding: 1.2rem 0; margin-top: 2rem; }
         .stat-divider { display: none; }
-        .stat-num { font-size: 1.6rem; }
-        .btn-group { flex-direction: column; align-items: stretch; }
-        .btn-primary, .btn-outline { text-align: center; justify-content: center; width: 100%; }
+        .stat { text-align: left; }
+        .stat-num { font-size: 1.5rem; }
+        .stat-label { font-size: 0.58rem; }
+        .btn-group { flex-direction: row; gap: 0.7rem; flex-wrap: nowrap; }
+        .btn-primary, .btn-outline {
+          width: auto; flex: 1; text-align: center; justify-content: center;
+          padding: 7px 14px; font-size: 0.62rem; letter-spacing: 1.5px;
+          clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+        }
         .comp-row-header { padding: 0.9rem 1rem; gap: 0.7rem; }
         .comp-row-name { font-size: 0.72rem; letter-spacing: 1px; }
         .comp-row-body-inner { grid-template-columns: 1fr; gap: 1rem; padding: 0.5rem 1rem 1.2rem; }
@@ -2727,18 +2734,21 @@ function PageStyles() {
         .tc-title { font-size: 1rem; }
       }
       @media (max-width: 480px) {
-        .hero { padding: 85px 1rem 40px; }
-        .hero-title { font-size: clamp(1.5rem,9vw,2.4rem); line-height: 1.05; }
-        .hero-tag { font-size: 0.72rem; }
-        .hero-sub { font-size: 0.75rem; margin-bottom: 1.8rem; }
+        .hero { padding: 95px 1rem 36px; }
+        .hero-title { font-size: clamp(1.6rem,7vw,2.2rem); line-height: 1.1; }
+        .hero-tag { font-size: 0.68rem; }
+        .hero-sub { font-size: 0.72rem; margin-bottom: 1.4rem; }
         .section { padding: 40px 1rem; }
         .section-label { font-size: 0.6rem; letter-spacing: 2px; }
         .section-title { font-size: clamp(1.2rem,7vw,1.8rem); }
-        .stats-bar { flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 1rem; }
-        .stat-divider { display: none; }
-        .stat-num { font-size: 1.4rem; }
-        .btn-group { gap: 0.8rem; }
-        .btn-primary, .btn-outline { padding: 11px 18px; font-size: 0.65rem; letter-spacing: 1.5px; }
+        .stats-bar { grid-template-columns: 1fr 1fr; gap: 0.9rem 0; padding: 1rem 0; margin-top: 1.6rem; }
+        .stat-num { font-size: 1.3rem; }
+        .stat-label { font-size: 0.55rem; letter-spacing: 2px; }
+        .btn-group { gap: 0.6rem; }
+        .btn-primary, .btn-outline {
+          padding: 6px 12px; font-size: 0.6rem; letter-spacing: 1.2px;
+          clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+        }
         .comp-terminal { border-radius: 0; }
         .comp-term-bar { padding: 0.6rem 1rem; }
         .comp-term-title { font-size: 0.6rem; }
