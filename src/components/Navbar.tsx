@@ -125,6 +125,11 @@ export default function Navbar() {
             className={`mob-link${isActive(href) ? " mob-link-active" : ""}`}
             style={{ animationDelay: mobileOpen ? `${i * 55}ms` : "0ms" }}
             onClick={() => setMobileOpen(false)}
+            onTouchStart={e => {
+              const el = e.currentTarget;
+              el.classList.add("mob-ripple");
+              setTimeout(() => el.classList.remove("mob-ripple"), 450);
+            }}
             {...(href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
           >
             <span className="mob-link-icon">◆</span>{label}

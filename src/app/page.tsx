@@ -2193,7 +2193,7 @@ useEffect(() => {
         <span /><span /><span />
       </div>
       <div className="comp-term-title">xavenir@nitjsr:~/competitions$</div>
-      <div className="comp-term-status">8 PROCESSES LOADED</div>
+      <div className="comp-term-status">16 PROCESSES LOADED</div>
     </div>
  
     {/* Competition rows */}
