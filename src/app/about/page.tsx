@@ -35,12 +35,12 @@ const CORE_TEAM: Member[] = [
     linkedin: "https://www.linkedin.com/in/khanshahnwaz",
   },
   {
-    name: "Aman Singh",
-    role: "Joint Secretary",
-    img: "/images/IMG_5241 - Aman Singh.jpg",
-    phone: "+91 7348762674",
-    email: "aman734876@gmail.com",
-    linkedin: "https://www.linkedin.com/in/aman-singh-webdev",
+    name: "Sujal Kumar",
+    role: "Treasurer",
+    img: "/images/IMG-20250720-WA0008~2 - Sujal Kumar.jpg",
+    phone: "9693780078",
+    email: "sujalpas62@gmail.com",
+    linkedin: "https://www.linkedin.com/in/sujal-kumar-552a39237",
   },
   {
     name: "Roshni Kumari",
@@ -51,12 +51,12 @@ const CORE_TEAM: Member[] = [
     linkedin: "https://www.linkedin.com/in/roshni-kumari-2aa61928a",
   },
   {
-    name: "Sujal Kumar",
-    role: "Treasurer",
-    img: "/images/IMG-20250720-WA0008~2 - Sujal Kumar.jpg",
-    phone: "9693780078",
-    email: "sujalpas62@gmail.com",
-    linkedin: "https://www.linkedin.com/in/sujal-kumar-552a39237",
+    name: "Aman Singh",
+    role: "Joint Secretary",
+    img: "/images/IMG_5241 - Aman Singh.jpg",
+    phone: "+91 7348762674",
+    email: "aman734876@gmail.com",
+    linkedin: "https://www.linkedin.com/in/aman-singh-webdev",
   },
 ];
 
