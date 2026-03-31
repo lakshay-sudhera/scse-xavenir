@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   title: "SCSE",
   description: "SCSE NIT JSR",
   icons: {
-    // icon: "/SCSElogo.svg",
-    // apple: "/SCSElogo.svg",
-    // shortcut: "/SCSElogo.svg",
+    icon: "/SCSElogo.svg",
+    apple: "/SCSElogo.svg",
+    shortcut: "/SCSElogo.svg",
   },
 };
 
