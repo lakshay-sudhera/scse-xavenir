@@ -3,6 +3,7 @@ import { connectDB } from "@/dbConfig/dbConfig";
 import { requireAdmin } from "@/lib/requireAdmin";
 import PendingEventRegistrations from "@/models/pendingEventPaymentModel";
 import EventRegistration from "@/models/eventRegistrationModel";
+import TeamInvite from "@/models/teamInviteModel";
 
 export async function POST(req: NextRequest) {
   const auth = await requireAdmin(req);
@@ -31,15 +32,43 @@ export async function POST(req: NextRequest) {
         eventName: updated.eventName,
       });
       if (!alreadyExists) {
-        await EventRegistration.create({
-          teamName: updated.teamName,
-          eventName: updated.eventName,
-          members: updated.members,
-          isAllPrime: false,
-          razorpay_order_id: updated.transactionId1,
-          razorpay_payment_id: updated.transactionId1,
-          razorpay_signature: "manual_verified",
-        });
+        if (updated.members.length === 1) {
+              const newRegistration = new EventRegistration({
+                teamName: updated.teamName,
+                eventName: updated.eventName,
+                members: updated.members,
+                isAllPrime: true,
+                razorpay_order_id: "no_need",
+                razorpay_payment_id: updated.transactionId1,
+                razorpay_signature: "no_need",
+              });
+              await newRegistration.save();
+              return NextResponse.json({ success: true,data: updated, message: "Registration created successfully" }, { status: 200 });
+            }
+        
+            // Team registration — create invites for all non-creator members
+            const invitedBy = updated.members[0];
+            const otherMembers = updated.members.filter((m: string) => m !== invitedBy);
+            const teamName = updated.teamName;
+            const eventName = updated.eventName;
+            // Delete any stale pending invites for same team+event
+            await TeamInvite.deleteMany({teamName, eventName, invitedBy });
+            const inviteDocs = otherMembers.map((uid: string) => ({
+              teamName: updated.teamName,
+              eventName: updated.eventName,
+              invitedBy,
+              invitedUser: uid,
+              status: "pending",
+              allMembers: updated.members,
+              registrationPayload: {},
+              registrationType: "free",
+            }));
+            await TeamInvite.insertMany(inviteDocs);
+        
+            return NextResponse.json(
+              { success: true, message: `Event registration ${status}`,data: updated },
+              { status: 200 }
+            );
       }
     }
 
