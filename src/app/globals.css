@@ -98,6 +98,8 @@ body {
 }
 .nav-links a:hover { color: var(--cyan); }
 .nav-links a:hover::after { width: 100%; }
+.nav-link-active { color: var(--cyan) !important; }
+.nav-link-active::after { width: 0 !important; }
 .nav-right { display: flex; align-items: center; gap: 10px; }
 .nav-cta {
   font-family: 'Orbitron', monospace; font-size: 0.68rem; letter-spacing: 2px;
@@ -139,9 +141,13 @@ body {
   cursor: pointer !important; padding: 7px; transition: border-color 0.2s;
 }
 .hamburger:hover { border-color: var(--cyan); box-shadow: 0 0 12px rgba(0,245,255,0.2); }
-.hamburger span { display: block; width: 18px; height: 1.5px; background: var(--cyan); transition: all 0.3s; transform-origin: center; }
+.hamburger span {
+  display: block; width: 18px; height: 1.5px; background: var(--cyan);
+  transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), opacity 0.2s ease, width 0.3s ease;
+  transform-origin: center;
+}
 .hamburger-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-.hamburger-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger-open span:nth-child(2) { opacity: 0; width: 0; }
 .hamburger-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
 /* ── MOBILE NAV ── */
@@ -158,11 +164,23 @@ body {
   padding: 14px 24px; text-decoration: none;
   font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; letter-spacing: 2px;
   color: rgba(200,220,255,0.6); border-bottom: 1px solid rgba(0,245,255,0.05);
-  transition: all 0.18s; opacity: 0;
+  transition: color 0.18s, padding-left 0.18s; opacity: 0;
+  position: relative; overflow: hidden;
 }
 .mobile-nav-open .mob-link { opacity: 1; }
+.mob-link::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(0,245,255,0.15) 0%, transparent 70%);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.mob-link.mob-ripple::after { opacity: 1; transition: opacity 0s; }
 .mob-link:hover { color: var(--pink); padding-left: 32px; }
 .mob-link:hover .mob-link-arr { opacity: 1; transform: none; }
+.mob-link-active { color: var(--cyan) !important; }
+.mob-link-active .mob-link-icon { color: var(--cyan) !important; }
+.mob-link-active .mob-link-arr { opacity: 1 !important; color: var(--cyan) !important; transform: none !important; }
 .mob-link-icon { font-size: 10px; color: rgba(0,245,255,0.3); width: 14px; text-align: center; }
 .mob-link-arr { margin-left: auto; color: var(--pink); opacity: 0; transform: translateX(-4px); transition: all 0.18s; }
 .mob-cta {

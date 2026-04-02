@@ -538,7 +538,7 @@
 //     };
 //   }, []);
 //   const competitions = [
-//     { icon: "⌨", title: "Computer Fundamentals Quiz", desc: "Test your grasp on CS basics in a challenging quiz. Think fast, answer faster!", prize: "₹8,000 PRIZE" },
+//     { icon: "⌨", title: "Computer Fundamentals Quiz", slug: "Computer Fundamentals Quiz", desc: "Test your grasp on CS basics in a challenging quiz. Think fast, answer faster!", prize: "₹8,000 PRIZE" },
 //     { icon: "⚡", title: "Typing Speed Challenge",     desc: "Compete to type swiftly and accurately. The fastest fingers claim glory.",          prize: "₹3,000 PRIZE" },
 //     { icon: "🧩", title: "Code Debugging",             desc: "Spot the bugs and fix them faster than anyone. Debug to dominate.",                 prize: "₹5,000 PRIZE" },
 //     { icon: "🤖", title: "AI Hackathon",               desc: "Build an AI-powered solution in 24 hours. Innovate or perish.",                    prize: "₹15,000 PRIZE" },
@@ -1391,6 +1391,27 @@ function useCountUp(target: number, active: boolean, duration = 2200) {
   return val;
 }
 
+// ── Countdown hook ─────────────────────────────────────
+function useCountdown(target: Date) {
+  const calc = () => {
+    const diff = target.getTime() - Date.now();
+    if (diff <= 0) return { d: 0, h: 0, m: 0, s: 0 };
+    return {
+      d: Math.floor(diff / 86400000),
+      h: Math.floor((diff % 86400000) / 3600000),
+      m: Math.floor((diff % 3600000) / 60000),
+      s: Math.floor((diff % 60000) / 1000),
+    };
+  };
+  const [time, setTime] = useState({ d: 0, h: 0, m: 0, s: 0 });
+  useEffect(() => {
+    setTime(calc());
+    const id = setInterval(() => setTime(calc()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return time;
+}
+
 // ── Stat counter component ─────────────────────────────
 function StatNum({ target, prefix = "", suffix = "" }: { target: number; prefix?: string; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -1774,7 +1795,7 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
   );
 }
 
-function CompRow({ index, comp }: { index: number; comp: { icon: string; title: string; desc: string; prize: string } }) {
+function CompRow({ index, comp }: { index: number; comp: { icon: string; title: string; desc: string; prize: string; slug: string } }) {
   const [open, setOpen] = useState(false);
   const id = String(index + 1).padStart(2, "0");
  
@@ -1809,7 +1830,7 @@ function CompRow({ index, comp }: { index: number; comp: { icon: string; title: 
               REGISTRATION OPEN
             </div>
             <Link
-              href="/register"
+              href={`/eventDetails/${encodeURIComponent(comp.slug)}`}
               className="comp-detail-btn"
               onClick={e => e.stopPropagation()}
             >
@@ -1828,6 +1849,7 @@ function CompRow({ index, comp }: { index: number; comp: { icon: string; title: 
 export default function LandingPage() {
   const { userData } = useContext(UserContext);
   const [activeComp, setActiveComp] = useState(0);
+  const countdown = useCountdown(new Date("2026-04-18T09:00:00+05:30"));
   const [loaded, setLoaded]       = useState(false);
   const [loaderDone, setLoaderDone] = useState(false);
   const [scrolled, setScrolled]   = useState(false);
@@ -1915,37 +1937,37 @@ useEffect(() => {
     };
   }, []);
  const competitions = [
-  { icon: "🕵️", title: "Scavenger Hunt", desc: "Solve tech puzzles, hunt hidden clues, and outsmart rival teams in a fast-paced challenge.", prize: "₹5,000 PRIZE" },
+  { icon: "🕵️", title: "Scavenger Hunt", slug: "Scavenger Hunt", desc: "Solve tech puzzles, hunt hidden clues, and outsmart rival teams in a fast-paced challenge.", prize: "₹5,000 PRIZE" },
 
-  { icon: "💃", title: "Paper Dance", desc: "Dance with your partner on shrinking paper—balance, coordination, and fun combined.", prize: "₹3,000 PRIZE" },
+  { icon: "💃", title: "Paper Dance", slug: "Paper Dance", desc: "Dance with your partner on shrinking paper—balance, coordination, and fun combined.", prize: "₹3,000 PRIZE" },
 
-  { icon: "🤖", title: "AI-ML Challenge", desc: "Build an AI/ML model to solve real-world problems under constraints.", prize: "₹8,000 PRIZE" },
+  { icon: "🤖", title: "AI-ML Challenge", slug: "AI-ML Challenge", desc: "Build an AI/ML model to solve real-world problems under constraints.", prize: "₹8,000 PRIZE" },
 
-  { icon: "🎮", title: "PUBG, Valorant & Free Fire Tournament", desc: "Compete in high-intensity esports battles and prove your squad’s dominance.", prize: "₹3,000 PRIZE" },
+  { icon: "🎮", title: "PUBG, Valorant & Free Fire Tournament", slug: "PUBG, Valorant & Free Fire Tournament", desc: "Compete in high-intensity esports battles and prove your squad’s dominance.", prize: "₹3,000 PRIZE" },
 
-  { icon: "🎨", title: "Frontend Design Contest", desc: "Design and build a stunning frontend UI from scratch—where creativity meets code.", prize: "₹4,000 PRIZE" },
+  { icon: "🎨", title: "Frontend Design Contest", slug: "Frontend Design Contest", desc: "Design and build a stunning frontend UI from scratch—where creativity meets code.", prize: "₹4,000 PRIZE" },
 
-  { icon: "🔐", title: "Ethical Hacking Challenge", desc: "Test your penetration testing and cybersecurity skills in a controlled environment.", prize: "₹5,000 PRIZE" },
+  { icon: "🔐", title: "Ethical Hacking Challenge", slug: "Ethical Hacking Challenge", desc: "Test your penetration testing and cybersecurity skills in a controlled environment.", prize: "₹5,000 PRIZE" },
 
-  { icon: "🥟", title: "Golgappa Eating Challenge", desc: "A fun-filled eating contest—push your limits in the ultimate golgappa showdown.", prize: "₹1,000 PRIZE" },
+  { icon: "🥟", title: "Golgappa Eating Challenge", slug: "Golgappa Eating Challenge", desc: "A fun-filled eating contest—push your limits in the ultimate golgappa showdown.", prize: "₹1,000 PRIZE" },
 
-  { icon: "🤖", title: "Robotics Competition", desc: "Design, build, and program robots to complete exciting real-world challenges.", prize: "₹3,000 PRIZE" },
+  { icon: "🤖", title: "Robotics Competition", slug: "Robotics Competition", desc: "Design, build, and program robots to complete exciting real-world challenges.", prize: "₹3,000 PRIZE" },
 
-  { icon: "🙈", title: "Blind Coding", desc: "Code without seeing your screen—pure logic, memory, and confidence.", prize: "₹3,000 PRIZE" },
+  { icon: "🙈", title: "Blind Coding", slug: "Blind Coding", desc: "Code without seeing your screen—pure logic, memory, and confidence.", prize: "₹3,000 PRIZE" },
 
-  { icon: "💡", title: "Ideathon", desc: "Pitch innovative tech ideas and showcase your creativity and problem-solving vision.", prize: "₹3,000 PRIZE" },
+  { icon: "💡", title: "Ideathon", slug: "Ideathon", desc: "Pitch innovative tech ideas and showcase your creativity and problem-solving vision.", prize: "₹3,000 PRIZE" },
 
-  { icon: "🎬", title: "Movie Mania", desc: "Enjoy a tech-themed movie screening followed by an engaging trivia challenge.", prize: "₹2,000 PRIZE" },
+  { icon: "🎬", title: "Movie Mania", slug: "Movie Mania", desc: "Enjoy a tech-themed movie screening followed by an engaging trivia challenge.", prize: "₹2,000 PRIZE" },
 
-  { icon: "💻", title: "Competitive Programming", desc: "Solve algorithmic problems under time pressure and prove your coding skills.", prize: "₹8,000 PRIZE" },
+  { icon: "💻", title: "Competitive Programming", slug: "Competitive Programming", desc: "Solve algorithmic problems under time pressure and prove your coding skills.", prize: "₹8,000 PRIZE" },
 
-  { icon: "⚡", title: "Hackathon", desc: "Build innovative solutions in an intense 24-hour coding marathon.", prize: "₹15,000 PRIZE" },
+  { icon: "⚡", title: "Hackathon", slug: "Hackathon", desc: "Build innovative solutions in an intense 24-hour coding marathon.", prize: "₹15,000 PRIZE" },
 
-  { icon: "⌨️", title: "Computer Fundamentals Quiz", desc: "Test your knowledge of core computer science concepts in a competitive quiz.", prize: "₹8,000 PRIZE" },
+  { icon: "⌨️", title: "Computer Fundamentals Quiz", slug: "Computer Fundamentals Quiz", desc: "Test your knowledge of core computer science concepts in a competitive quiz.", prize: "₹8,000 PRIZE" },
 
-  { icon: "⚡", title: "Typing Speed Challenge", desc: "Compete on speed and accuracy—fastest fingers take the win.", prize: "₹3,000 PRIZE" },
+  { icon: "⚡", title: "Typing Speed Challenge", slug: "Typing Speed Challenge", desc: "Compete on speed and accuracy—fastest fingers take the win.", prize: "₹3,000 PRIZE" },
 
-  { icon: "🎥", title: "Tech Reel", desc: "Create a short, engaging video capturing the essence of technology trends.", prize: "₹2,000 PRIZE" }
+  { icon: "🎥", title: "Tech Reel", slug: "Tech Reel", desc: "Create a short, engaging video capturing the essence of technology trends.", prize: "₹2,000 PRIZE" }
 ];
 
   return (
@@ -1995,6 +2017,18 @@ useEffect(() => {
             <span className="ht-cs glitch" data-text="COMPUTER SCIENCE">COMPUTER SCIENCE</span>
             <span className="ht-eng glitch" data-text="& ENGINEERING">&amp; ENGINEERING</span>
           </h1>
+
+          <div className="hero-countdown">
+            <span className="hcd-label">// XAVENIR &apos;26 LAUNCHES IN</span>
+            <div className="hcd-units">
+              {[["d", countdown.d], ["h", countdown.h], ["m", countdown.m], ["s", countdown.s]].map(([u, v]) => (
+                <div key={u as string} className="hcd-unit">
+                  <span className="hcd-num">{String(v).padStart(2, "0")}</span>
+                  <span className="hcd-u">{u}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <p className="hero-sub">
             <span>CODE</span> | <span>CREATE</span> | <span>CONQUER</span><br />
@@ -2051,7 +2085,7 @@ useEffect(() => {
                 shaping the architects of tomorrow's technology landscape.
               </p>
               <Link href="/about" className="btn-primary" style={{ display: "inline-flex", marginTop: "0.5rem" }}>
-                <span>// Know More</span>
+                <span> Know More</span>
               </Link>
             </div>
           </div>
@@ -2192,7 +2226,7 @@ useEffect(() => {
         <span /><span /><span />
       </div>
       <div className="comp-term-title">xavenir@nitjsr:~/competitions$</div>
-      <div className="comp-term-status">8 PROCESSES LOADED</div>
+      <div className="comp-term-status">{competitions.length} PROCESSES LOADED</div>
     </div>
  
     {/* Competition rows */}
@@ -2223,7 +2257,7 @@ useEffect(() => {
           <div className="btn-group" style={{ justifyContent: "center" }}>
             {userData ? (
               <>
-                <Link href="/dashboard" className="btn-primary"><span>/ Dashboard /</span></Link>
+                <Link href="/dashboard" className="btn-primary"><span> Dashboard </span></Link>
                 <button
                   className="btn-outline"
                   onClick={async () => {
@@ -2231,13 +2265,13 @@ useEffect(() => {
                     window.location.href = "/";
                   }}
                 >
-                  / Logout /
+                   Logout 
                 </button>
               </>
             ) : (
               <>
-                <Link href="/register" className="btn-primary"><span>/ Register /</span></Link>
-                <Link href="/login" className="btn-outline"> / Login / </Link>
+                <Link href="/register" className="btn-primary"><span> Register </span></Link>
+                <Link href="/login" className="btn-outline">  Login  </Link>
               </>
             )}
           </div>
@@ -2393,9 +2427,9 @@ function PageStyles() {
       /* ── NAV UNDERGLOW ── */
       .nav-underglow {
         position: fixed; top: 70px; left: 0; right: 0;
-        height: 220px; pointer-events: none; z-index: 1;
+        height: 60px; pointer-events: none; z-index: 1;
         background: linear-gradient(180deg,rgba(0,245,255,0.07) 0%,rgba(0,180,255,0.06) 25%,rgba(191,0,255,0.025) 55%,transparent 100%);
-        filter: blur(8px);
+        filter: blur(25px);
       }
 
       /* ── CORNER GLOW ── */
@@ -2483,8 +2517,7 @@ function PageStyles() {
         min-height: 100vh; padding: 120px 5rem 80px;
         display: flex; flex-direction: column; justify-content: center;
         position: relative; z-index: 1;
-      }
-      .hero-content { max-width: 700px; }
+      }      .hero-content { max-width: 700px; }
       .hero-tag {
         font-family: 'Share Tech Mono', monospace; font-size: 1.5rem; letter-spacing: 4px;
         color: var(--pink); text-transform: uppercase; margin-bottom: 1.5rem;
@@ -2492,12 +2525,13 @@ function PageStyles() {
       }
       .hero-tag-line { display: inline-block; width: 20px; height: 1px; background: var(--pink); box-shadow: 0 0 8px var(--pink); flex-shrink: 0; }
       .hero-title {
-        font-family: 'Orbitron', monospace; font-size: clamp(2.6rem,5.5vw,5.2rem);
-        font-weight: 900; line-height: 1; margin-bottom: 1.5rem;
+        font-family: 'Orbitron', monospace; font-size: clamp(1.8rem,3.6vw,3.6rem);
+        font-weight: 900; line-height: 1.08; margin-bottom: 1.5rem;
+        letter-spacing: 0.04em;
       }
-      .ht-society { display: block; color: var(--cyan); font-size: 0.94em; text-shadow: 0 0 18px rgba(0,245,255,0.55), 0 0 6px rgba(0,245,255,0.3); }
-      .ht-cs      { display: block; color: #fff; font-size: 0.66em; text-shadow: 0 0 20px rgba(0,245,255,0.15); }
-      .ht-eng     { display: block; color: var(--pink); font-size: 0.88em; text-shadow: 0 0 8px rgba(255,0,128,0.8), 0 0 25px rgba(255,0,128,0.2); }
+      .ht-society { display: block; color: var(--cyan); font-size: 1.35em; text-shadow: 0 0 12px rgba(0,245,255,0.6), 0 0 30px rgba(0,245,255,0.3); }
+      .ht-cs      { display: block; color: #fff; font-size: 0.8em; text-shadow: 0 0 10px rgba(255,255,255,0.15); white-space: nowrap; }
+      .ht-eng     { display: block; color: var(--pink); font-size: 1.18em; text-shadow: 0 0 12px rgba(255,0,128,0.7), 0 0 30px rgba(255,0,128,0.3); white-space: nowrap; }
 
       /* ── GLITCH ── */
       .glitch { position: relative; animation: glitch-base 8s infinite; }
@@ -2517,6 +2551,14 @@ function PageStyles() {
         color: rgba(180,200,255,0.65); margin-bottom: 2.5rem; letter-spacing: 2px; line-height: 2;
       }
       .hero-sub span { color: var(--cyan); }
+
+      /* ── COUNTDOWN ── */
+      .hero-countdown { margin: 1.2rem 0 1.6rem; }
+      .hcd-label { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; letter-spacing: 3px; color: var(--pink); display: block; margin-bottom: 0.7rem; }
+      .hcd-units { display: flex; gap: 1rem; align-items: center; }
+      .hcd-unit { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 52px; background: rgba(0,245,255,0.04); border: 1px solid rgba(0,245,255,0.18); padding: 8px 10px; position: relative; clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px)); }
+      .hcd-num { font-family: 'Orbitron', monospace; font-size: 1.5rem; font-weight: 900; color: var(--cyan); text-shadow: 0 0 12px rgba(0,245,255,0.5); line-height: 1; }
+      .hcd-u { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 2px; color: rgba(0,245,255,0.4); text-transform: uppercase; }
 
       /* ── STATS ── */
       .stats-bar { display: flex; gap: 2.5rem; align-items: center; margin-top: 4rem; flex-wrap: wrap; }
@@ -2627,7 +2669,7 @@ function PageStyles() {
       .comp-row-chevron { font-size: 0.6rem; color: rgba(0,245,255,0.4); transition: color 0.2s; min-width: 12px; }
       .comp-row-open .comp-row-chevron { color: var(--cyan); }
       .comp-row-body { max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1); }
-      .comp-row-open .comp-row-body { max-height: 200px; }
+      .comp-row-open .comp-row-body { max-height: 400px; }
       .comp-row-body-inner { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: start; padding: 0.5rem 1.8rem 1.8rem 3.8rem; border-top: 1px solid rgba(0,245,255,0.07); }
       .comp-detail-label { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; letter-spacing: 3px; color: var(--pink); margin-bottom: 0.5rem; }
       .comp-detail-desc { font-size: 0.9rem; color: rgba(180,200,255,0.65); line-height: 1.7; max-width: 520px; }
@@ -2693,28 +2735,39 @@ function PageStyles() {
         .stats-bar { gap: 1.5rem; padding: 1.2rem 1.5rem; flex-wrap: wrap; }
         .comp-row-body-inner { gap: 1.5rem; padding: 0.5rem 1.2rem 1.5rem 1.8rem; }
         .comp-detail-right { min-width: 140px; }
+        .comp-row-open .comp-row-body { max-height: 500px; }
         .btn-primary { padding: 12px 24px; font-size: 0.7rem; }
         .btn-outline  { padding: 11px 22px; font-size: 0.7rem; }
         .three-canvas { width: 100% !important; opacity: 0.35 !important; }
       }
       @media (max-width: 600px) {
-        .hero { padding: 90px 1.2rem 50px; }
-        .hero-title { font-size: clamp(1.8rem,8vw,3rem); }
-        .hero-tag { font-size: 0.82rem; letter-spacing: 2px; }
-        .hero-sub { font-size: 0.8rem; line-height: 1.8; }
+        .hero { padding: 100px 1.2rem 40px; min-height: unset; }
+        .hero-title { font-size: clamp(1.8rem,7.5vw,2.6rem); }
+        .hero-tag { font-size: 0.72rem; letter-spacing: 2px; margin-bottom: 1rem; }
+        .hero-sub { font-size: 0.75rem; line-height: 1.7; margin-bottom: 1.6rem; letter-spacing: 1px; }
+        .hcd-num { font-size: 1.1rem; }
+        .hcd-unit { min-width: 40px; padding: 6px 8px; }
+        .hcd-units { gap: 0.6rem; }
         .section { padding: 50px 1.2rem; }
         .section-title { font-size: clamp(1.3rem,6vw,2rem); }
         .footer-grid { grid-template-columns: 1fr; }
-        .stats-bar { gap: 1rem; padding: 1rem; }
+        .stats-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 0; padding: 1.2rem 0; margin-top: 2rem; }
         .stat-divider { display: none; }
-        .stat-num { font-size: 1.6rem; }
-        .btn-group { flex-direction: column; align-items: stretch; }
-        .btn-primary, .btn-outline { text-align: center; justify-content: center; width: 100%; }
+        .stat { text-align: left; }
+        .stat-num { font-size: 1.5rem; }
+        .stat-label { font-size: 0.58rem; }
+        .btn-group { flex-direction: row; gap: 0.7rem; flex-wrap: nowrap; }
+        .btn-primary, .btn-outline {
+          width: auto; flex: 1; text-align: center; justify-content: center;
+          padding: 7px 14px; font-size: 0.62rem; letter-spacing: 1.5px;
+          clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+        }
         .comp-row-header { padding: 0.9rem 1rem; gap: 0.7rem; }
         .comp-row-name { font-size: 0.72rem; letter-spacing: 1px; }
         .comp-row-body-inner { grid-template-columns: 1fr; gap: 1rem; padding: 0.5rem 1rem 1.2rem; }
         .comp-detail-right { align-items: flex-start; min-width: unset; }
         .comp-row-prize { display: none; }
+        .comp-row-open .comp-row-body { max-height: 600px; }
         .cta-band { padding: 40px 1.2rem; }
         .cta-sub { font-size: 0.78rem; }
         .footer { padding: 2.5rem 1.2rem 1.2rem; }
@@ -2725,18 +2778,21 @@ function PageStyles() {
         .tc-title { font-size: 1rem; }
       }
       @media (max-width: 480px) {
-        .hero { padding: 85px 1rem 40px; }
-        .hero-title { font-size: clamp(1.5rem,9vw,2.4rem); line-height: 1.05; }
-        .hero-tag { font-size: 0.72rem; }
-        .hero-sub { font-size: 0.75rem; margin-bottom: 1.8rem; }
+        .hero { padding: 95px 1rem 36px; }
+        .hero-title { font-size: clamp(1.6rem,7vw,2.2rem); line-height: 1.1; }
+        .hero-tag { font-size: 0.68rem; }
+        .hero-sub { font-size: 0.72rem; margin-bottom: 1.4rem; }
         .section { padding: 40px 1rem; }
         .section-label { font-size: 0.6rem; letter-spacing: 2px; }
         .section-title { font-size: clamp(1.2rem,7vw,1.8rem); }
-        .stats-bar { flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 1rem; }
-        .stat-divider { display: none; }
-        .stat-num { font-size: 1.4rem; }
-        .btn-group { gap: 0.8rem; }
-        .btn-primary, .btn-outline { padding: 11px 18px; font-size: 0.65rem; letter-spacing: 1.5px; }
+        .stats-bar { grid-template-columns: 1fr 1fr; gap: 0.9rem 0; padding: 1rem 0; margin-top: 1.6rem; }
+        .stat-num { font-size: 1.3rem; }
+        .stat-label { font-size: 0.55rem; letter-spacing: 2px; }
+        .btn-group { gap: 0.6rem; }
+        .btn-primary, .btn-outline {
+          padding: 6px 12px; font-size: 0.6rem; letter-spacing: 1.2px;
+          clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+        }
         .comp-terminal { border-radius: 0; }
         .comp-term-bar { padding: 0.6rem 1rem; }
         .comp-term-title { font-size: 0.6rem; }
@@ -2746,7 +2802,8 @@ function PageStyles() {
         .comp-row-name { font-size: 0.68rem; }
         .comp-row-body-inner { padding: 0.5rem 0.8rem 1rem; }
         .comp-detail-prize-big { font-size: 1.1rem; }
-        .comp-detail-btn { padding: 8px 14px; font-size: 0.58rem; }
+        .comp-detail-btn { padding: 8px 14px; font-size: 0.58rem; white-space: nowrap; }
+        .comp-row-open .comp-row-body { max-height: 700px; }
         .cta-band { padding: 36px 1rem; }
         .cta-title { font-size: clamp(1.2rem,7vw,1.8rem); }
         .footer { padding: 2rem 1rem 1rem; }

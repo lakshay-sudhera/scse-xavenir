@@ -109,7 +109,7 @@ const SECTIONS = [
       {
         sub: "A",
         label: "Email Support",
-        desc: "For questions or concerns regarding this Shipping and Delivery Policy, reach us at scse@nitjsr.ac.in",
+        desc: "For questions or concerns regarding this Shipping and Delivery Policy, reach us at nitjsr.scse@gmail.com",
       },
     ],
   },
@@ -324,10 +324,10 @@ function PolicyCard({
                     <>
                       For questions or concerns regarding this Shipping and Delivery Policy, reach us at{" "}
                       <a
-                        href="mailto:scse@nitjsr.ac.in"
+                        href="mailto:nitjsr.scse@gmail.com"
                         style={{ color: "#00f5ff", textDecoration: "none" }}
                       >
-                        scse@nitjsr.ac.in
+                        nitjsr.scse@gmail.com
                       </a>
                       {" "}or visit the{" "}
                       <Link href="/contact" style={{ color: "#00f5ff", textDecoration: "none" }}>
@@ -665,7 +665,7 @@ export default function ShippingPage() {
                 <span>// ISSUED BY</span> · SCSE Web Team · NIT Jamshedpur
               </span>
               <span className="ship-footer-text">
-                <span>// CONTACT</span> · scse@nitjsr.ac.in
+                <span>// CONTACT</span> · nitjsr.scse@gmail.com
               </span>
             </div>
             <div style={{ display: "flex", gap: "0.8rem", flexWrap: "wrap" }}>

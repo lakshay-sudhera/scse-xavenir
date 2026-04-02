@@ -2,8 +2,18 @@
 
 import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { UserContext } from "@/context/UserContext";
+
+const NAV_LINKS: [string, string][] = [
+  ["/",         "Home"],
+  ["/about",    "About"],
+  ["/events",   "Events"],
+  ["/contact",  "Contact"],
+  ["/gallery",  "Gallery"],
+  ["/sponsors", "Sponsors"],
+  ["https://www.whatsapp.com", "Whatsapp"],
+];
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -11,6 +21,12 @@ export default function Navbar() {
   const { userData, setUserData, authLoading } = useContext(UserContext);
   const loggedIn = !!userData;
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -19,73 +35,56 @@ export default function Navbar() {
     router.push("/");
   };
 
-  // ── Scroll shadow ──────────────────────────────────
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  // ── Close mobile menu on resize ────────────────────
   useEffect(() => {
-    const handler = () => {
-      if (window.innerWidth > 900) setMobileOpen(false);
-    };
+    const handler = () => { if (window.innerWidth > 900) setMobileOpen(false); };
     window.addEventListener("resize", handler);
     return () => window.removeEventListener("resize", handler);
   }, []);
 
-  // ── Custom cursor (global — runs on every page) ────
   useEffect(() => {
     const cursor = document.getElementById("cy-cursor");
     const trail  = document.getElementById("cy-cursor-trail");
     if (!cursor || !trail) return;
-
     let mx = 0, my = 0, tx = 0, ty = 0;
-
     const onMove = (e: MouseEvent) => {
-      mx = e.clientX;
-      my = e.clientY;
-      cursor.style.left = mx + "px";
-      cursor.style.top  = my + "px";
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + "px"; cursor.style.top = my + "px";
     };
-
     document.addEventListener("mousemove", onMove);
-
     const id = setInterval(() => {
-      tx += (mx - tx) * 0.15;
-      ty += (my - ty) * 0.15;
-      trail.style.left = tx + "px";
-      trail.style.top  = ty + "px";
+      tx += (mx - tx) * 0.15; ty += (my - ty) * 0.15;
+      trail.style.left = tx + "px"; trail.style.top = ty + "px";
     }, 16);
-
-    return () => {
-      document.removeEventListener("mousemove", onMove);
-      clearInterval(id);
-    };
+    return () => { document.removeEventListener("mousemove", onMove); clearInterval(id); };
   }, []);
 
   return (
     <>
-      {/* ── Custom cursor elements (rendered once globally) ── */}
       <div id="cy-cursor" />
       <div id="cy-cursor-trail" />
-
-      {/* ── Navbar underglow ── */}
       <div className="nav-underglow" />
 
       <nav className={`nav ${scrolled ? "nav-scrolled" : ""}`}>
         <Link href="/" className="logo">&lt;/SCSE&gt;</Link>
 
-        {/* Desktop links */}
         <ul className="nav-links">
-          <li><Link href="/">Home</Link></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/events">Events</a></li>
-          <li><a href="/contact">Contact</a></li>
-          <li><a href="/gallery">Gallery</a></li>
-          <li><a href="/sponsors">Sponsors</a></li>
-          <li><a href="/sponsors">Whatsapp</a></li>
+          {NAV_LINKS.map(([href, label]) => (
+            <li key={href}>
+              <a
+                href={href}
+                className={isActive(href) ? "nav-link-active" : ""}
+                {...(href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
+              >
+                {label}
+              </a>
+            </li>
+          ))}
         </ul>
 
         <div className="nav-right">
@@ -118,23 +117,20 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
       <div className={`mobile-nav ${mobileOpen ? "mobile-nav-open" : ""}`}>
-        {[
-          ["/",              "Home"],
-          ["/about",         "About"],
-          ["/events",        "Events"],
-          ["/contact",       "Contact"],
-          ["/gallery",       "Gallery"],
-          ["/sponsors",      "Sponsors"],
-          ["/sponsors",      "Whatsapp"],
-        ].map(([href, label], i) => (
+        {NAV_LINKS.map(([href, label], i) => (
           <a
             key={label}
             href={href}
-            className="mob-link"
+            className={`mob-link${isActive(href) ? " mob-link-active" : ""}`}
             style={{ animationDelay: mobileOpen ? `${i * 55}ms` : "0ms" }}
             onClick={() => setMobileOpen(false)}
+            onTouchStart={e => {
+              const el = e.currentTarget;
+              el.classList.add("mob-ripple");
+              setTimeout(() => el.classList.remove("mob-ripple"), 450);
+            }}
+            {...(href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
           >
             <span className="mob-link-icon">◆</span>{label}
             <span className="mob-link-arr">›</span>
@@ -156,9 +152,7 @@ export default function Navbar() {
         )}
       </div>
 
-      {mobileOpen && (
-        <div className="mob-backdrop" onClick={() => setMobileOpen(false)} />
-      )}
+      {mobileOpen && <div className="mob-backdrop" onClick={() => setMobileOpen(false)} />}
     </>
   );
 }

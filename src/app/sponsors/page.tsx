@@ -1,5 +1,6 @@
 import './page.css'
 import SponsorCard from './SponsorCard'
+import Link from "next/link";
 
 function Sponsors() {
   return (
@@ -34,7 +35,7 @@ function Sponsors() {
           </div>
 
           {/* Sponsor Cards */}
-          <div className="flex flex-wrap justify-center gap-6 md:gap-12 w-full max-w-6xl px-4 mt-8 md:mt-72">
+          <div className="flex flex-col md:flex-row flex-wrap justify-center gap-6 md:gap-12 w-full max-w-6xl px-6 md:px-4 mt-10 md:mt-72 items-center">
 
             {/* CARD 1 */}
             <div className="sponsor-card-wrapper">
@@ -71,7 +72,7 @@ function Sponsors() {
           {/* BE OUR SPONSORS CTA */}
           <div className="sponsor-cta">
             <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLSclbHWh3OGFRJP31Zic5KFtvQ1QSQ-wOyAnJLbhBM3huR39hw/viewform?pli=1"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSeYMEDPbFvrT6418RWm_ucp2OJ6y-0XaXkkrgdE4Zt82JGH4A/viewform?usp=dialog"
               className="cta-btn"
             >
               ⚡ Be Our Sponsor
@@ -271,15 +272,21 @@ function Sponsors() {
           </div>
 
           {/* CONTACT */}
-          <div className="contact-card-inner flex flex-col items-center justify-center w-full max-w-[300px]
-                          bg-black/70 border border-fuchsia-400/40 text-fuchsia-200
-                          rounded-2xl p-10
-                          shadow-[0_0_30px_rgba(255,0,255,0.25)_inset,0_0_30px_rgba(255,0,255,0.15)]
-                          space-y-5 cursor-pointer transition-transform duration-300
-                          hover:scale-105 hover:shadow-[0_0_45px_rgba(255,0,255,0.5),0_0_70px_rgba(0,247,255,0.2)]">
-            <div className="text-fuchsia-200/80 tracking-widest uppercase text-sm">For more enquiries</div>
-            <div className="contact-label text-fuchsia-300">Contact Us</div>
-          </div>
+          <Link href="/contact">
+  <div className="contact-card-inner flex flex-col items-center justify-center w-full max-w-[300px]
+                  bg-black/70 border border-fuchsia-400/40 text-fuchsia-200
+                  rounded-2xl p-10
+                  shadow-[0_0_30px_rgba(255,0,255,0.25)_inset,0_0_30px_rgba(255,0,255,0.15)]
+                  space-y-5 cursor-pointer transition-transform duration-300
+                  hover:scale-105 hover:shadow-[0_0_45px_rgba(255,0,255,0.5),0_0_70px_rgba(0,247,255,0.2)]">
+    <div className="text-fuchsia-200/80 tracking-widest uppercase text-sm">
+      For more enquiries
+    </div>
+    <div className="contact-label text-fuchsia-300">
+      Contact Us
+    </div>
+  </div>
+</Link>
 
         </div>
 

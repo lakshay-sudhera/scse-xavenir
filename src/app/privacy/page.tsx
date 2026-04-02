@@ -25,7 +25,7 @@ const sections = [
   },
   {
     title: "6. Your Rights",
-    content: "You have the right to access, update, or request deletion of your personal data at any time through your dashboard or by contacting us at scse@nitjsr.ac.in.",
+    content: "You have the right to access, update, or request deletion of your personal data at any time through your dashboard or by contacting us at nitjsr.scse@gmail.com.",
   },
   {
     title: "7. Cookies & Tracking",
@@ -62,7 +62,7 @@ export default function PrivacyPage() {
         </div>
 
         <div className="pp-footer">
-          <p>Questions? Contact us at <a href="mailto:scse@nitjsr.ac.in">scse@nitjsr.ac.in</a></p>
+          <p>Questions? Contact us at <a href="mailto:nitjsr.scse@gmail.com">nitjsr.scse@gmail.com</a></p>
           <Link href="/terms" className="pp-link">View Terms &amp; Conditions →</Link>
         </div>
       </div>

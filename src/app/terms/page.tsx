@@ -41,7 +41,7 @@ const sections = [
   },
   {
     title: "10. Contact",
-    content: "All concerns or communications relating to these Terms must be directed to us via the contact information provided on this website or at scse@nitjsr.ac.in.",
+    content: "All concerns or communications relating to these Terms must be directed to us via the contact information provided on this website or at nitjsr.scse@gmail.com.",
   },
 ];
 
@@ -72,7 +72,7 @@ export default function TermsPage() {
         </div>
 
         <div className="tc-footer">
-          <p>Last updated: 2025 &nbsp;|&nbsp; Questions? <a href="mailto:scse@nitjsr.ac.in">scse@nitjsr.ac.in</a></p>
+          <p>Last updated: 2025 &nbsp;|&nbsp; Questions? <a href="mailto:nitjsr.scse@gmail.com">nitjsr.scse@gmail.com</a></p>
           <Link href="/privacy" className="tc-link">View Privacy Policy →</Link>
         </div>
       </div>

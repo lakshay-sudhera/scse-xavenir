@@ -7,7 +7,7 @@ type Payment = {
   status?: string; createdAt: string;
 };
 type Tab    = "pending" | "approved" | "rejected";
-type Panel  = "stats" | "payments" | "eventregs" | "search" | "goodies" | "announce" | "contacts";
+type Panel  = "stats" | "payments" | "eventregs" | "search" | "goodies" | "announce" | "contacts" | "certificates";
 
 const NAV: { key: Panel; icon: string; label: string }[] = [
   { key: "stats",     icon: "◈", label: "Stats"       },
@@ -17,6 +17,7 @@ const NAV: { key: Panel; icon: string; label: string }[] = [
   { key: "search",    icon: "◎", label: "User Search" },
   { key: "goodies",   icon: "★", label: "Goodies"     },
   { key: "announce",  icon: "📢", label: "Announce"   },
+  { key: "certificates", icon: "🏆", label: "Certificates" },
 ];
 
 type EventReg = {
@@ -78,6 +79,14 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
   const [annEvent,  setAnnEvent]  = useState("");
   const [announcing,setAnnouncing]= useState(false);
   const [annResult, setAnnResult] = useState("");
+
+  // certificates
+  const [certEvent,    setCertEvent]    = useState("");
+  const [certWinners,  setCertWinners]  = useState<{userID:string;type:"winner"|"runner_up";position:number}[]>([]);
+  const [certWinnerInput, setCertWinnerInput] = useState({ userID: "", type: "winner" as "winner"|"runner_up", position: 1 });
+  const [certLoading,  setCertLoading]  = useState(false);
+  const [certResult,   setCertResult]   = useState<{success:number;skipped:number;failed:number;errors:string[]} | null>(null);
+  const [certError,    setCertError]    = useState("");
 
   const updateStatus = async (id: string, status: string) => {
     setLoadingId(id);
@@ -564,6 +573,123 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
                 {announcing ? <span className="spin" /> : "📢 SEND"}
               </button>
               {annResult && <p style={{color: annResult.includes("Sent") || annResult.includes("sent") ? "#22c55e" : "#ef4444", fontFamily:"'Inter',sans-serif",fontSize:13}}>{annResult}</p>}
+            </div>
+          </div>
+        )}
+
+        {/* CERTIFICATES */}
+        {panel === "certificates" && (
+          <div className="content-panel">
+            <div className="page-header">
+              <h1 className="page-title">🏆 Generate Certificates</h1>
+              <p className="page-sub">Generate participation + winner certificates for an event. All registered members get participation certs. Add winners manually below.</p>
+            </div>
+            <div className="form-stack">
+
+              {/* Event selector */}
+              <div className="form-field">
+                <label className="form-label">SELECT EVENT *</label>
+                <select className="s-input" style={{borderRight:"1px solid #1e2535",height:42,paddingTop:0,paddingBottom:0}}
+                  value={certEvent} onChange={e => { setCertEvent(e.target.value); setCertResult(null); setCertError(""); }}>
+                  <option value="">— Choose an event —</option>
+                  {stats.eventRegsByName.map(e => (
+                    <option key={e._id} value={e._id}>{e._id} ({e.participants} participants)</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Winners section */}
+              <div className="form-field">
+                <label className="form-label">WINNERS / RUNNER-UPS <span style={{opacity:0.4}}>(optional — leave empty for participation only)</span></label>
+                <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
+                  <input className="s-input" style={{flex:"2 1 160px",borderRight:"1px solid #1e2535"}}
+                    placeholder="SCSE-XXXXXXX"
+                    value={certWinnerInput.userID}
+                    onChange={e => setCertWinnerInput(p => ({...p, userID: e.target.value}))} />
+                  <select className="s-input" style={{flex:"1 1 120px",borderRight:"1px solid #1e2535",height:42,paddingTop:0,paddingBottom:0}}
+                    value={certWinnerInput.type}
+                    onChange={e => setCertWinnerInput(p => ({...p, type: e.target.value as any}))}>
+                    <option value="winner">Winner</option>
+                    <option value="runner_up">Runner Up</option>
+                  </select>
+                  <input className="s-input" style={{flex:"1 1 80px",borderRight:"1px solid #1e2535"}}
+                    type="number" min={1} max={3} placeholder="Position"
+                    value={certWinnerInput.position}
+                    onChange={e => setCertWinnerInput(p => ({...p, position: Number(e.target.value)}))} />
+                  <button className="s-btn" style={{flex:"0 0 auto"}}
+                    onClick={() => {
+                      if (!certWinnerInput.userID.trim()) return;
+                      const uid = certWinnerInput.userID.trim().startsWith("SCSE-")
+                        ? certWinnerInput.userID.trim()
+                        : `SCSE-${certWinnerInput.userID.trim()}`;
+                      setCertWinners(prev => [...prev.filter(w => w.userID !== uid),
+                        { userID: uid, type: certWinnerInput.type, position: certWinnerInput.position }]);
+                      setCertWinnerInput({ userID: "", type: "winner", position: 1 });
+                    }}>+ ADD</button>
+                </div>
+
+                {/* Winners list */}
+                {certWinners.length > 0 && (
+                  <div style={{display:"flex",flexDirection:"column",gap:6,marginTop:4}}>
+                    {certWinners.map((w, i) => (
+                      <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",
+                        padding:"8px 12px",background:"rgba(99,102,241,0.08)",border:"1px solid rgba(99,102,241,0.2)",borderRadius:6}}>
+                        <span style={{fontFamily:"'Space Mono',monospace",fontSize:12,color:"#818cf8"}}>{w.userID}</span>
+                        <span style={{fontSize:12,color:"#94a3b8"}}>{w.type === "winner" ? "🥇" : "🥈"} {w.type} · Position {w.position}</span>
+                        <button style={{background:"none",border:"none",color:"#ef4444",cursor:"pointer",fontSize:14}}
+                          onClick={() => setCertWinners(prev => prev.filter((_, j) => j !== i))}>✕</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Info box */}
+              {certEvent && (
+                <div style={{padding:"10px 14px",background:"rgba(0,245,255,0.04)",border:"1px solid rgba(0,245,255,0.15)",borderRadius:6,fontSize:12,color:"#94a3b8"}}>
+                  → All registered participants of <span style={{color:"#00f5ff"}}>{certEvent}</span> will receive participation certificates.
+                  {certWinners.length > 0 && <><br/>→ {certWinners.length} winner/runner-up certificate(s) will also be generated.</>}
+                  <br/>→ Already-generated certificates will be skipped.
+                </div>
+              )}
+
+              {certError && <div className="err-msg">⚠ {certError}</div>}
+
+              {/* Result */}
+              {certResult && (
+                <div style={{padding:"12px 16px",background:"rgba(34,197,94,0.06)",border:"1px solid rgba(34,197,94,0.2)",borderRadius:6,fontSize:13,lineHeight:1.8}}>
+                  <span style={{color:"#22c55e"}}>✔ Generated: {certResult.success}</span><br/>
+                  <span style={{color:"#94a3b8"}}>⊘ Skipped (already exist): {certResult.skipped}</span><br/>
+                  {certResult.failed > 0 && <><span style={{color:"#ef4444"}}>✕ Failed: {certResult.failed}</span><br/></>}
+                  {certResult.errors.length > 0 && (
+                    <details style={{marginTop:8}}>
+                      <summary style={{cursor:"pointer",color:"#f59e0b",fontSize:12}}>View errors ({certResult.errors.length})</summary>
+                      <ul style={{marginTop:6,paddingLeft:16,color:"#ef4444",fontSize:11}}>
+                        {certResult.errors.map((e,i) => <li key={i}>{e}</li>)}
+                      </ul>
+                    </details>
+                  )}
+                </div>
+              )}
+
+              <button className="s-btn" style={{alignSelf:"flex-start"}}
+                disabled={certLoading || !certEvent}
+                onClick={async () => {
+                  setCertLoading(true); setCertResult(null); setCertError("");
+                  try {
+                    const res = await fetch("/api/admin/generate-certificates", {
+                      method: "POST", headers: {"Content-Type":"application/json"},
+                      body: JSON.stringify({ eventName: certEvent, winners: certWinners }),
+                    });
+                    const d = await res.json();
+                    if (!res.ok) { setCertError(d.error || "Failed"); return; }
+                    setCertResult(d.result);
+                  } catch { setCertError("Network error"); }
+                  finally { setCertLoading(false); }
+                }}>
+                {certLoading ? <><span className="spin" /> GENERATING...</> : "🏆 GENERATE CERTIFICATES"}
+              </button>
+
             </div>
           </div>
         )}

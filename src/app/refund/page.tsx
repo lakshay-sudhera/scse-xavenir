@@ -28,7 +28,7 @@ const sections = [
   {
     id: "05",
     title: "Refund Process",
-    content: "To initiate a refund, contact us at scse@nitjsr.ac.in with your registration details and reason for cancellation. Approved refunds will be processed within 7–10 business days to the original payment source.",
+    content: "To initiate a refund, contact us at nitjsr.scse@gmail.com with your registration details and reason for cancellation. Approved refunds will be processed within 7–10 business days to the original payment source.",
     color: "var(--cyan)",
   },
   {
@@ -67,9 +67,9 @@ export default function RefundPage() {
         <div className="rf-contact">
           <div className="rf-contact-label">// support.contact()</div>
           <div className="rf-contact-grid">
-            <a href="mailto:scse@nitjsr.ac.in" className="rf-contact-item">
+            <a href="mailto:nitjsr.scse@gmail.com" className="rf-contact-item">
               <span className="rf-contact-tag">MAIL</span>
-              scse@nitjsr.ac.in
+              nitjsr.scse@gmail.com
             </a>
             <a href="tel:+919118841006" className="rf-contact-item">
               <span className="rf-contact-tag">PHONE</span>
@@ -79,7 +79,7 @@ export default function RefundPage() {
         </div>
 
         <div className="rf-footer">
-          <p>Last updated: 2025 &nbsp;|&nbsp; Questions? <a href="mailto:scse@nitjsr.ac.in">scse@nitjsr.ac.in</a></p>
+          <p>Last updated: 2025 &nbsp;|&nbsp; Questions? <a href="mailto:nitjsr.scse@gmail.com">nitjsr.scse@gmail.com</a></p>
           <Link href="/privacy" className="rf-link">View Privacy Policy →</Link>
         </div>
       </div>

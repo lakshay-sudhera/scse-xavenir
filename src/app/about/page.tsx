@@ -14,14 +14,14 @@ interface WebMember { name: string; role: string; img: string; github?: string; 
 const PROFESSORS: Professor[] = [
   { name: "Dr. Danish Ali Khan",  role: "Head of Department", img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774629413/h_gtptll.jpg" },
   { name: "Dr. Jitesh Pradhan",   role: "Prof. In-Charge",    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774629413/j_cnec4m.jpg" },
-  { name: "Dr. Dinesh Kumar", role: "Associate Professor", img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774629414/ds_mvxrrv.jpg" },
+  { name: "Dr. Deepak Rai", role: "Prof. In-Charge", img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774896826/Screenshot_2026-03-31_002317_x6lmqr.png" },
 ];
 
 const CORE_TEAM: Member[] = [
     {
     name: "Abhishek kumar",
     role: "President",
-    img: "/images/Screenshot_20260220_093211 - Abhishek Kumar.jpg",
+    img: "/images/abhishek_sir.png",
     phone: "+91 9798687024",
     email: "2023ugcs048@nitjsr.ac.in",
     linkedin: "https://www.linkedin.com/in/abhishek-kaushik47",
@@ -35,12 +35,12 @@ const CORE_TEAM: Member[] = [
     linkedin: "https://www.linkedin.com/in/khanshahnwaz",
   },
   {
-    name: "Aman Singh",
-    role: "Joint Secretary",
-    img: "/images/IMG_5241 - Aman Singh.jpg",
-    phone: "+91 7348762674",
-    email: "aman734876@gmail.com",
-    linkedin: "https://www.linkedin.com/in/aman-singh-webdev",
+    name: "Sujal Kumar",
+    role: "Treasurer",
+    img: "/images/IMG-20250720-WA0008~2 - Sujal Kumar.jpg",
+    phone: "9693780078",
+    email: "sujalpas62@gmail.com",
+    linkedin: "https://www.linkedin.com/in/sujal-kumar-552a39237",
   },
   {
     name: "Roshni Kumari",
@@ -51,12 +51,12 @@ const CORE_TEAM: Member[] = [
     linkedin: "https://www.linkedin.com/in/roshni-kumari-2aa61928a",
   },
   {
-    name: "Sujal Kumar",
-    role: "Treasurer",
-    img: "/images/IMG-20250720-WA0008~2 - Sujal Kumar.jpg",
-    phone: "9693780078",
-    email: "sujalpas62@gmail.com",
-    linkedin: "https://www.linkedin.com/in/sujal-kumar-552a39237",
+    name: "Aman Singh",
+    role: "Joint Secretary",
+    img: "/images/IMG_5241 - Aman Singh.jpg",
+    phone: "+91 7348762674",
+    email: "aman734876@gmail.com",
+    linkedin: "https://www.linkedin.com/in/aman-singh-webdev",
   },
 ];
 
@@ -256,12 +256,12 @@ const MEMBERS: Member[] = [
   },
   
   {
-    name: "Shubham Pandey",
+    name: "Anuj Kumar",
     role: "EM Head",
-    img: "/our-member-photo/Shubham Pandey.jpeg",
-    phone: "9205120803",
-    email: "adityaprakash91111@gmail.com",
-    linkedin: "https://www.linkedin.com/in/shubham-pandey-a71951344?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+    img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774585360/sample_tl78ud.jpg",
+    phone: "7858927896",
+    email: "anujkumar@gmail.com",
+    linkedin: "https://www.linkedin.com/in/anuj-kumar-14878b28a",
   },
   {
     name: "Sachin Kumar",
@@ -287,6 +287,7 @@ const MEMBERS: Member[] = [
 const WEB_TEAM: WebMember[] = [
   { name: "Ayush Verma",             role: "Web Lead",  img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774474434/WhatsApp_Image_2026-03-26_at_3.03.23_AM_yi25nd.jpg", github: "https://github.com/ayushv-nitj", linkedin: "https://www.linkedin.com/in/ayush-verma-jsr25" },
   { name: "Priyanshu Raj",           role: "Web Lead",  img: "/web-team-photo/IMG_20260326_022402 - Priyanshu Raj.jpg", github: "https://github.com/priyanshuraj-dev", linkedin: "https://www.linkedin.com/in/priyanshuraj-nitjsr/" },
+  { name: "Yashita ",           role: "Web Team",  img: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774812629/yashita_xnmoou.jpg", github: "https://github.com/yashita7002-hub", linkedin: "https://www.linkedin.com/in/yashita-07981b394" },
   { name: "Vivek Mishra",            role: "Web Team",  img: "/web-team-photo/WhatsApp Image 2026-03-26 -Vivek Mishra.jpeg", github: "https://github.com/vivekrtx-lang", linkedin: "https://www.linkedin.com/in/vivek-mishra-9735a3386" },
   { name: "Deeptanshu Singh Negi",   role: "Web Team",  img: "/web-team-photo/IMG-20260215-WA0048 - Deeptanshu Singh Negi.jpg", github: "https://github.com/deeptanshu-glitch", linkedin: "https://www.linkedin.com/in/deeptanshu-singh-negi" },
   { name: "Lakshay Sudhera",         role: "Web Team",  img: "/web-team-photo/profile - Lakshay Sudhera.jpeg", github: "https://github.com/lakshay-sudhera", linkedin: "https://www.linkedin.com/in/lakshay-kumar-sudhera-133b35389/" },
@@ -297,6 +298,8 @@ const WEB_TEAM: WebMember[] = [
   {name:  "Harshit Sharma",          role: "Web Team",  img: "/web-team-photo/ Harshit Sharma.jpg" , github:"https://github.com/HarshitSharma-h8",    linkedin:"https://www.linkedin.com/in/harshit-sharma-fullstack-dev/"},
   {name:  "Ganesh Gundawar",         role: "Web Team",  img: "/web-team-photo/IMG_20250727_174200 - Ganesh Gundawar.jpg" , github:"https://github.com/ganeshgundawar",    linkedin:"https://www.linkedin.com/in/ganesh-gundawar-2b681926a?utm_source=share_via&utm_content=profile&utm_medium=member_android"},
 ];
+
+
 
 const EDITIONS: Edition[] = [
   { year: "2023", theme: "Rise of the Machines",  highlights: ["First ever SCSE Tech Fest", "500+ participants", "6 flagship events", "Industry experts from TCS & Infosys"],          participants: "500+",  events: "6", prizePool: "₹25,000",  status: "ARCHIVED" },
@@ -368,6 +371,31 @@ function ProfCard({ prof }: { prof: Professor }) {
   );
 }
 
+function CopyText({ text, display, className }: { text: string; display: React.ReactNode; className?: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    });
+  };
+  return (
+    <span onClick={handleCopy} className={className} style={{ cursor: "pointer", position: "relative" }}>
+      {display}
+      {copied && (
+        <span style={{
+          position: "absolute", bottom: "120%", left: "50%", transform: "translateX(-50%)",
+          background: "rgba(0,245,255,0.15)", border: "1px solid rgba(0,245,255,0.4)",
+          color: "var(--cyan)", fontSize: "0.6rem", letterSpacing: "0.1em",
+          padding: "3px 8px", whiteSpace: "nowrap", pointerEvents: "none",
+          fontFamily: "var(--f-mono)",
+        }}>COPIED</span>
+      )}
+    </span>
+  );
+}
+
 function CoreCard({ member }: { member: Member }) {
   return (
     <div className="core-card">
@@ -382,12 +410,8 @@ function CoreCard({ member }: { member: Member }) {
         <h3 className="core-name">{member.name}</h3>
         <p className="core-role">{member.role}</p>
         <div className="core-contacts">
-          <a href={`tel:${member.phone}`} className="core-contact-link">
-            <span className="core-contact-icon">☎</span> {member.phone}
-          </a>
-          <a href={`mailto:${member.email}`} className="core-contact-link">
-            <span className="core-contact-icon">✉</span> {member.email}
-          </a>
+          <CopyText text={member.phone} className="core-contact-link" display={<><span className="core-contact-icon">☎</span> {member.phone}</>} />
+          <CopyText text={member.email} className="core-contact-link" display={<><span className="core-contact-icon">✉</span> {member.email}</>} />
           <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="core-linkedin">
             ▶ LinkedIn Profile
           </a>
@@ -414,7 +438,7 @@ function MemberCard({ member, idx }: { member: Member; idx: number }) {
         <h3 className="mem-name">{member.name}</h3>
         <p className="mem-role">{member.role}</p>
         <div className={`mem-details ${hovered ? "mem-details-visible" : ""}`}>
-          <a href={`tel:${member.phone}`} className="mem-detail-item">☎ {member.phone}</a>
+          <CopyText text={member.phone} className="mem-detail-item" display={<>☎ {member.phone}</>} />
           <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="mem-detail-linkedin">▶ LinkedIn</a>
         </div>
       </div>
@@ -830,7 +854,7 @@ export default function AboutPage() {
           background: linear-gradient(90deg, var(--cyan), var(--pink), var(--purple));
         }
         .core-card:hover { border-color: rgba(0,245,255,0.5); box-shadow: 0 0 45px rgba(0,245,255,0.11); }
-        .core-img-wrap { position: relative; height: 260px; overflow: hidden; }
+        .core-img-wrap { position: relative; height: 280px; overflow: hidden; }
         .core-img {
           width: 100%; height: 100%; object-fit: cover; object-position: top;
           filter: grayscale(15%) brightness(0.85);
@@ -895,9 +919,9 @@ export default function AboutPage() {
           color: var(--cyan); background: rgba(0,3,20,0.82);
           padding: 2px 7px; z-index: 2; letter-spacing: 0.08em;
         }
-        .mem-img-wrap { position: relative; height: 170px; overflow: hidden; }
+        .mem-img-wrap { position: relative; height: 190px; overflow: hidden; }
         .mem-img {
-          width: 100%; height: 100%; object-fit: cover; object-position: top;
+          width: 100%; height: 100%; object-fit: cover; object-position: center 15%;
           filter: grayscale(20%) brightness(0.85);
           transition: filter 0.3s, transform 0.3s;
         }
@@ -1078,9 +1102,9 @@ export default function AboutPage() {
           font-family: var(--f-mono); font-size: 0.62rem;
           color: rgba(0,245,255,0.35); letter-spacing: 0.08em; z-index: 3;
         }
-        .web-card-img-wrap { position: relative; height: 170px; overflow: hidden; }
+        .web-card-img-wrap { position: relative; height: 190px; overflow: hidden; }
         .web-card-img {
-          width: 100%; height: 100%; object-fit: cover; object-position: top;
+          width: 100%; height: 100%; object-fit: cover; object-position: center 15%;
           filter: grayscale(30%) brightness(0.8);
           transition: filter 0.4s, transform 0.4s;
         }
@@ -1181,8 +1205,12 @@ export default function AboutPage() {
           .sec-label { font-size: 0.68rem; letter-spacing: 0.18em; }
           .about-term-body { padding: 1rem; font-size: 0.78rem; line-height: 1.75; }
           .core-card { flex-direction: column; }
-          .core-img-wrap { width: 100%; height: 200px; }
-          .core-img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+          .core-img-wrap { width: 100%; height: 240px; }
+          .core-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+          .mem-img-wrap { height: 160px; }
+          .mem-img { object-position: center top; }
+          .web-card-img-wrap { height: 160px; }
+          .web-card-img { object-position: center top; }
           .xav-title { font-size: 1.1rem; }
           .xav-text { font-size: 0.95rem; }
         }
@@ -1190,8 +1218,10 @@ export default function AboutPage() {
           .about-hero { padding: 85px 1rem 36px; }
           .about-section { padding: 36px 1rem; }
           .about-hero-title { font-size: clamp(1.4rem, 9vw, 2.2rem); line-height: 1.1; }
-          .prof-grid { grid-template-columns: 1fr; gap: 1rem; }
+          .prof-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
           .mem-grid, .web-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+          .mem-img-wrap { height: 140px; }
+          .web-card-img-wrap { height: 140px; }
           .mem-name, .web-card-name { font-size: 0.82rem; }
           .mem-role, .web-card-role { font-size: 0.7rem; }
           .edition-year { font-size: 1rem; }
@@ -1199,6 +1229,8 @@ export default function AboutPage() {
           .edition-stat-val { font-size: 1.2rem; }
           .prof-name { font-size: 0.9rem; }
           .prof-role { font-size: 0.72rem; }
+          .prof-img-wrap { width: 100px; height: 100px; }
+          .prof-img { width: 100px; height: 100px; }
         }
       `}</style>
 
