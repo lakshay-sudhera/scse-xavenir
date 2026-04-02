@@ -627,42 +627,6 @@ export default function RegisterForEvent({
     const u = [...participants]; u[index] = value.trim(); setParticipants(u);
   };
 
-  const handlePayment = async () => {
-    setLoading(true);
-    try {
-      await loadRazorpayScript();
-      const response = await axios.post("/api/razorpay/eventFeesOrder", { eventName });
-      const data = response.data;
-      if (!data.success) {
-        setLoading(false);
-        alert("Failed to create order: " + data.message);
-        setError("Please try later");
-        return;
-      }
-      const { order } = data;
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_API_KEY!,
-        amount: order.amount, currency: order.currency,
-        name: "SCSE", description: "Test Transaction", order_id: order.id,
-        handler: async function (response: any) {
-          alert("Payment successful! See your registration in dashboard");
-          router.push("/dashboard");
-          await axios.post("/api/razorpay/verifyEventPayment", {
-            ...response, teamName, members: participants, eventName,
-          });
-        },
-        theme: { color: "#00fff0" },
-        modal: { escape: false, ondismiss: () => { setLoading(false); } },
-      };
-      const rzp1 = new (window as any).Razorpay(options);
-      rzp1.on("payment.failed", () => setLoading(false));
-      rzp1.open();
-    } catch (error) {
-      setLoading(false);
-      console.error("Payment Error:", error);
-      alert("Something went wrong. Try later");
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true);
