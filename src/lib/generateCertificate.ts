@@ -8,7 +8,7 @@ try {
   registerFont(path.join(fontsDir, "Orbitron.ttf"),   { family: "Orbitron",   weight: "400 900" });
   registerFont(path.join(fontsDir, "Roboto.ttf"),     { family: "Roboto",     weight: "100 900" });
   registerFont(path.join(fontsDir, "RobotoMono.ttf"), { family: "RobotoMono", weight: "100 700" });
-} catch { /* fonts already registered or not found — fall back gracefully */ }
+} catch { /* fonts already registered or not found - fall back */ }
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
@@ -447,6 +447,9 @@ export async function uploadCertificateToCloudinary(
     );
 
     const { Readable } = require("stream");
-    Readable.from(imageBuffer).pipe(stream);
+    Readable.from(imageBuffer).pipe(stream); //Readable.from(imageBuffer) wraps the imageBuffer into a readable stream, which is then piped into Cloudinary's upload stream.
   });
 }
+
+
+// This file uses the Node.js Canvas API to draw a certificate image, then uploads it to Cloudinary

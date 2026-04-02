@@ -6,6 +6,7 @@ import Link from "next/link";
 import { UserContext } from "@/context/UserContext";
 import "./dashboard.css";
 import Loading from "@/components/Loading";
+import { useToast } from "@/components/Toast";
 import RegistrationFeesButton from "@/components/RegistrationFeesButton";
 
 type User = {
@@ -28,6 +29,7 @@ type Tab = "overview" | "events" | "profile" | "receipt" | "certificates" | "not
 export default function Dashboard() {
   const router = useRouter();
   const { userData, setUserData } = useContext(UserContext);
+  const { showToast } = useToast();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [ready, setReady] = useState(false);
@@ -149,8 +151,15 @@ export default function Dashboard() {
         setUserData({ ...userData!, ...d.data });
         setSaveMsg("// CHANGES_SAVED");
         setEditMode(false);
-      } else { setSaveMsg("// ERROR: " + d.message); }
-    } catch { setSaveMsg("// NETWORK_ERROR"); }
+        showToast("Profile saved successfully!", "success");
+      } else {
+        setSaveMsg("// ERROR: " + d.message);
+        showToast(d.message || "Failed to save profile.", "error");
+      }
+    } catch {
+      setSaveMsg("// NETWORK_ERROR");
+      showToast("Network error. Please try again.", "error");
+    }
     setSaving(false);
   };
 

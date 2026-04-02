@@ -1,59 +1,80 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useRef } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 
 type ToastType = "success" | "error" | "info";
-interface Toast { id: number; message: string; type: ToastType; }
-interface ToastCtx { toast: (msg: string, type?: ToastType) => void; }
+interface ToastItem { id: number; message: string; type: ToastType; }
 
-const ToastContext = createContext<ToastCtx>({ toast: () => {} });
+interface ToastContextValue {
+  showToast: (message: string, type?: ToastType) => void;
+}
 
-export function useToast() { return useContext(ToastContext); }
+const ToastContext = createContext<ToastContextValue>({ showToast: () => {} });
+
+export function useToast() {
+  return useContext(ToastContext);
+}
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
-  const [toasts, setToasts] = useState<Toast[]>([]);
-  const counter = useRef(0);
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
 
-  const toast = useCallback((message: string, type: ToastType = "info") => {
-    const id = ++counter.current;
-    setToasts(p => [...p, { id, message, type }]);
-    setTimeout(() => setToasts(p => p.filter(t => t.id !== id)), 3500);
+  const showToast = useCallback((message: string, type: ToastType = "success") => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3500);
   }, []);
 
-  const colors: Record<ToastType, string> = {
-    success: "#00ff88",
-    error:   "var(--pink, #ff0080)",
-    info:    "var(--cyan, #00f5ff)",
+  const colors: Record<ToastType, { border: string; icon: string; glow: string }> = {
+    success: { border: "#00ff88", icon: "✓", glow: "rgba(0,255,136,0.25)" },
+    error:   { border: "#ff0080", icon: "✕", glow: "rgba(255,0,128,0.25)" },
+    info:    { border: "#00f5ff", icon: "◈", glow: "rgba(0,245,255,0.25)" },
   };
-  const icons: Record<ToastType, string> = { success: "✓", error: "✕", info: "◈" };
 
   return (
-    <ToastContext.Provider value={{ toast }}>
+    <ToastContext.Provider value={{ showToast }}>
       {children}
-      <div style={{ position: "fixed", bottom: "1.5rem", right: "1.5rem", zIndex: 99999, display: "flex", flexDirection: "column", gap: "0.6rem", pointerEvents: "none" }}>
-        {toasts.map(t => (
-          <div key={t.id} style={{
-            display: "flex", alignItems: "center", gap: "0.7rem",
-            padding: "10px 16px",
-            background: "rgba(2,0,18,0.97)",
-            border: `1px solid ${colors[t.type]}`,
-            boxShadow: `0 0 18px ${colors[t.type]}33`,
-            fontFamily: "'Share Tech Mono', monospace",
-            fontSize: "0.78rem", letterSpacing: "0.06em",
-            color: "#e0e8ff",
-            animation: "toast-in 0.25s ease",
-            clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
-            maxWidth: "min(340px, 90vw)",
-          }}>
-            <span style={{ color: colors[t.type], fontSize: "0.9rem", flexShrink: 0 }}>{icons[t.type]}</span>
-            {t.message}
-          </div>
-        ))}
+      <div style={{
+        position: "fixed", bottom: "2rem", right: "2rem",
+        zIndex: 99999, display: "flex", flexDirection: "column", gap: "10px",
+        pointerEvents: "none",
+      }}>
+        {toasts.map(t => {
+          const c = colors[t.type];
+          return (
+            <div key={t.id} style={{
+              display: "flex", alignItems: "center", gap: "12px",
+              padding: "14px 20px",
+              background: "rgba(2,0,18,0.97)",
+              border: `1px solid ${c.border}`,
+              boxShadow: `0 0 24px ${c.glow}, 0 4px 20px rgba(0,0,0,0.5)`,
+              fontFamily: "'Orbitron', monospace",
+              fontSize: "0.72rem", letterSpacing: "2px",
+              color: "#e0e8ff",
+              animation: "toast-in 0.3s ease forwards",
+              backdropFilter: "blur(12px)",
+              minWidth: "260px", maxWidth: "380px",
+            }}>
+              <span style={{ color: c.border, fontSize: "1rem", flexShrink: 0 }}>{c.icon}</span>
+              <span>{t.message}</span>
+              <div style={{
+                position: "absolute", bottom: 0, left: 0,
+                height: "2px", background: c.border,
+                boxShadow: `0 0 8px ${c.border}`,
+                animation: "toast-bar 3.5s linear forwards",
+                width: "100%",
+              }} />
+            </div>
+          );
+        })}
       </div>
       <style>{`
         @keyframes toast-in {
           from { opacity: 0; transform: translateX(20px); }
           to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes toast-bar {
+          from { width: 100%; }
+          to   { width: 0%; }
         }
       `}</style>
     </ToastContext.Provider>

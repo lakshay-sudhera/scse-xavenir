@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { UserContext } from "@/context/UserContext";
+import { useToast } from "@/components/Toast";
 
 const NAV_LINKS: [string, string][] = [
   ["/",         "Home"],
@@ -28,10 +29,13 @@ export default function Navbar() {
     return pathname.startsWith(href);
   };
 
+  const { showToast } = useToast();
+
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     setUserData(null);
     setMobileOpen(false);
+    showToast("Logged out successfully", "success");
     router.push("/");
   };
 

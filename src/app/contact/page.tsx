@@ -1,6 +1,7 @@
 "use client";
 import './styles.css'
 import { useState } from "react";
+import { useToast } from "@/components/Toast";
 
 const contacts = [
   {
@@ -49,6 +50,7 @@ const contacts = [
          
 
 export default function ContactPage() {
+  const { showToast } = useToast();
   const [form, setForm] = useState({ name: "", email: "", mobile: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -108,10 +110,12 @@ export default function ContactPage() {
       }
 
       setSubmitted(true);
+      showToast("Message sent successfully!", "success");
       setForm({ name: "", email: "", mobile: "", message: "" });
       setTimeout(() => setSubmitted(false), 4000);
     } catch {
       setError("Network error. Please try again.");
+      showToast("Failed to send message. Please try again.", "error");
     } finally {
       setLoading(false);
     }

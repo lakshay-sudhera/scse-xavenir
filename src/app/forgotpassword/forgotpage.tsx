@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useToast } from "@/components/Toast";
 
 export default function ForgotPassword() {
+  const { showToast } = useToast();
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,6 +24,7 @@ export default function ForgotPassword() {
 
     setLoading(false);
     setSubmitted(true);
+    showToast("Password reset link sent to your email.", "success");
   };
 
   return (

@@ -21,7 +21,7 @@ async function getAdminData() {
   catch { redirect("/login"); }
 
   await connectDB();
-  const user = await User.findOne({ email: decoded.email }).select("role").lean();
+  const user = await User.findOne({ email: decoded.email }).select("role").lean();  // .lean() -> to return plain JavaScript objects instead of full Mongoose documents - less memory, faster lookup, no save() , populate() functions, no getters/setters
   if (!user || user.role !== "admin") redirect("/");
 
   const [payments, eventRegs, totalUsers, primeUsers, visitorDoc, confirmedEventRegs, eventRegsByName, contacts] = await Promise.all([
