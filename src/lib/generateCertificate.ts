@@ -1,5 +1,14 @@
-import { createCanvas } from "canvas";
+import { createCanvas, registerFont } from "canvas";
 import { v2 as cloudinary } from "cloudinary";
+import path from "path";
+
+// Register fonts once at module load
+const fontsDir = path.join(process.cwd(), "src/lib/fonts");
+try {
+  registerFont(path.join(fontsDir, "Orbitron.ttf"),   { family: "Orbitron",   weight: "400 900" });
+  registerFont(path.join(fontsDir, "Roboto.ttf"),     { family: "Roboto",     weight: "100 900" });
+  registerFont(path.join(fontsDir, "RobotoMono.ttf"), { family: "RobotoMono", weight: "100 700" });
+} catch { /* fonts already registered or not found — fall back gracefully */ }
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
@@ -164,7 +173,7 @@ function drawHexSeal(ctx: any, cx: number, cy: number, r: number) {
   ctx.shadowBlur = 0;
   // text
   ctx.fillStyle = CYAN;
-  ctx.font = "bold 11px monospace";
+  ctx.font = "bold 11px RobotoMono, monospace";
   ctx.textAlign = "center";
   ctx.fillText("SCSE", cx, cy - 4);
   ctx.fillText("NITJSR", cx, cy + 10);
@@ -210,19 +219,19 @@ export async function buildCertificateImage(
   // Logo boxes
   drawLogoBox(ctx, contentL, 48, 68, false);
   ctx.fillStyle = hex(CYAN, 0.8);
-  ctx.font = "bold 11px monospace";
+  ctx.font = "bold 11px RobotoMono, monospace";
   ctx.textAlign = "center";
   ctx.fillText("</SCSE>", contentL + 34, 82);
   ctx.fillText("NITJSR", contentL + 34, 97);
 
   drawLogoBox(ctx, contentR - 68, 48, 68, true);
   ctx.fillStyle = hex(MAGENTA, 0.8);
-  ctx.font = "bold 11px monospace";
+  ctx.font = "bold 11px RobotoMono, monospace";
   ctx.fillText("SCSE", contentR - 34, 82);
   ctx.fillText("2026", contentR - 34, 97);
 
   // Fest title — draw once, centered, two-tone
-  ctx.font = "bold 52px sans-serif";
+  ctx.font = "bold 52px Roboto, sans-serif";
   ctx.textAlign = "left";
   const part1 = "XAVENIR ";
   const part2 = "'26";
@@ -242,7 +251,7 @@ export async function buildCertificateImage(
 
   // Subtitle
   ctx.fillStyle = hex(CYAN, 0.45);
-  ctx.font = "12px monospace";
+  ctx.font = "12px RobotoMono, monospace";
   ctx.textAlign = "center";
   ctx.fillText("THE ANNUAL TECHNO-MANAGEMENT FEST  ·  NIT JAMSHEDPUR", W / 2, 110);
 
@@ -256,18 +265,18 @@ export async function buildCertificateImage(
                            "Certificate of Participation";
 
   ctx.fillStyle = WHITE;
-  ctx.font = "bold 34px serif";
+  ctx.font = "bold 34px Roboto, sans-serif";
   ctx.textAlign = "center";
   ctx.letterSpacing = "0.22em";
   cx(ctx, certTitle.toUpperCase(), 195);
 
   ctx.fillStyle = hex(WHITE, 0.48);
-  ctx.font = "italic 300 18px sans-serif";
+  ctx.font = "italic 300 18px Roboto, sans-serif";
   cx(ctx, "This Certificate is Presented to", 225);
 
   // ── NAME ──
   ctx.fillStyle = "#ffffff";
-  ctx.font = "bold 52px sans-serif";
+  ctx.font = "bold 52px Roboto, sans-serif";
   ctx.shadowColor = hex(WHITE, 0.22); ctx.shadowBlur = 8;
   cx(ctx, fullName.toUpperCase(), 305);
   ctx.shadowBlur = 0;
@@ -286,7 +295,7 @@ export async function buildCertificateImage(
   if (userID) {
     ctx.fillStyle = CYAN;
     ctx.shadowColor = hex(CYAN, 0.6); ctx.shadowBlur = 6;
-    ctx.font = "bold 15px monospace";
+    ctx.font = "bold 15px RobotoMono, monospace";
     ctx.textAlign = "center";
     cx(ctx, userID, 345);
     ctx.shadowBlur = 0;
@@ -297,7 +306,7 @@ export async function buildCertificateImage(
     const suffix = position === 1 ? "1ST" : position === 2 ? "2ND" : "3RD";
     const badgeLabel = type === "winner" ? `${suffix} PLACE` : `${suffix} RUNNER UP`;
     ctx.fillStyle = accentColor;
-    ctx.font = "bold 36px monospace";
+    ctx.font = "bold 36px RobotoMono, monospace";
     ctx.shadowColor = hex(accentColor, 0.7); ctx.shadowBlur = 20;
     ctx.textAlign = "center";
     cx(ctx, badgeLabel, 400);
@@ -306,8 +315,8 @@ export async function buildCertificateImage(
 
   // ── BODY TEXT ──
   const bodyY = isWinner ? 460 : 415;
-  const bodyFont = "19px sans-serif";
-  const bodyFontBold = "bold 19px sans-serif";
+  const bodyFont = "19px Roboto, sans-serif";
+  const bodyFontBold = "bold 19px Roboto, sans-serif";
 
   ctx.font = bodyFont;
   const line1 = type === "participation"
@@ -358,7 +367,7 @@ export async function buildCertificateImage(
 
   // Commendation
   ctx.fillStyle = hex(WHITE, 0.38);
-  ctx.font = "italic 300 16px sans-serif";
+  ctx.font = "italic 300 16px Roboto, sans-serif";
   ctx.textAlign = "center";
   const commend1 = type === "participation"
     ? "We commend their active engagement, eagerness to learn, and valuable"
@@ -373,7 +382,7 @@ export async function buildCertificateImage(
 
   // Left sig
   ctx.fillStyle = hex(WHITE, 0.35);
-  ctx.font = "italic 28px sans-serif";
+  ctx.font = "italic 28px Roboto, sans-serif";
   ctx.textAlign = "center";
   ctx.fillText("~~~", sigCenters[0], sigY);
   const slX = sigCenters[0] - 75;
@@ -384,7 +393,7 @@ export async function buildCertificateImage(
   ctx.strokeStyle = grad5; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(slX, sigY + 10); ctx.lineTo(slX + 150, sigY + 10); ctx.stroke();
   ctx.fillStyle = hex(CYAN, 0.5);
-  ctx.font = "12px monospace";
+  ctx.font = "12px RobotoMono, monospace";
   ctx.fillText("F/I TECHNICAL ACTIVITIES", sigCenters[0], sigY + 28);
 
   // Hex seal center
@@ -392,7 +401,7 @@ export async function buildCertificateImage(
 
   // Right sig
   ctx.fillStyle = hex(WHITE, 0.35);
-  ctx.font = "italic 28px sans-serif";
+  ctx.font = "italic 28px Roboto, sans-serif";
   ctx.fillText("~~~", sigCenters[2], sigY);
   const slX2 = sigCenters[2] - 75;
   const grad6 = ctx.createLinearGradient(slX2, 0, slX2 + 150, 0);
@@ -402,13 +411,13 @@ export async function buildCertificateImage(
   ctx.strokeStyle = grad6; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(slX2, sigY + 10); ctx.lineTo(slX2 + 150, sigY + 10); ctx.stroke();
   ctx.fillStyle = hex(CYAN, 0.5);
-  ctx.font = "12px monospace";
+  ctx.font = "12px RobotoMono, monospace";
   ctx.fillText("DEAN S/W", sigCenters[2], sigY + 28);
 
   // ── BOTTOM STRIP ──
   const issued = new Date().toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" });
   ctx.fillStyle = hex(CYAN, 0.28);
-  ctx.font = "9px monospace";
+  ctx.font = "9px RobotoMono, monospace";
   ctx.textAlign = "left";
   ctx.fillText(`XAVENIR 2026  ·  NIT JAMSHEDPUR  ·  SCSE`, 78, H - 22);
   ctx.textAlign = "right";
