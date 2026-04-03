@@ -1,16 +1,14 @@
-/**
- * In-memory rate limiter — no external dependencies.
- * Uses a sliding window per IP address.
- *
- * For multi-instance deployments, swap the Map for a Redis store.
- */
+//  * In-memory rate limiter — no external dependencies.
+//  * Uses a sliding window per IP address.
+//  * For multi-instance deployments, we need to swap the Map for a Redis store.
+ 
 
 interface RateLimitEntry {
   count: number;
   windowStart: number;
 }
 
-const store = new Map<string, RateLimitEntry>();
+const store = new Map<string, RateLimitEntry>();    // key = action + IP ("login:192.168.1.1")
 
 // Clean up stale entries every 10 minutes to prevent memory leaks
 setInterval(() => {
@@ -37,7 +35,7 @@ interface RateLimitResult {
 
 export function rateLimit(ip: string, key: string, options: RateLimitOptions): RateLimitResult {
   const { limit, windowMs } = options;
-  const storeKey = `${key}:${ip}`;
+  const storeKey = `${key}:${ip}`;   //key = route identifier ("login")
   const now = Date.now();
 
   const entry = store.get(storeKey);
@@ -59,7 +57,7 @@ export function rateLimit(ip: string, key: string, options: RateLimitOptions): R
   return { allowed: false, remaining: 0, retryAfterMs };
 }
 
-/** Extract the real client IP from Next.js request headers */
+// Extract the real client IP from Next.js request headers 
 export function getIP(req: Request): string {
   const forwarded = req.headers.get("x-forwarded-for");
   if (forwarded) return forwarded.split(",")[0].trim();

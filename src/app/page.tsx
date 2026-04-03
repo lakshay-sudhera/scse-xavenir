@@ -1392,7 +1392,7 @@ function useCountUp(target: number, active: boolean, duration = 2200) {
 }
 
 // ── Countdown hook ─────────────────────────────────────
-function useCountdown(target: Date) {
+function useCountdown(target: Date) { //custom hook
   const calc = () => {
     const diff = target.getTime() - Date.now();
     if (diff <= 0) return { d: 0, h: 0, m: 0, s: 0 };
@@ -1403,12 +1403,13 @@ function useCountdown(target: Date) {
       s: Math.floor((diff % 60000) / 1000),
     };
   };
-  const [time, setTime] = useState({ d: 0, h: 0, m: 0, s: 0 });
-  useEffect(() => {
-    setTime(calc());
-    const id = setInterval(() => setTime(calc()), 1000);
-    return () => clearInterval(id);
-  }, []);
+  const [time, setTime] = useState({ d: 0, h: 0, m: 0, s: 0 }); //state
+  useEffect(() => {  //runs after component mounts
+    setTime(calc());   //sets correct countdown
+    const id = setInterval(() => setTime(calc()), 1000); //runs after every 1s and update state with new countdown
+    //each second : calc() runs -> setTime() updates the state -> component is re rendered -> UI is updated automatically
+    return () => clearInterval(id);  //stop the interval
+  }, []);   // empty dependency array -> runs only once on mount
   return time;
 }
 
