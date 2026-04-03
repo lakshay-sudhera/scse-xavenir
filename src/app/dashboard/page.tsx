@@ -1144,7 +1144,7 @@ export default function Dashboard() {
                   <p style={{ fontFamily: "'Rajdhani',sans-serif", color: "rgba(180,200,255,0.55)", marginBottom: 20, fontSize: "0.95rem" }}>
                     Connect with participants, get event updates, and receive instant support.
                   </p>
-                  <a href="https://chat.whatsapp.com/" target="_blank" rel="noopener noreferrer" className="db-btn-primary">
+                  <a href="https://chat.whatsapp.com/JSwbC8kQxEKJQGY2S2S3ob" target="_blank" rel="noopener noreferrer" className="db-btn-primary">
                     <span>💬 &nbsp;JOIN WHATSAPP COMMUNITY</span>
                   </a>
                 </div>
