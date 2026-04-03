@@ -3,7 +3,7 @@ import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import busboy, { FileInfo } from "busboy";
 import { Readable } from "stream";
 
-export const runtime = "nodejs";
+export const runtime = "nodejs"; //run this route in nodejs runtime not edge runtime(busboy and nodestreams work only in nodejs)
 
 // Cloudinary config, this authenticates your backend with cloudinary
 cloudinary.config({
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   try {
     const contentType = req.headers.get("content-type") || "";
 
-    if (!contentType.includes("multipart/form-data")) {
+    if (!contentType.includes("multipart/form-data")) {    //multipart/form-data -> encoding type used to send FormData over HTTP. tells the server that this req has both text + binary files
       return NextResponse.json(
         { error: "Content-Type must be multipart/form-data" },
         { status: 415 }
@@ -37,10 +37,9 @@ export async function POST(req: NextRequest) {
     const fields: Record<string, string> = {};
     const uploads: Record<string, UploadApiResponse | { error: string }> = {};
     const uploadPromises: Promise<void>[] = [];
-
-    
     // Handle file streams
-    bb.on(
+    bb.on(  
+    // bb = busboy instance,  .on -> event listener
       "file",
       (
         fieldname: string,
@@ -64,12 +63,13 @@ export async function POST(req: NextRequest) {
             }
           );
 
-          fileStream.pipe(uploadStream);
+          fileStream.pipe(uploadStream); //as busboy reads bytes from the incoming HTTP request, they flow directly into Cloudinary's stream
         });
 
-        uploadPromises.push(promise);
+        uploadPromises.push(promise);  //tracks async uploads to run in parallel
       }
     );
+    //Client → HTTP request → Busboy → fileStream → Cloudinary
 
     // Handle text fields
     bb.on("field", (fieldname: string, value: string) => {
@@ -78,20 +78,20 @@ export async function POST(req: NextRequest) {
 
     // Wait for busboy to finish parsing
     const finished = new Promise<void>((resolve, reject) => {
-      bb.on("close", resolve);
+      bb.on("close", resolve); //no incoming data
       bb.on("error", reject);
     });
 
-    nodeStream.pipe(bb);
+    nodeStream.pipe(bb); // incoming HTTP request stream -> pipe it into Busboy
 
-    await finished;
-    await Promise.all(uploadPromises);
+    await finished;  // Busboy parsing done, (all fields and files discovered)
+    await Promise.all(uploadPromises);   // Actual uploads finished
 
     return NextResponse.json(
       {
         success: true,
-        fields,
-        uploads,
+        fields,     //text inputs
+        uploads,   //url returned by cloudinary, object with all the uploaded entries
       },
       { status: 200 }
     );

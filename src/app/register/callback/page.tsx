@@ -267,3 +267,7 @@
 //     textAlign: "center" as const,
 //   },
 // };
+
+export default function Page() {
+  return <div>Callback</div>;
+}

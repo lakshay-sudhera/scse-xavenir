@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useToast } from "@/components/Toast";
 
 interface ResetPasswordProps {
   token?: string;
@@ -11,6 +12,7 @@ interface ResetPasswordProps {
 
 export default function ResetPassword({ token = "", email = "" }: ResetPasswordProps) {
   const router = useRouter();
+  const { showToast } = useToast();
 
   const [newPassword, setNewPassword]   = useState("");
   const [confirm, setConfirm]           = useState("");
@@ -42,9 +44,11 @@ export default function ResetPassword({ token = "", email = "" }: ResetPasswordP
 
     if (res.ok) {
       setSuccess(true);
+      showToast("Password reset successfully!", "success");
       setTimeout(() => router.push("/login"), 3000);
     } else {
       setError(data.error || "Something went wrong.");
+      showToast(data.error || "Password reset failed.", "error");
     }
   };
 
