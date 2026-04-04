@@ -1043,13 +1043,15 @@ export default function Dashboard() {
                       prime_granted: "var(--yellow)",
                       announcement: "var(--pink)",
                     };
+                    const isRejection = /reject/i.test(n.title);
+                    const color = isRejection ? "var(--pink)" : colorMap[n.type];
                     return (
-                      <div key={`notif-${i}`} className="db-card" style={{ gap: 8, opacity: n.read ? 0.6 : 1, borderColor: n.read ? undefined : colorMap[n.type] + "44" }}>
+                      <div key={`notif-${i}`} className="db-card" style={{ gap: 8, opacity: n.read ? 0.6 : 1, borderColor: n.read ? undefined : color + "44" }}>
                         <div className="db-card-corner tl" /><div className="db-card-corner br" />
-                        <div className="db-card-top-bar" style={{ background: colorMap[n.type] }} />
+                        <div className="db-card-top-bar" style={{ background: color }} />
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <span style={{ fontSize: "1.1rem" }}>{iconMap[n.type] || "🔔"}</span>
-                          <span style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.78rem", color: colorMap[n.type], letterSpacing: 1 }}>{n.title}</span>
+                          <span style={{ fontSize: "1.1rem" }}>{isRejection ? "❌" : (iconMap[n.type] || "🔔")}</span>
+                          <span style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.78rem", color, letterSpacing: 1 }}>{n.title}</span>
                           {!n.read && <span style={{ marginLeft: "auto", width: 7, height: 7, borderRadius: "50%", background: "var(--pink)", boxShadow: "0 0 6px var(--pink)", display: "inline-block" }} />}
                           <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.65rem", color: "rgba(180,200,255,0.3)", marginLeft: n.read ? "auto" : 0 }}>
                             {new Date(n.createdAt).toLocaleDateString()}
