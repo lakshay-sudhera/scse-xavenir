@@ -12,10 +12,16 @@ interface UserData {
   isPrime: boolean;
   isNitian: boolean;
   isFromCse: boolean;
-  b1: boolean;
-  b2: boolean;
+  isCollectedTshirt: boolean; // this is source of truth for hoodie 
+  paidForTshirt:  "unpaid" | "paid" | "approved" | "rejected";
+  paidForaccoModation: "unpaid" | "paid" | "approved" | "rejected";
+  paidForPrime: "paid" | "unpaid" | "rejected" | "approved";
+  phone?: string;
+  gender?: string;
+  profilePic?: string;
   x: boolean;
 }
+
 
 interface UserContextValue {
   userData: UserData | null;

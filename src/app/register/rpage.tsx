@@ -16,8 +16,11 @@ export default function RegisterPage() {
     }, 4000);
     return () => clearInterval(iv);
   }, []);
-
+  // This function redirects user to Google OAuth authorization URL, where user logs in and Google returns an authorization code to backend for authentication.
   const handleGoogleSignup = () => {
+    // we are creating google oAuth authorisation url
+    // this tells google, who is requesting login, where to redirect user back, what data you want
+    // prompt = consent forces google to show consent screen every time
     const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile&access_type=offline&prompt=consent`;
     window.location.href = googleUrl;
   };

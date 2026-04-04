@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       );
       return response;
     }
-
+    // This exact format is required by Razorpay.
     const body = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_API_SECRET!)

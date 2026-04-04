@@ -130,9 +130,8 @@ export async function POST(req: NextRequest) {
       isNitian,
       isFromCse,
       isPrime: false,
-      b1: false,
-      b2: false,
-      x: false
+      isCollectedTshirt: false,
+      // server error comes if mamnually (paid waale mein) 
     });
     await newUser.save();
 
@@ -164,6 +163,7 @@ export async function POST(req: NextRequest) {
     response.cookies.delete("eAuthToken");
     return response;
   } catch (error) {
+    console.log("Error")
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

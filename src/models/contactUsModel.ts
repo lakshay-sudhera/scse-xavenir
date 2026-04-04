@@ -20,9 +20,7 @@ const ContactUsSchema: Schema<ContactUs> = new Schema(
     number: {
       type: String,
       required: [true, "Phone number is required"],
-      match: [/^\d{10}$/, "Phone number must be of 10 digits"],
     },
-
     content: {
       type: String,
       required: [true, "Message content is required"],

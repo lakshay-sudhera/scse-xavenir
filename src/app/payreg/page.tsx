@@ -10,16 +10,22 @@ import {
 } from "@/utils/paychecker";
 
 interface UserData {
-  userID: string;
   email: string;
+  role: string;
+  userID: string;
   fullName: string;
+  collegeName: string;
+  isPrime: boolean;
   isNitian: boolean;
   isFromCse: boolean;
-  isPrime: boolean;
-  b1: boolean;
-  b2: boolean;
-  iat: number;
-  exp: number;
+  isCollectedTshirt: boolean; // this is source of truth for hoodie 
+  paidForTshirt:  "unpaid" | "paid" | "approved" | "rejected";
+  paidForaccoModation: "unpaid" | "paid" | "approved" | "rejected";
+  paidForPrime: "paid" | "unpaid" | "rejected" | "approved";
+  phone?: string;
+  gender?: string;
+  profilePic?: string;
+  x: boolean;
 }
 
 function Page() {

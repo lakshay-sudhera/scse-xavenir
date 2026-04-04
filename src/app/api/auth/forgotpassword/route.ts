@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 
     const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL}/resetpassword?token=${resetToken}&email=${encodeURIComponent(email)}`;
 
-    // Send email
+    // creates mail sender
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {

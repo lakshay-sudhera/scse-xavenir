@@ -2,10 +2,6 @@ import Razorpay from "razorpay";
 import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 
-export interface MyTokenPayload extends jwt.JwtPayload {
-  isFromCse: boolean;
-}
-
 export async function POST(request: NextRequest) {
   try {
     const token = request.cookies.get("logtok")?.value;
@@ -15,7 +11,6 @@ export async function POST(request: NextRequest) {
         { status: 401 }
     );
     }
-
     let decoded;
     try {
     decoded = jwt.verify(token, process.env.JWT_SECRET!);
@@ -28,7 +23,6 @@ export async function POST(request: NextRequest) {
     return res;
     }
     const amount = 900;
-
     const instance = new Razorpay({
       key_id: process.env.RAZORPAY_API_KEY!,
       key_secret: process.env.RAZORPAY_API_SECRET!,

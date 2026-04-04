@@ -9,17 +9,22 @@ import { useToast } from "@/components/Toast";
 import RegistrationFeesButton from "@/components/RegistrationFeesButton";
 
 type User = {
-  fullName: string;
   email: string;
-  userID: string;
   role: string;
+  userID: string;
+  fullName: string;
+  collegeName: string;
+  isPrime: boolean;
   isNitian: boolean;
   isFromCse: boolean;
-  isPrime: boolean;
-  collegeName: string;
+  isCollectedTshirt: boolean; // this is source of truth for hoodie 
+  paidForTshirt:  "unpaid" | "paid" | "approved" | "rejected";
+  paidForaccoModation: "unpaid" | "paid" | "approved" | "rejected";
+  paidForPrime: "paid" | "unpaid" | "rejected" | "approved";
   phone?: string;
   gender?: string;
   profilePic?: string;
+  x: boolean;
   // phoneVerified?: boolean;
 };
 

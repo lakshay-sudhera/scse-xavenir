@@ -184,7 +184,7 @@ export async function GET(req: NextRequest) {
 
   // ── Serialize ──
   const pdfBytes = await pdfDoc.save();
-
+  // it is node only, it is converting to buffer and sending file as response
   return new NextResponse(Buffer.from(pdfBytes), {
     headers: {
       "Content-Type": "application/pdf",

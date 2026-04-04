@@ -10,12 +10,14 @@ export interface User extends Document {
   isPrime: boolean;
   isNitian: boolean;
   isFromCse: boolean;
-  b1: boolean; // this is source of truth for hoodie 
-  b2: boolean;
-  x: boolean;
+  isCollectedTshirt: boolean; // this is source of truth for hoodie 
+  paidForTshirt:  "unpaid" | "paid" | "approved" | "rejected";
+  paidForaccoModation: "unpaid" | "paid" | "approved" | "rejected";
+  paidForPrime: "paid" | "unpaid" |"approved" | "rejected";
   phone?: string;
   gender?: string;
   profilePic?: string;
+  x: boolean;
   // phoneVerified?: boolean;
 }
 
@@ -29,6 +31,24 @@ const UserSchema: Schema<User> = new Schema(
         /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
         "Please enter a valid email address",
       ],
+    },
+    paidForPrime: {
+      type: String,
+      enum: ["paid", "unpaid", "rejected","approved"],
+      required: true,
+      default: "unpaid",
+    },
+    paidForTshirt: {
+      type: String,
+      enum: ["unpaid", "paid", "approved", "rejected"],
+      required: true,
+      default: "unpaid",
+    },
+    paidForaccoModation: {
+      type: String,
+      enum: ["unpaid", "paid", "approved", "rejected"],
+      required: true,
+      default: "unpaid",
     },
     role: {
       type: String,
@@ -67,12 +87,7 @@ const UserSchema: Schema<User> = new Schema(
       required: true,
       default: false,
     },
-    b1: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    b2: {
+    isCollectedTshirt: {
       type: Boolean,
       required: true,
       default: false,
