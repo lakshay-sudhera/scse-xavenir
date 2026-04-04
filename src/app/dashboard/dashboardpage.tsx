@@ -57,6 +57,7 @@ export default function Dashboard() {
   const [gender, setGender] = useState("");
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState("");
+  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
 
   // // phone OTP verification
   // const [otpPhone, setOtpPhone] = useState("");
@@ -433,38 +434,143 @@ export default function Dashboard() {
 
                   <div className="db-section-label" style={{ marginBottom: 16 }}>// payment.status()</div>
 
-                  {user?.isPrime ? (
-                    <div className="db-status-ok">
-                      <span className="db-pulse-dot" style={{ background: "#00ff88", boxShadow: "0 0 8px #00ff88" }} />
-                      <span style={{ color: "#00ff88", fontFamily: "'Inter',sans-serif", fontWeight: 700, letterSpacing: 1, fontSize: "1rem" }}>
-                        &nbsp;REGISTRATION COMPLETE
-                      </span>
-                      <p style={{ color: "rgba(180,200,255,0.5)", fontSize: "0.82rem", marginTop: 12, fontFamily: "'Rajdhani',sans-serif" }}>
-                        Full access granted to all events and features.
-                      </p>
+                  {user?.isPrime || user?.paidForPrime === "approved" ? (
+                    <div>
+                      <div className="db-status-ok" style={{ marginBottom: '16px' }}>
+                        <span className="db-pulse-dot" style={{ background: "#00ff88", boxShadow: "0 0 8px #00ff88" }} />
+                        <span style={{ color: "#00ff88", fontFamily: "'Inter',sans-serif", fontWeight: 700, letterSpacing: 1, fontSize: "1rem" }}>
+                          &nbsp;REGISTRATION COMPLETE
+                        </span>
+                        <p style={{ color: "rgba(180,200,255,0.5)", fontSize: "0.82rem", marginTop: 12, fontFamily: "'Rajdhani',sans-serif" }}>
+                          Full access granted to all events and features.
+                        </p>
+                      </div>
+                      
+                      {/* Sub-payment status for Prime users */}
+                      {user?.isNitian ? (
+                        <>
+                          {user?.paidForTshirt === "approved" && (
+                            <div className="db-status-ok" style={{ padding: '8px 16px', background: 'rgba(0,255,136,0.05)', border: '1px solid rgba(0,255,136,0.2)' }}>
+                              <span style={{ color: "#00ff88", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: "0.9rem" }}>
+                                ✓ T-SHIRT PAYMENT: APPROVED
+                              </span>
+                            </div>
+                          )}
+                          {user?.paidForTshirt === "paid" && (
+                            <div className="db-status-ok" style={{ padding: '8px 16px', background: 'rgba(255,200,0,0.05)', border: '1px solid rgba(255,200,0,0.2)' }}>
+                              <span style={{ color: "#ffc800", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: "0.9rem" }}>
+                                ◌ T-SHIRT PAYMENT: PENDING
+                              </span>
+                            </div>
+                          )}
+                          {(user?.paidForTshirt === "unpaid" || user?.paidForTshirt === "rejected") && (
+                            <div style={{ marginTop: '12px' }}>
+                              {user.paidForTshirt === "rejected" && (
+                                <p style={{ color: "#ff4444", marginBottom: "8px", fontSize: "0.85rem", fontFamily: "'Rajdhani',sans-serif" }}>
+                                  Your previous T-shirt payment was rejected.
+                                </p>
+                              )}
+                              <Link href="/payreg?type=tshirt_only" className="db-btn-primary" style={{ width: '100%', display: 'block', textAlign: 'center' }}>
+                                <span>// PAY FOR T-SHIRT</span>
+                              </Link>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          {user?.paidForaccoModation === "approved" && (
+                            <div className="db-status-ok" style={{ padding: '8px 16px', background: 'rgba(0,255,136,0.05)', border: '1px solid rgba(0,255,136,0.2)' }}>
+                              <span style={{ color: "#00ff88", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: "0.9rem" }}>
+                                ✓ ACCOMMODATION PAYMENT: APPROVED
+                              </span>
+                            </div>
+                          )}
+                          {user?.paidForaccoModation === "paid" && (
+                            <div className="db-status-ok" style={{ padding: '8px 16px', background: 'rgba(255,200,0,0.05)', border: '1px solid rgba(255,200,0,0.2)' }}>
+                              <span style={{ color: "#ffc800", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: "0.9rem" }}>
+                                ◌ ACCOMMODATION PAYMENT: PENDING
+                              </span>
+                            </div>
+                          )}
+                          {(user?.paidForaccoModation === "unpaid" || user?.paidForaccoModation === "rejected") && (
+                            <div style={{ marginTop: '12px' }}>
+                              {user.paidForaccoModation === "rejected" && (
+                                <p style={{ color: "#ff4444", marginBottom: "8px", fontSize: "0.85rem", fontFamily: "'Rajdhani',sans-serif" }}>
+                                  Your previous accommodation payment was rejected.
+                                </p>
+                              )}
+                              <Link href="/payreg?type=accom_only" className="db-btn-primary" style={{ width: '100%', display: 'block', textAlign: 'center' }}>
+                                <span>// PAY FOR ACCOMMODATION</span>
+                              </Link>
+                            </div>
+                          )}
+                        </>
+                      )}
                     </div>
                   ) : (
                     <div>
-                      <p style={{ color: "rgba(180,200,255,0.7)", fontFamily: "'Rajdhani',sans-serif", marginBottom: 8 }}>
-                        Registration payment is pending.
-                      </p>
-                      <p style={{ color: "#00ff88", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: "0.9rem", marginBottom: 4 }}>
-                        // email_verified ✓
-                      </p>
-                      <p style={{ color: "rgba(180,200,255,0.4)", fontFamily: "'Rajdhani',sans-serif", fontSize: "0.85rem", marginBottom: 24 }}>
-                        Complete payment to unlock all features.
-                      </p>
-                      {/* Non-Nitian: Razorpay inline payment */}
-                      {!user?.isNitian && (
-                        <RegistrationFeesButton email={user?.email ?? ""} />
+                      {user?.paidForPrime === "paid" ? (
+                        <div className="db-status-ok" style={{ background: 'rgba(255,200,0,0.05)', border: '1px solid rgba(255,200,0,0.2)' }}>
+                          <span style={{ color: "#ffc800", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: "0.9rem" }}>
+                            ◌ REGISTRATION PAYMENT: PENDING VERIFICATION
+                          </span>
+                          <p style={{ color: "rgba(180,200,255,0.4)", fontFamily: "'Rajdhani',sans-serif", fontSize: "0.85rem", marginTop: 8 }}>
+                            Please wait while the admin verifies your transaction screenshot.
+                          </p>
+                        </div>
+                      ) : (
+                        <>
+                          <p style={{ color: "rgba(180,200,255,0.7)", fontFamily: "'Rajdhani',sans-serif", marginBottom: 8 }}>
+                            Registration payment is pending.
+                          </p>
+                          <p style={{ color: "#00ff88", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: "0.9rem", marginBottom: 4 }}>
+                            // email_verified ✓
+                          </p>
+                          
+                          {user?.paidForPrime === "rejected" && (
+                            <p style={{ color: "#ff4444", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: "0.9rem", marginTop: 12, marginBottom: 4 }}>
+                              // PREVIOUS_PAYMENT_REJECTED ×
+                            </p>
+                          )}
+                          
+                          <p style={{ color: "rgba(180,200,255,0.4)", fontFamily: "'Rajdhani',sans-serif", fontSize: "0.85rem", marginBottom: 24 }}>
+                            Complete payment to unlock all features.
+                          </p>
+
+                          {!showPaymentOptions ? (
+                            <button 
+                              className="db-btn-primary" 
+                              style={{ width: '100%' }}
+                              onClick={() => setShowPaymentOptions(true)}
+                            >
+                              <span>// PAY REGISTRATION FEES</span>
+                            </button>
+                          ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                              <p style={{ color: "#00ff88", fontSize: "0.85rem", fontFamily: "'Rajdhani',sans-serif" }}>SELECT OPTION:</p>
+                              {user?.isNitian ? (
+                                <>
+                                  <Link href="/payreg?type=reg_with_tshirt" className="db-btn-primary" style={{ textAlign: 'center', background: 'rgba(0, 255, 136, 0.1)' }}>
+                                    <span>// PAY WITH T-SHIRT</span>
+                                  </Link>
+                                  <Link href="/payreg?type=reg_without_tshirt" className="db-btn-primary" style={{ textAlign: 'center' }}>
+                                    <span>// PAY WITHOUT T-SHIRT</span>
+                                  </Link>
+                                </>
+                              ) : (
+                                <>
+                                  <Link href="/payreg?type=reg_with_accom" className="db-btn-primary" style={{ textAlign: 'center', background: 'rgba(0, 255, 136, 0.1)' }}>
+                                    <span>// PAY WITH ACCOMMODATION</span>
+                                  </Link>
+                                  <Link href="/payreg?type=reg_without_accom" className="db-btn-primary" style={{ textAlign: 'center' }}>
+                                    <span>// PAY WITHOUT ACCOMMODATION</span>
+                                  </Link>
+                                </>
+                              )}
+                            </div>
+                          )}
+                        </>
                       )}
-                      {/* NIT CSE: redirect to /payreg */}
-                      {user?.isNitian && (
-                        <Link href="/payreg" className="db-btn-primary">
-                          <span>// PAY NOW</span>
-                        </Link>
-                      )}
-                      {/* NIT non-CSE: no payment button shown */}
                     </div>
                   )}
 

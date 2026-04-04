@@ -33,21 +33,49 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Record not found" }, { status: 404 });
     }
 
-    // On approval, mark the user as isPrime and send notification
-    if (isApproved && updated.email) {
-      const updatedUser = await User.findOneAndUpdate(
-        { email: updated.email },
-        { isPrime: true },
-        { new: true }
-      );
-      if (updatedUser) {
-        await notify({
-          userID: updatedUser.userID,
-          type: "payment_verified",
-          title: "Registration payment verified",
-          message: "Your registration payment has been manually verified by the admin. Prime access is now active.",
-          meta: { email: updated.email },
-        });
+    if (updated.email) {
+      const pt = updated.paymentType || "registration_only";
+      const userUpdate: any = {};
+
+      if (isApproved) {
+        if (["reg_with_tshirt", "reg_without_tshirt", "reg_with_accom", "reg_without_accom", "registration_only"].includes(pt)) {
+          userUpdate.isPrime = true;
+          userUpdate.paidForPrime = "approved";
+        }
+        if (pt === "reg_with_tshirt" || pt === "tshirt_only") {
+          userUpdate.paidForTshirt = "approved";
+        }
+        if (pt === "reg_with_accom" || pt === "accom_only") {
+          userUpdate.paidForaccoModation = "approved";
+        }
+
+        const updatedUser = await User.findOneAndUpdate(
+          { email: updated.email },
+          userUpdate,
+          { new: true }
+        );
+
+        if (updatedUser) {
+          await notify({
+            userID: updatedUser.userID,
+            type: "payment_verified",
+            title: "Payment verified",
+            message: "Your payment has been manually verified by the admin. Check your dashboard for updated status.",
+            meta: { email: updated.email },
+          });
+        }
+      } else {
+        // Rejected
+        if (["reg_with_tshirt", "reg_without_tshirt", "reg_with_accom", "reg_without_accom", "registration_only"].includes(pt)) {
+          userUpdate.paidForPrime = "rejected";
+        }
+        if (pt === "reg_with_tshirt" || pt === "tshirt_only") {
+          userUpdate.paidForTshirt = "rejected";
+        }
+        if (pt === "reg_with_accom" || pt === "accom_only") {
+          userUpdate.paidForaccoModation = "rejected";
+        }
+        await User.findOneAndUpdate({ email: updated.email }, userUpdate);
       }
     }
 
