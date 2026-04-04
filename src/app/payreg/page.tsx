@@ -3,12 +3,6 @@
 import React, { useEffect, useState, Suspense } from "react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  checkIsFromCse,
-  checkIsFromNit,
-  check3rdYear,
-} from "@/utils/paychecker";
-
 interface UserData {
   email: string;
   role: string;
@@ -69,38 +63,29 @@ function PayRegForm() {
 
   if (typeParam === "reg_with_tshirt") {
     amount = isCSE
-      ? Number(process.env.NEXT_PUBLIC_PRICE_CSE_PRIME_WITH_TSHIRT || 700)
-      : Number(process.env.NEXT_PUBLIC_PRICE_NCSE_PRIME_WITH_TSHIRT || 1100);
+      ? Number(process.env.NEXT_PUBLIC_PRICE_CSE_PRIME_WITH_TSHIRT || 890)
+      : Number(process.env.NEXT_PUBLIC_PRICE_NCSE_PRIME_WITH_TSHIRT || 890);
     formTitle = "REG + TSHIRT";
   } else if (typeParam === "reg_without_tshirt") {
     amount = isCSE
       ? Number(process.env.NEXT_PUBLIC_PRICE_CSE_PRIME_WITHOUT_TSHIRT || 500)
-      : Number(process.env.NEXT_PUBLIC_PRICE_NCSE_PRIME_WITHOUT_TSHIRT || 900);
+      : Number(process.env.NEXT_PUBLIC_PRICE_NCSE_PRIME_WITHOUT_TSHIRT || 500);
     formTitle = "REGISTRATION";
   } else if (typeParam === "tshirt_only") {
     amount = isCSE
-      ? Number(process.env.NEXT_PUBLIC_PRICE_CSE_TSHIRT || 200)
-      : Number(process.env.NEXT_PUBLIC_PRICE_NCSE_TSHIRT || 200);
+      ? Number(process.env.NEXT_PUBLIC_PRICE_CSE_TSHIRT || 390)
+      : Number(process.env.NEXT_PUBLIC_PRICE_NCSE_TSHIRT || 390);
     formTitle = "T-SHIRT";
   } else if (typeParam === "reg_with_accom") {
-    amount = Number(process.env.NEXT_PUBLIC_PRICE_NONIT_PRIME_WITH_ACCO || 1500);
+    amount = Number(process.env.NEXT_PUBLIC_PRICE_NONIT_PRIME_WITH_ACCO || 1300);
     formTitle = "REG + ACCOM";
   } else if (typeParam === "reg_without_accom") {
     amount = Number(process.env.NEXT_PUBLIC_PRICE_NONIT_PRIME_WITHOUT_ACCO || 900);
     formTitle = "REGISTRATION";
   } else if (typeParam === "accom_only") {
-    amount = Number(process.env.NEXT_PUBLIC_PRICE_ACCO || 600);
+    amount = Number(process.env.NEXT_PUBLIC_PRICE_ACCO || 400);
     formTitle = "ACCOMMODATION";
-  } else {
-    if (userData?.isNitian && userData.isFromCse) {
-      amount = 500;
-      if (check3rdYear(userData?.email!)) amount = 500;
-    } else if (userData?.isNitian && !userData.isFromCse) {
-      amount = 900;
-    } else {
-      amount = 900;
-    }
-  }
+  } 
   const handleImageUpload = async () => {
     setError(null);
     if (!image) { setError("Please select an image to upload."); return; }

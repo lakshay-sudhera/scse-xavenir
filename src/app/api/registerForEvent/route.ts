@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: `Member not found in DB: ${memberId}` }, { status: 404 });
       }
       if (user.isNitian && user.isFromCse && !user.isPrime) {
-        return NextResponse.json({ error: "All members are not Prime, register as prime" }, { status: 400 });
+        return NextResponse.json({ error: "CSE members must be prime, register as prime" }, { status: 400 });
       }
       if (!user.isPrime) allPrime = false;
       if (!user.isNitian) allNitian = false;

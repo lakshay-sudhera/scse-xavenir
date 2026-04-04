@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
 
     // Update User model immediately
     const userUpdate: any = {};
-    if (["reg_with_tshirt", "reg_without_tshirt", "reg_with_accom", "reg_without_accom"].includes(paymentType)) {
+    if (["reg_with_tshirt", "reg_without_tshirt", "reg_with_accom", "reg_without_accom","registration_only"].includes(paymentType)) {
       userUpdate.paidForPrime = "paid";
       if (paymentType === "reg_with_tshirt") userUpdate.paidForTshirt = "paid";
       if (paymentType === "reg_with_accom") userUpdate.paidForaccoModation = "paid";
