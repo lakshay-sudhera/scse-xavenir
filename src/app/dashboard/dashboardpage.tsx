@@ -44,11 +44,9 @@ export default function Dashboard() {
   const [expandedTeam, setExpandedTeam] = useState<string | null>(null);
   const [teamMembers, setTeamMembers] = useState<Record<string, any[]>>({});
   const [invites, setInvites] = useState<any[]>([]);
-  const [sentInvites, setSentInvites] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [certificates, setCertificates] = useState<any[]>([]);
   const [certsLoading, setCertsLoading] = useState(false);
-  const [respondingInvite, setRespondingInvite] = useState<string | null>(null);
   const [glitch, setGlitch] = useState(false);
 
   // profile edit
@@ -122,10 +120,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!user) return;
-    fetch("/api/team-invites")
-      .then(r => r.json())
-      .then(d => { setInvites(d.data || []); setSentInvites(d.sent || []); })
-      .catch(() => {});
     fetch("/api/notifications")
       .then(r => r.json())
       .then(d => setNotifications(d.data || []))
@@ -255,34 +249,6 @@ export default function Dashboard() {
     } catch { setTeamMembers(prev => ({ ...prev, [key]: [] })); }
   };
 
-  const handleInviteRespond = async (inviteId: string, action: "accept" | "reject") => {
-    setRespondingInvite(inviteId);
-    try {
-      const res = await fetch("/api/team-invites/respond", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ inviteId, action }),
-      });
-      const d = await res.json();
-      // Refresh invites list
-      setInvites(prev => prev.map(inv => inv._id === inviteId ? { ...inv, status: action === "accept" ? "accepted" : "rejected" } : inv));
-      if (action === "accept" && d.message?.includes("registered")) {
-        // Refresh events/teams and sent invites too
-        fetch("/api/team-invites").then(r => r.json()).then(d2 => { setInvites(d2.data || []); setSentInvites(d2.sent || []); }).catch(() => {});
-        fetch("/api/users/eventRegistrations", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userID: user?.userID }),
-        }).then(r => r.json()).then(d2 => {
-          const data = d2.data || [];
-          setEvents(data);
-          setTeams(data.filter((ev: any) => ev.teamName && ev.members?.length > 1));
-        }).catch(() => {});
-      }
-    } catch { /* ignore */ }
-    setRespondingInvite(null);
-  };
-
   if (!ready) return <Loading />;
 
   const tabs: { key: Tab; label: string; icon: string }[] = [
@@ -351,7 +317,7 @@ export default function Dashboard() {
                 <span className="db-tab-icon">{t.icon}</span>
                 {t.label}
                 {t.key === "notifications" && (() => {
-                  const count = invites.filter(inv => inv.status === "pending").length + notifications.filter(n => !n.read).length;
+                  const count = notifications.filter(n => !n.read).length;
                   return count > 0 ? (
                     <span style={{ marginLeft: 6, background: "var(--pink)", color: "#fff", borderRadius: "50%", fontSize: "0.6rem", fontWeight: 700, padding: "1px 5px", fontFamily: "'Inter',sans-serif" }}>
                       {count}
@@ -596,7 +562,7 @@ export default function Dashboard() {
                 {/* Events column */}
                 <div>
                   <div className="db-section-label" style={{ marginBottom: 16 }}>// events.registered()</div>
-                  {events.length === 0 && sentInvites.length === 0 ? (
+                  {events.length === 0 ? (
                     <div className="db-card" style={{ alignItems: "center", textAlign: "center", padding: "3rem 2rem" }}>
                       <div className="db-card-corner tl" /><div className="db-card-corner br" />
                       <div style={{ fontSize: "2.5rem", opacity: 0.4, marginBottom: 16 }}>📅</div>
@@ -659,60 +625,6 @@ export default function Dashboard() {
                           </div>
                         );
                       })}
-                      {/* Pending teams created by this user (awaiting member approvals) */}
-                      {(() => {
-                        // Group sent invites by teamName+eventName
-                        const grouped: Record<string, any[]> = {};
-                        sentInvites.forEach(inv => {
-                          const key = `${inv.teamName}||${inv.eventName}`;
-                          if (!grouped[key]) grouped[key] = [];
-                          grouped[key].push(inv);
-                        });
-                        // Filter out teams that are already fully registered (all accepted = EventRegistration exists)
-                        const pendingGroups = Object.entries(grouped).filter(([, invs]) => {
-                          const allAccepted = invs.every(inv => inv.status === "accepted");
-                          // If all accepted, the EventRegistration was created — it'll appear in events list above
-                          return !allAccepted;
-                        });
-                        return pendingGroups.map(([key, invs], gi) => {
-                          const anyRejected = invs.some(inv => inv.status === "rejected");
-                          const overallStatus = anyRejected ? "REJECTED" : "PENDING";
-                          const statusColor = anyRejected ? "var(--pink)" : "var(--yellow)";
-                          const isOpen = expandedTeam === `sent-${key}`;
-                          return (
-                            <div
-                              key={`sent-${gi}`}
-                              className="db-event-row"
-                              style={{ flexDirection: "column", alignItems: "flex-start", gap: 6, cursor: "pointer" }}
-                              onClick={() => setExpandedTeam(isOpen ? null : `sent-${key}`)}
-                            >
-                              <div className="db-card-corner tl" /><div className="db-card-corner br" />
-                              <div style={{ display: "flex", alignItems: "center", gap: 10, width: "100%" }}>
-                                <span className="db-event-id">[{String(events.length + gi + 1).padStart(2, "0")}]</span>
-                                <span className="db-event-name">{invs[0].teamName} <span style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "0.75rem", color: "rgba(180,200,255,0.4)", fontWeight: 400 }}>({invs[0].eventName})</span></span>
-                                <span style={{ marginLeft: "auto", fontFamily: "'Share Tech Mono',monospace", fontSize: "0.7rem", color: statusColor }}>
-                                  ◉ {overallStatus}
-                                </span>
-                                <span style={{ color: "rgba(180,200,255,0.4)", fontSize: "0.8rem", marginLeft: 4 }}>{isOpen ? "▲" : "▼"}</span>
-                              </div>
-                              {isOpen && (
-                                <div style={{ paddingLeft: "2.5rem", width: "100%", marginTop: 4, display: "flex", flexDirection: "column", gap: 4 }}>
-                                  {invs.map((inv, ii) => (
-                                    <div key={ii} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 10px", background: "rgba(0,245,255,0.03)", border: "1px solid rgba(0,245,255,0.08)" }}>
-                                      <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.7rem", color: "var(--cyan)", opacity: 0.5 }}>{String(ii + 1).padStart(2, "0")}</span>
-                                      <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.75rem", color: "rgba(220,230,255,0.7)" }}>{inv.invitedUser}</span>
-                                      <span style={{ marginLeft: "auto", fontFamily: "'Share Tech Mono',monospace", fontSize: "0.68rem",
-                                        color: inv.status === "accepted" ? "#00ff88" : inv.status === "rejected" ? "var(--pink)" : "var(--yellow)" }}>
-                                        {inv.status === "accepted" ? "✓ ACCEPTED" : inv.status === "rejected" ? "✕ REJECTED" : "◌ PENDING"}
-                                      </span>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        });
-                      })()}
                     </div>
                   )}
                 </div>
@@ -720,35 +632,6 @@ export default function Dashboard() {
                 {/* Teams column */}
                 <div>
                   <div className="db-section-label" style={{ marginBottom: 16 }}>// teams.formed()</div>
-                  {/* Pending invites shown at top of teams column */}
-                  {invites.filter(inv => inv.status === "pending").map((inv, i) => (
-                    <div key={i} className="db-event-row" style={{ flexDirection: "column", alignItems: "flex-start", gap: 8, marginBottom: 10, borderColor: "rgba(191,0,255,0.3)" }}>
-                      <div className="db-card-corner tl" /><div className="db-card-corner br" />
-                      <div style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", flexWrap: "wrap" }}>
-                        <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.68rem", color: "var(--yellow)" }}>⚡ INVITE</span>
-                        <span className="db-event-name" style={{ color: "var(--purple)" }}>{inv.teamName}</span>
-                        <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.7rem", color: "var(--cyan)", marginLeft: "auto" }}>◈ {inv.eventName}</span>
-                      </div>
-                      <div style={{ display: "flex", gap: 8 }}>
-                        <button
-                          className="db-btn-primary"
-                          style={{ padding: "4px 14px", fontSize: "0.75rem" }}
-                          disabled={respondingInvite === inv._id}
-                          onClick={() => handleInviteRespond(inv._id, "accept")}
-                        >
-                          <span>{respondingInvite === inv._id ? "◌" : "✓ ACCEPT"}</span>
-                        </button>
-                        <button
-                          className="db-btn-outline"
-                          style={{ padding: "4px 14px", fontSize: "0.75rem" }}
-                          disabled={respondingInvite === inv._id}
-                          onClick={() => handleInviteRespond(inv._id, "reject")}
-                        >
-                          ✕ REJECT
-                        </button>
-                      </div>
-                    </div>
-                  ))}
                   {teams.length === 0 ? (
                     <div className="db-card" style={{ alignItems: "center", textAlign: "center", padding: "3rem 2rem" }}>
                       <div className="db-card-corner tl" /><div className="db-card-corner br" />
@@ -1119,7 +1002,7 @@ export default function Dashboard() {
             <div className="db-section">
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
                 <div className="db-section-label">// notifications.load()</div>
-                {(notifications.some(n => !n.read) || invites.some(inv => inv.status === "pending")) && (
+                {notifications.some(n => !n.read) && (
                   <button
                     className="db-btn-outline"
                     style={{ padding: "4px 14px", fontSize: "0.72rem" }}
@@ -1132,7 +1015,7 @@ export default function Dashboard() {
                   </button>
                 )}
               </div>
-              {invites.length === 0 && notifications.length === 0 ? (
+              {notifications.length === 0 ? (
                 <div className="db-card">
                   <div className="db-card-corner tl" /><div className="db-card-corner br" />
                   <div className="db-card-top-bar" style={{ background: "var(--purple)" }} />
@@ -1144,59 +1027,6 @@ export default function Dashboard() {
                 </div>
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {/* Pending invites section header */}
-                  {invites.some(inv => inv.status === "pending") && (
-                    <div style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.62rem", letterSpacing: "0.2em", color: "var(--yellow)", padding: "6px 0 2px", borderBottom: "1px solid rgba(255,230,0,0.15)" }}>
-                      ◉ PENDING INVITES — ACTION REQUIRED
-                    </div>
-                  )}
-                  {/* Team invites — pending first, then rest */}
-                  {[
-                    ...invites.filter(inv => inv.status === "pending"),
-                    ...invites.filter(inv => inv.status !== "pending").reverse(),
-                  ].map((inv, i, arr) => {
-                    // Insert a divider between pending and non-pending
-                    const prevPending = i > 0 && arr[i - 1].status === "pending";
-                    const thisPending = inv.status === "pending";
-                    const showDivider = !thisPending && prevPending;
-                    return (
-                      <>
-                        {showDivider && (
-                          <div key={`div-${i}`} style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.62rem", letterSpacing: "0.2em", color: "rgba(180,200,255,0.3)", padding: "6px 0 2px", borderBottom: "1px solid rgba(0,245,255,0.08)", marginTop: 4 }}>
-                            // previous invites
-                          </div>
-                        )}
-                        <div key={`inv-${i}`} className="db-card" style={{ gap: 10, borderColor: inv.status === "pending" ? "rgba(191,0,255,0.35)" : undefined }}>
-                          <div className="db-card-corner tl" /><div className="db-card-corner br" />
-                          <div className="db-card-top-bar" style={{ background: inv.status === "pending" ? "var(--purple)" : inv.status === "accepted" ? "#00ff88" : "var(--pink)" }} />
-                          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                            <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.68rem", color: "var(--purple)" }}>⬡ TEAM INVITE</span>
-                            <span style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.78rem", color: "var(--cyan)" }}>{inv.teamName}</span>
-                            <span style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "0.78rem", color: "rgba(180,200,255,0.4)" }}>· {inv.eventName}</span>
-                            <span style={{ marginLeft: "auto", fontFamily: "'Share Tech Mono',monospace", fontSize: "0.68rem",
-                              color: inv.status === "pending" ? "var(--yellow)" : inv.status === "accepted" ? "#00ff88" : "var(--pink)" }}>
-                              ◉ {inv.status.toUpperCase()}
-                            </span>
-                          </div>
-                          <p style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: "0.85rem", color: "rgba(180,200,255,0.55)" }}>
-                            You have been invited to join team <span style={{ color: "var(--cyan)" }}>{inv.teamName}</span> for <span style={{ color: "var(--cyan)" }}>{inv.eventName}</span>.
-                          </p>
-                          {inv.status === "pending" && (
-                            <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
-                              <button className="db-btn-primary" style={{ padding: "6px 18px", fontSize: "0.8rem" }}
-                                disabled={respondingInvite === inv._id} onClick={() => handleInviteRespond(inv._id, "accept")}>
-                                <span>{respondingInvite === inv._id ? "◌..." : "✓ ACCEPT"}</span>
-                              </button>
-                              <button className="db-btn-outline" style={{ padding: "6px 18px", fontSize: "0.8rem" }}
-                                disabled={respondingInvite === inv._id} onClick={() => handleInviteRespond(inv._id, "reject")}>
-                                ✕ REJECT
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </>
-                    );
-                  })}
                   {/* System notifications */}
                   {[...notifications].reverse().map((n, i) => {
                     const iconMap: Record<string, string> = {
@@ -1213,13 +1043,15 @@ export default function Dashboard() {
                       prime_granted: "var(--yellow)",
                       announcement: "var(--pink)",
                     };
+                    const isRejection = /reject/i.test(n.title);
+                    const color = isRejection ? "var(--pink)" : colorMap[n.type];
                     return (
-                      <div key={`notif-${i}`} className="db-card" style={{ gap: 8, opacity: n.read ? 0.6 : 1, borderColor: n.read ? undefined : colorMap[n.type] + "44" }}>
+                      <div key={`notif-${i}`} className="db-card" style={{ gap: 8, opacity: n.read ? 0.6 : 1, borderColor: n.read ? undefined : color + "44" }}>
                         <div className="db-card-corner tl" /><div className="db-card-corner br" />
-                        <div className="db-card-top-bar" style={{ background: colorMap[n.type] }} />
+                        <div className="db-card-top-bar" style={{ background: color }} />
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <span style={{ fontSize: "1.1rem" }}>{iconMap[n.type] || "🔔"}</span>
-                          <span style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.78rem", color: colorMap[n.type], letterSpacing: 1 }}>{n.title}</span>
+                          <span style={{ fontSize: "1.1rem" }}>{isRejection ? "❌" : (iconMap[n.type] || "🔔")}</span>
+                          <span style={{ fontFamily: "'Orbitron',monospace", fontSize: "0.78rem", color, letterSpacing: 1 }}>{n.title}</span>
                           {!n.read && <span style={{ marginLeft: "auto", width: 7, height: 7, borderRadius: "50%", background: "var(--pink)", boxShadow: "0 0 6px var(--pink)", display: "inline-block" }} />}
                           <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.65rem", color: "rgba(180,200,255,0.3)", marginLeft: n.read ? "auto" : 0 }}>
                             {new Date(n.createdAt).toLocaleDateString()}

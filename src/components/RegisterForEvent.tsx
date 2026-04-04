@@ -33,7 +33,8 @@ export default function RegisterForEvent({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const [participants, setParticipants] = useState<string[]>(Array(minPart).fill(""));
+  const leaderID = userData?.userID ?? "";
+  const [participants, setParticipants] = useState<string[]>([leaderID, ...Array(Math.max(minPart - 1, 0)).fill("")]);
   const [teamName, setTeamName] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -62,6 +63,7 @@ export default function RegisterForEvent({
       setTimeout(() => setShowLoginToast(false), 3500);
       return;
     }
+    setParticipants([leaderID, ...Array(Math.max(minPart - 1, 0)).fill("")]);
     setIsOverlayOpen(true);
     window.scrollTo(0, 0);
     document.body.style.overflowY = "hidden";
@@ -219,14 +221,17 @@ export default function RegisterForEvent({
               {participants.map((value, i) => (
                 <div key={i} className="rfe-field">
                   <label className="rfe-label">
-                    PARTICIPANT {i + 1} <span className="rfe-hint">(SCSE-xxxxxxx)</span>
+                    PARTICIPANT {i + 1}{i === 0 && <span className="rfe-hint"> (YOU — TEAM LEADER)</span>}
+                    {i > 0 && <span className="rfe-hint"> (SCSE-xxxxxxx)</span>}
                   </label>
                   <div className="rfe-field-row">
                     <input
-                      type="text" placeholder="SCSE-1234567" className="rfe-input"
+                      type="text" placeholder={i === 0 ? leaderID : "SCSE-1234567"} className="rfe-input"
                       value={value} onChange={e => handleParticipantChange(i, e.target.value)} required
+                      readOnly={i === 0}
+                      style={i === 0 ? { opacity: 0.6, cursor: "not-allowed" } : undefined}
                     />
-                    {participants.length > minPart && (
+                    {i > 0 && participants.length > minPart && (
                       <button type="button" onClick={() => handleRemoveParticipant(i)} className="rfe-remove-btn">✕</button>
                     )}
                   </div>

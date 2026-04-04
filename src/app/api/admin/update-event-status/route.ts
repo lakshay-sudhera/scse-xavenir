@@ -3,7 +3,7 @@ import { connectDB } from "@/dbConfig/dbConfig";
 import { requireAdmin } from "@/lib/requireAdmin";
 import PendingEventRegistrations from "@/models/pendingEventPaymentModel";
 import EventRegistration from "@/models/eventRegistrationModel";
-import TeamInvite from "@/models/teamInviteModel";
+import { notify } from "@/lib/notify";
 
 export async function POST(req: NextRequest) {
   const auth = await requireAdmin(req);
@@ -32,45 +32,39 @@ export async function POST(req: NextRequest) {
         eventName: updated.eventName,
       });
       if (!alreadyExists) {
-        if (updated.members.length === 1) {
-              const newRegistration = new EventRegistration({
-                teamName: updated.teamName,
-                eventName: updated.eventName,
-                members: updated.members,
-                isAllPrime: true,
-                razorpay_order_id: "no_need",
-                razorpay_payment_id: updated.transactionId1,
-                razorpay_signature: "no_need",
-              });
-              await newRegistration.save();
-              return NextResponse.json({ success: true,data: updated, message: "Registration created successfully" }, { status: 200 });
-            }
-        
-            // Team registration — create invites for all non-creator members
-            const invitedBy = updated.members[0];
-            const otherMembers = updated.members.filter((m: string) => m !== invitedBy);
-            const teamName = updated.teamName;
-            const eventName = updated.eventName;
-            // Delete any stale pending invites for same team+event
-            await TeamInvite.deleteMany({teamName, eventName, invitedBy });
-            const inviteDocs = otherMembers.map((uid: string) => ({
-              teamName: updated.teamName,
-              eventName: updated.eventName,
-              invitedBy,
-              invitedUser: uid,
-              status: "pending",
-              allMembers: updated.members,
-              registrationPayload: {},
-              registrationType: "free",
-            }));
-            await TeamInvite.insertMany(inviteDocs);
-        
-            return NextResponse.json(
-              { success: true, message: `Event registration ${status}`,data: updated },
-              { status: 200 }
-            );
+        const newRegistration = new EventRegistration({
+          teamName: updated.teamName,
+          eventName: updated.eventName,
+          members: updated.members,
+          isAllPrime: true,
+          razorpay_order_id: "no_need",
+          razorpay_payment_id: updated.transactionId1,
+          razorpay_signature: "no_need",
+        });
+        await newRegistration.save();
+
+        // Notify all team members of approval
+        await notify(updated.members.map((uid: string) => ({
+          userID: uid,
+          type: "payment_verified" as const,
+          title: "Event registration approved",
+          message: `Your team "${updated.teamName}" has been approved for ${updated.eventName}.`,
+          meta: { teamName: updated.teamName, eventName: updated.eventName },
+        })));
+
+        return NextResponse.json({ success: true, data: updated, message: "Registration created successfully" }, { status: 200 });
       }
     }
+
+    // On rejection — notify the team leader
+    if (status === "rejected") {
+      await notify({ 
+        userID: updated.members[0],
+        type: "payment_verified" as const,
+        title: "Event registration rejected",
+        message: `Your team "${updated.teamName}" registration for ${updated.eventName} was rejected.`,
+        meta: { teamName: updated.teamName, eventName: updated.eventName },
+  })};
 
     return NextResponse.json({ message: `Event registration ${status}`, data: updated }, { status: 200 });
   } catch {

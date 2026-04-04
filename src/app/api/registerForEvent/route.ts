@@ -2,8 +2,8 @@ import { connectDB } from "@/dbConfig/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/userModel";
 import EventRegistration from "@/models/eventRegistrationModel";
-import TeamInvite from "@/models/teamInviteModel";
 import jwt from "jsonwebtoken";
+import { notify } from "@/lib/notify";
 
 export async function POST(req: NextRequest) {
   try {
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: `Member not found in DB: ${memberId}` }, { status: 404 });
       }
       if (user.isNitian && user.isFromCse && !user.isPrime) {
-        return NextResponse.json({ error: "All members are not Prime, register as prime" }, { status: 400 });
+        return NextResponse.json({ error: "CSE members must be prime, register as prime" }, { status: 400 });
       }
       if (!user.isPrime) allPrime = false;
       if (!user.isNitian) allNitian = false;
@@ -60,43 +60,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "All members are not Prime, register as prime" }, { status: 400 });
     }
 
-    // Solo registration — no invites needed
-    if (members.length === 1) {
-      const newRegistration = new EventRegistration({
-        teamName, eventName, members,
-        isAllPrime: true,
-        razorpay_order_id: "no_need",
-        razorpay_payment_id: "no_need",
-        razorpay_signature: "no_need",
-      });
-      await newRegistration.save();
-      return NextResponse.json({ success: true, message: "Registration created successfully" }, { status: 200 });
-    }
+    // Register the team directly — no invites needed
+    const newRegistration = new EventRegistration({
+      teamName, eventName, members,
+      isAllPrime: true,
+      razorpay_order_id: "no_need",
+      razorpay_payment_id: "no_need",
+      razorpay_signature: "no_need",
+    });
+    await newRegistration.save();
 
-    // Team registration — create invites for all non-creator members
-    const invitedBy = creatorUserID || members[0];
-    const otherMembers = members.filter((m: string) => m !== invitedBy);
+    // Notify all team members of the registration
+    await notify(members.map((uid: string) => ({
+      userID: uid,
+      type: "team_confirmed" as const,
+      title: "Team registration confirmed",
+      message: `You have been added to team "${teamName}" for ${eventName}.`,
+      meta: { teamName, eventName },
+    })));
 
-    // Delete any stale pending invites for same team+event
-    await TeamInvite.deleteMany({ teamName, eventName, invitedBy });
-
-    const inviteDocs = otherMembers.map((uid: string) => ({
-      teamName,
-      eventName,
-      invitedBy,
-      invitedUser: uid,
-      status: "pending",
-      allMembers: members,
-      registrationPayload: {},
-      registrationType: "free",
-    }));
-
-    await TeamInvite.insertMany(inviteDocs);
-
-    return NextResponse.json(
-      { success: true, message: "Invites sent to team members. Registration will complete once all accept." },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, message: "Registration created successfully" }, { status: 200 });
   } catch (error: any) {
     console.error("Event Registration Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
