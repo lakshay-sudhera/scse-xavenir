@@ -24,7 +24,7 @@ export default function Footer() {
       <div className="ft-brand-strip">
         <div className="ft-brand-inner">
           <div className="ft-brand-left">
-            <span className="ft-logo">&lt;/SCSE&gt;</span>
+            <span className="ft-logo">&lt;SCSE&gt;</span>
             <span className="ft-tagline">Society of Computer Science &amp; Engineering</span>
             <p className="ft-desc">
               Innovate. Create. Dominate.<br />
