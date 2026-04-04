@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 type Payment = {
   _id: string; email: string; scseId: string; paymentProof: string;
   transactionId1: string; transactionId2?: string; transactionId3?: string;
-  status?: string; createdAt: string;
+  status?: string; createdAt: string; paymentType?: string; expectedAmount?: number;
 };
 type Tab    = "pending" | "approved" | "rejected";
 type Panel  = "stats" | "payments" | "eventregs" | "search" | "goodies" | "announce" | "contacts" | "certificates";
@@ -265,7 +265,30 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
                 <div className="card-accent" />
                 <div className="card-header">
                   <div className="card-meta">
-                    <div className="card-rid">REC #{p._id.slice(-8).toUpperCase()}</div>
+                    <div className="card-rid" style={{marginBottom: "6px"}}>REC #{p._id.slice(-8).toUpperCase()}</div>
+                    <div className="card-ptype" style={{
+                      display: "inline-block", 
+                      padding: "4px 8px", 
+                      background: "rgba(0,245,255,0.1)", 
+                      color: "#00f5ff", 
+                      fontFamily: "'Share Tech Mono', monospace", 
+                      fontSize: "0.7rem", 
+                      border: "1px solid rgba(0,245,255,0.3)",
+                      marginBottom: "6px"
+                    }}>
+                      {p.paymentType ? p.paymentType.replace(/_/g, " ").toUpperCase() : "REGISTRATION ONLY"}
+                    </div>
+                    {p.expectedAmount && (
+                      <div className="card-pamount" style={{
+                        color: "#ffff00", 
+                        fontFamily: "'Orbitron', monospace", 
+                        fontSize: "0.9rem",
+                        fontWeight: "bold",
+                        marginBottom: "10px"
+                      }}>
+                        EXPECTED: ₹{p.expectedAmount}
+                      </div>
+                    )}
                     <h2 className="card-email">{p.email}</h2>
                     <div className="card-scse"><span className="fl">SCSE ID</span><span className="fv">{p.scseId}</span></div>
                     <div className="card-txns">

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   checkIsFromCse,
   checkIsFromNit,
@@ -19,7 +19,7 @@ interface UserData {
   isNitian: boolean;
   isFromCse: boolean;
   isCollectedTshirt: boolean; // this is source of truth for hoodie 
-  paidForTshirt:  "unpaid" | "paid" | "approved" | "rejected";
+  paidForTshirt: "unpaid" | "paid" | "approved" | "rejected";
   paidForaccoModation: "unpaid" | "paid" | "approved" | "rejected";
   paidForPrime: "paid" | "unpaid" | "rejected" | "approved";
   phone?: string;
@@ -28,19 +28,21 @@ interface UserData {
   x: boolean;
 }
 
-function Page() {
+function PayRegForm() {
   const router = useRouter();
-  const [userData, setUserData]     = useState<UserData | null>(null);
-  const [image, setImage]           = useState<File | null>(null);
-  const [imageUrl, setImageUrl]     = useState<string | null>(null);
-  const [loading, setLoading]       = useState(false);
+  const searchParams = useSearchParams();
+  const typeParam = searchParams.get("type") || "registration_only";
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [image, setImage] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [error, setError]           = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [submitHovered, setSubmitHovered] = useState(false);
   const [uploadHovered, setUploadHovered] = useState(false);
-  const [formData, setFormData]     = useState({
+  const [formData, setFormData] = useState({
     transactionId1: "",
     transactionId2: "",
     transactionId3: "",
@@ -59,16 +61,46 @@ function Page() {
     fetchUserData();
   }, []);
   console.log(userData);
-  let amount = 900;
-  if (userData?.isNitian && userData.isFromCse) {
-    amount = 500;
-    if (check3rdYear(userData?.email!)) amount = 500;
-  } else if (userData?.isNitian && !userData.isFromCse) {
-    amount = 900;
-  } else {
-    amount = 900;
-  }
 
+  let amount = 900;
+  let formTitle = "SECURE";
+
+  const isCSE = userData?.isFromCse;
+
+  if (typeParam === "reg_with_tshirt") {
+    amount = isCSE
+      ? Number(process.env.NEXT_PUBLIC_PRICE_CSE_PRIME_WITH_TSHIRT || 700)
+      : Number(process.env.NEXT_PUBLIC_PRICE_NCSE_PRIME_WITH_TSHIRT || 1100);
+    formTitle = "REG + TSHIRT";
+  } else if (typeParam === "reg_without_tshirt") {
+    amount = isCSE
+      ? Number(process.env.NEXT_PUBLIC_PRICE_CSE_PRIME_WITHOUT_TSHIRT || 500)
+      : Number(process.env.NEXT_PUBLIC_PRICE_NCSE_PRIME_WITHOUT_TSHIRT || 900);
+    formTitle = "REGISTRATION";
+  } else if (typeParam === "tshirt_only") {
+    amount = isCSE
+      ? Number(process.env.NEXT_PUBLIC_PRICE_CSE_TSHIRT || 200)
+      : Number(process.env.NEXT_PUBLIC_PRICE_NCSE_TSHIRT || 200);
+    formTitle = "T-SHIRT";
+  } else if (typeParam === "reg_with_accom") {
+    amount = Number(process.env.NEXT_PUBLIC_PRICE_NONIT_PRIME_WITH_ACCO || 1500);
+    formTitle = "REG + ACCOM";
+  } else if (typeParam === "reg_without_accom") {
+    amount = Number(process.env.NEXT_PUBLIC_PRICE_NONIT_PRIME_WITHOUT_ACCO || 900);
+    formTitle = "REGISTRATION";
+  } else if (typeParam === "accom_only") {
+    amount = Number(process.env.NEXT_PUBLIC_PRICE_ACCO || 600);
+    formTitle = "ACCOMMODATION";
+  } else {
+    if (userData?.isNitian && userData.isFromCse) {
+      amount = 500;
+      if (check3rdYear(userData?.email!)) amount = 500;
+    } else if (userData?.isNitian && !userData.isFromCse) {
+      amount = 900;
+    } else {
+      amount = 900;
+    }
+  }
   const handleImageUpload = async () => {
     setError(null);
     if (!image) { setError("Please select an image to upload."); return; }
@@ -91,7 +123,7 @@ function Page() {
     setSubmitting(true);
     if (!imageUrl) { setError("Please upload payment proof."); setSubmitting(false); return; }
     if (!formData.transactionId1) { setError("Transaction ID 1 is required."); setSubmitting(false); return; }
-    const data = { ...formData, paymentProof: imageUrl, email: userData?.email, scseId: userData?.userID };
+    const data = { ...formData, paymentProof: imageUrl, email: userData?.email, scseId: userData?.userID, paymentType: typeParam, expectedAmount: amount };
     try {
       await axios.post("/api/collegepay", data);
       setShowSuccess(true);
@@ -138,8 +170,8 @@ function Page() {
             {/* Title */}
             <p style={s.tag}>// PAYMENT_GATEWAY</p>
             <h1 style={s.title}>
-              <span style={s.titleCyan}>PAYMENT</span>
-              <span style={s.titleWhite}>PORTAL</span>
+              <span style={s.titleCyan}>{formTitle}</span>
+              <span style={s.titleWhite}>PAYMENT</span>
             </h1>
             <div style={s.divider}>
               <div style={s.divLine} />
@@ -250,7 +282,7 @@ function Page() {
 
             {/* Transaction IDs */}
             {[
-              { key: "transactionId1", label: "TRANSACTION_ID_1", required: true,  hint: "" },
+              { key: "transactionId1", label: "TRANSACTION_ID_1", required: true, hint: "" },
               { key: "transactionId2", label: "TRANSACTION_ID_2", required: false, hint: "OPTIONAL" },
               { key: "transactionId3", label: "TRANSACTION_ID_3", required: false, hint: "OPTIONAL" },
             ].map(({ key, label, required, hint }) => (
@@ -369,7 +401,13 @@ function Page() {
   );
 }
 
-export default Page;
+export default function Page() {
+  return (
+    <Suspense fallback={<div style={{ padding: '2rem', color: '#00f5ff', fontFamily: 'monospace' }}>LOADING PAYMENT PORTAL...</div>}>
+      <PayRegForm />
+    </Suspense>
+  )
+}
 
 const s: Record<string, React.CSSProperties> = {
   root: {

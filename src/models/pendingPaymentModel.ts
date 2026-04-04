@@ -10,6 +10,8 @@ export interface PendingPayments extends Document {
   transactionId3?: string;
   isSpam: boolean;
   status: "pending" | "verified" | "rejected";
+  paymentType: string;
+  expectedAmount: number;
 }
 
 const PendingPaymentsSchema: Schema<PendingPayments> = new Schema(
@@ -56,6 +58,24 @@ const PendingPaymentsSchema: Schema<PendingPayments> = new Schema(
     transactionId3: {
       type: String,
       required: false,
+    },
+    paymentType: {
+      type: String,
+      enum: [
+        "reg_with_tshirt",
+        "reg_without_tshirt",
+        "tshirt_only",
+        "reg_with_accom",
+        "reg_without_accom",
+        "accom_only",
+        "registration_only"
+      ],
+      default: "registration_only",
+    },
+    expectedAmount: {
+      type: Number,
+      required: true,
+      default: 500,
     },
   },
   {
