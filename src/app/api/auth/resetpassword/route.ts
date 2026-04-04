@@ -32,7 +32,8 @@ export async function POST(req: NextRequest) {
 
     let decoded: any;
     try {
-      decoded = jwt.verify(token, secret);
+      decoded =
+      jwt.verify(token, secret);
     } catch (err) {
       return NextResponse.json(
         { error: "Reset link is invalid or has expired." },

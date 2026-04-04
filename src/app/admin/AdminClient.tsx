@@ -17,7 +17,7 @@ const NAV: { key: Panel; icon: string; label: string }[] = [
   { key: "search",    icon: "◎", label: "User Search" },
   { key: "goodies",   icon: "★", label: "Goodies"     },
   { key: "announce",  icon: "📢", label: "Announce"   },
-  { key: "certificates", icon: "🏆", label: "Certificates" },
+  // { key: "certificates", icon: "🏆", label: "Certificates" },
 ];
 
 type EventReg = {
@@ -577,7 +577,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
           </div>
         )}
 
-        {/* CERTIFICATES */}
+        {/* CERTIFICATES
         {panel === "certificates" && (
           <div className="content-panel">
             <div className="page-header">
@@ -586,7 +586,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
             </div>
             <div className="form-stack">
 
-              {/* Event selector */}
+              Event selector
               <div className="form-field">
                 <label className="form-label">SELECT EVENT *</label>
                 <select className="s-input" style={{borderRight:"1px solid #1e2535",height:42,paddingTop:0,paddingBottom:0}}
@@ -598,7 +598,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
                 </select>
               </div>
 
-              {/* Winners section */}
+              Winners section
               <div className="form-field">
                 <label className="form-label">WINNERS / RUNNER-UPS <span style={{opacity:0.4}}>(optional — leave empty for participation only)</span></label>
                 <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
@@ -628,7 +628,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
                     }}>+ ADD</button>
                 </div>
 
-                {/* Winners list */}
+                Winners list
                 {certWinners.length > 0 && (
                   <div style={{display:"flex",flexDirection:"column",gap:6,marginTop:4}}>
                     {certWinners.map((w, i) => (
@@ -644,7 +644,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
                 )}
               </div>
 
-              {/* Info box */}
+              Info box
               {certEvent && (
                 <div style={{padding:"10px 14px",background:"rgba(0,245,255,0.04)",border:"1px solid rgba(0,245,255,0.15)",borderRadius:6,fontSize:12,color:"#94a3b8"}}>
                   → All registered participants of <span style={{color:"#00f5ff"}}>{certEvent}</span> will receive participation certificates.
@@ -655,7 +655,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
 
               {certError && <div className="err-msg">⚠ {certError}</div>}
 
-              {/* Result */}
+              Result
               {certResult && (
                 <div style={{padding:"12px 16px",background:"rgba(34,197,94,0.06)",border:"1px solid rgba(34,197,94,0.2)",borderRadius:6,fontSize:13,lineHeight:1.8}}>
                   <span style={{color:"#22c55e"}}>✔ Generated: {certResult.success}</span><br/>
@@ -692,7 +692,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
 
             </div>
           </div>
-        )}
+        )} */}
 
       </main>
 

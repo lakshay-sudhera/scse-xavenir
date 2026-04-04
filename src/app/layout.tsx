@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SCSE",
+  title: "Home - SCSE",
   description: "SCSE NIT JSR",
   icons: {
     icon: "/SCSElogo.svg",

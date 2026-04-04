@@ -268,6 +268,13 @@
 //   },
 // };
 
-export default function Page() {
-  return <div>Callback</div>;
+
+
+
+
+export default function GoogleCallbackPage() {
+  return <div style={{ padding: "4rem", textAlign: "center", fontFamily: "'Rajdhani', sans-serif" }}>
+    <h1>Google Callback</h1>
+    <p>You have been successfully authenticated with Google.</p>
+  </div>
 }
