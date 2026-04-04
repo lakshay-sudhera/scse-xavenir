@@ -915,15 +915,15 @@ export default function Dashboard() {
                       </p>
                     </div>
                     {/* Non-Nitian: Razorpay inline payment */}
-                    {!user?.isNitian && (
+                    {/* {!user?.isNitian && (
                       <RegistrationFeesButton email={user?.email ?? ""} />
-                    )}
+                    )} */}
                     {/* NIT CSE: redirect to /payreg */}
-                    {user?.isNitian && user?.isFromCse && (
+                    {/* {user?.isNitian && user?.isFromCse && (
                       <Link href="/payreg" className="db-btn-primary" style={{ alignSelf: "flex-start" }}>
                         <span>PAY NOW →</span>
                       </Link>
-                    )}
+                    )} */}
                     {/* NIT non-CSE: no payment button shown */}
                   </>
                 )}
