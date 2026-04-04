@@ -13,7 +13,7 @@ const NAV_LINKS: [string, string][] = [
   ["/contact",  "Contact"],
   ["/gallery",  "Gallery"],
   ["/sponsors", "Sponsors"],
-  ["https://www.whatsapp.com", "Whatsapp"],
+  ["https://chat.whatsapp.com/JSwbC8kQxEKJQGY2S2S3ob", "Whatsapp"],
 ];
 
 export default function Navbar() {
