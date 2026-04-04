@@ -475,15 +475,22 @@ export default function Dashboard() {
                     </div>
                   ) : (
                     <div>
-                      {user?.paidForPrime === "paid" ? (
-                        <div className="db-status-ok" style={{ background: 'rgba(255,200,0,0.05)', border: '1px solid rgba(255,200,0,0.2)' }}>
-                          <span style={{ color: "#ffc800", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: "0.9rem" }}>
-                            ◌ REGISTRATION PAYMENT: PENDING VERIFICATION
-                          </span>
-                          <p style={{ color: "rgba(180,200,255,0.4)", fontFamily: "'Rajdhani',sans-serif", fontSize: "0.85rem", marginTop: 8 }}>
-                            Please wait while the admin verifies your transaction screenshot.
-                          </p>
-                        </div>
+                     {user?.paidForPrime === "paid" ? (
+                  <div className="db-status-ok" style={{ background: 'rgba(255,200,0,0.05)', border: '1px solid rgba(255,200,0,0.2)' }}>
+                    <span style={{ color: "#ffc800", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: "0.9rem" }}>
+                      ◌ PENDING VERIFICATION:{" "}
+                      {user?.isNitian
+                        ? user?.paidForTshirt === "paid"
+                          ? "PRIME + T-SHIRT"
+                          : "PRIME"
+                        : user?.paidForaccoModation === "paid"
+                        ? "PRIME + ACCOMMODATION"
+                        : "PRIME"}
+                    </span>
+                    <p style={{ color: "rgba(180,200,255,0.4)", fontFamily: "'Rajdhani',sans-serif", fontSize: "0.85rem", marginTop: 8 }}>
+                      Please wait while the admin verifies your transaction screenshot.
+                    </p>
+                  </div>
                       ) : (
                         <>
                           <p style={{ color: "rgba(180,200,255,0.7)", fontFamily: "'Rajdhani',sans-serif", marginBottom: 8 }}>

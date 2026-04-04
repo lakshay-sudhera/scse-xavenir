@@ -173,7 +173,7 @@ export async function GET(req: NextRequest) {
   [
     "This is a system-generated receipt and does not require a signature.",
     "For support: scse@nitjsr.ac.in  |  +91 97986 87024",
-    "© 2025 Xavenir — SCSE, NIT Jamshedpur",
+    "© 2026 Xavenir — SCSE, NIT Jamshedpur",
   ].forEach((line, i) => {
     const textWidth = fontRegular.widthOfTextAtSize(line, 8);
     page.drawText(line, {

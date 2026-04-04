@@ -641,7 +641,7 @@ export default function ShippingPage() {
           <div className="ship-tags">
             <span className="ship-tag">// TICKET POLICY</span>
             <span className="ship-tag-pink">// PAYMENT TERMS</span>
-            <span className="ship-tag-purple">// EFFECTIVE 2025</span>
+            <span className="ship-tag-purple">// EFFECTIVE 2026</span>
           </div>
 
           <div className="ship-divider" />
@@ -659,7 +659,7 @@ export default function ShippingPage() {
           <div className="ship-footer-bar">
             <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
               <span className="ship-footer-text">
-                <span>// LAST UPDATED</span> · March 2025
+                <span>// LAST UPDATED</span> · March 2026
               </span>
               <span className="ship-footer-text">
                 <span>// ISSUED BY</span> · SCSE Web Team · NIT Jamshedpur

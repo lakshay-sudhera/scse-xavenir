@@ -80,7 +80,7 @@ export default function RefundPage() {
         </div>
 
         <div className="rf-footer">
-          <p>Last updated: 2025 &nbsp;|&nbsp; Questions? <a href="mailto:nitjsr.scse@gmail.com">nitjsr.scse@gmail.com</a></p>
+          <p>Last updated: 2026 &nbsp;|&nbsp; Questions? <a href="mailto:nitjsr.scse@gmail.com">nitjsr.scse@gmail.com</a></p>
           <Link href="/privacy" className="rf-link">View Privacy Policy →</Link>
         </div>
       </div>

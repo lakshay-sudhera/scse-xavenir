@@ -34,7 +34,7 @@ const sections = [
   },
   {
     title: "8. Changes to This Policy",
-    content: "We may update this policy periodically. Continued use of the platform after changes constitutes acceptance of the revised policy. Last updated: 2025.",
+    content: "We may update this policy periodically. Continued use of the platform after changes constitutes acceptance of the revised policy. Last updated: 2026.",
   },
 ];
 
