@@ -6,7 +6,7 @@ import { useToast } from "@/components/Toast";
 const contacts = [
   {
     name: "Abhishek Kaushik",
-    role: "Event Related Query",
+    role: "General Query",
     phone: "+91 97986 87024",
     email: "abhishekkumar89647@gmail.com",
     image: "/contact/abhishek.jpg",
@@ -16,12 +16,12 @@ const contacts = [
   },
   {
     name: "Sujal Kumar",
-    role: "Payment Related Query",
-    phone: "+91 99693780078",
-    email: "sujalkumar@gmail.com",
+    role: "Event Related Query",
+    phone: "+91 9693780078",
+    email: "sujalpas62@gmail.com",
     image: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774475261/1707369959885_re1yjn.jpg",
     linkedin: "https://www.linkedin.com/in/sujal-kumar-552a39237/",
-    tag: "FINANCE.NODE",
+    tag: "EVENTS.NODE",
     color: "var(--yellow)",
   },
   {
@@ -31,17 +31,17 @@ const contacts = [
     email: "priyanshuraj979837@gmail.com",
     image: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774475067/WhatsApp_Image_2026-03-26_at_3.13.56_AM_yqltff.jpg",
     linkedin: "https://www.linkedin.com/in/priyanshuraj-nitjsr/",
-    tag: "EVENTS.NODE",
+    tag: "REGISTER.NODE",
     color: "var(--cyan)",
   },
    {
     name: "Ayush Verma",
-    role: "General Query",
+    role: "Payment Related Query",
     phone: "+91 8936081707",
     email: "ayush7610jsr@gmail.com",
     image: "https://res.cloudinary.com/dtieuimsz/image/upload/v1774474434/WhatsApp_Image_2026-03-26_at_3.03.23_AM_yi25nd.jpg",
     linkedin: "https://www.linkedin.com/in/ayush-verma-jsr25",
-    tag: "RESGISTER.NODE",
+    tag: "PAYMENT.NODE",
     color: "var(--purple)",
   },
  

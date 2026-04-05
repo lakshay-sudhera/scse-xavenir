@@ -75,7 +75,7 @@ export default function Navbar() {
       <div className="nav-underglow" />
 
       <nav className={`nav ${scrolled ? "nav-scrolled" : ""}`}>
-        <Link href="/" className="logo">&lt;/SCSE&gt;</Link>
+        <Link href="/" className="logo">&lt;SCSE&gt;</Link>
 
         <ul className="nav-links">
           {NAV_LINKS.map(([href, label]) => (
