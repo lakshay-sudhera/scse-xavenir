@@ -6,7 +6,6 @@ import { UserContext } from "@/context/UserContext";
 import "./dashboard.css";
 import Loading from "@/components/Loading";
 import { useToast } from "@/components/Toast";
-// import RegistrationFeesButton from "@/components/RegistrationFeesButton";
 
 type User = {
   email: string;
@@ -162,42 +161,6 @@ export default function Dashboard() {
     setSaving(false);
   };
 
-  // const handleSendOtp = async () => {
-  //   if (!otpPhone.trim()) { setOtpMsg("Enter a phone number first."); return; }
-  //   setOtpLoading(true); setOtpMsg("");
-  //   try {
-  //     const res = await fetch("/api/users/phone-otp/send", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ phone: otpPhone }),
-  //     });
-  //     const d = await res.json();
-  //     if (res.ok) { setOtpSent(true); setOtpMsg("OTP sent to your registered email."); }
-  //     else { setOtpMsg(d.error || "Failed to send OTP."); }
-  //   } catch { setOtpMsg("Network error."); }
-  //   setOtpLoading(false);
-  // };
-
-  // const handleVerifyOtp = async () => {
-  //   if (!otpValue.trim()) { setOtpMsg("Enter the OTP."); return; }
-  //   setOtpLoading(true); setOtpMsg("");
-  //   try {
-  //     const res = await fetch("/api/users/phone-otp/verify", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ otp: otpValue }),
-  //     });
-  //     const d = await res.json();
-  //     if (res.ok) {
-  //       setUser(prev => ({ ...prev!, phone: otpPhone, phoneVerified: true }));
-  //       setUserData({ ...userData!, phone: otpPhone } as any);
-  //       setPhone(otpPhone);
-  //       setOtpSent(false); setOtpValue(""); setOtpPhone("");
-  //       setOtpMsg("✓ Phone verified and saved!");
-  //     } else { setOtpMsg(d.error || "Verification failed."); }
-  //   } catch { setOtpMsg("Network error."); }
-  //   setOtpLoading(false);
-  // };
 
   const handlePicUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -510,12 +473,16 @@ export default function Dashboard() {
 
                           {!showPaymentOptions ? (
                             <button 
-                              className="db-btn-primary" 
-                              style={{ width: '100%' }}
-                              onClick={() => setShowPaymentOptions(true)}
-                            >
-                              <span> PAY REGISTRATION FEES</span>
-                            </button>
+                          className="db-btn-primary" 
+                            style={{ width: '100%' }}
+                            onClick={() => setShowPaymentOptions(true)}
+                          >
+                            <span>
+                              {user?.isNitian 
+                                ? " PAY REGISTRATION FEES" 
+                                : " PAY REGISTRATION FEES — T-SHIRT FREE 🎁"}
+                            </span>
+                          </button>
                           ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                               <p style={{ color: "#00ff88", fontSize: "0.85rem", fontFamily: "'Rajdhani',sans-serif" }}>SELECT OPTION:</p>
@@ -530,11 +497,11 @@ export default function Dashboard() {
                                 </>
                               ) : (
                                 <>
-                                  <Link href="/payreg?type=reg_with_accom" className="db-btn-primary" style={{ textAlign: 'center', background: 'rgba(0, 255, 136, 0.1)' }}>
-                                    <span>// PAY WITH ACCOMMODATION</span>
+                                  <Link href="/payreg?type=reg_with_accom" className="db-btn-primary" style={{ textAlign: 'center' }}>
+                                    <span>PAY WITH ACCOMMODATION</span>
                                   </Link>
                                   <Link href="/payreg?type=reg_without_accom" className="db-btn-primary" style={{ textAlign: 'center' }}>
-                                    <span>// PAY WITHOUT ACCOMMODATION</span>
+                                    <span> PAY WITHOUT ACCOMMODATION</span>
                                   </Link>
                                 </>
                               )}

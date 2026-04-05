@@ -486,15 +486,15 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
             {goodiesError && <div className="err-msg">⚠ {goodiesError}</div>}
             {goodiesResult && (
               <div className="result-card">
-                <div className="card-accent" style={{background: goodiesResult.b1 ? "#00ffb3" : "#f59e0b"}} />
+                <div className="card-accent" style={{background: goodiesResult.isCollectedTshirt ? "#00ffb3" : "#f59e0b"}} />
                 {[["NAME", goodiesResult.fullName], ["EMAIL", goodiesResult.email], ["USER ID", goodiesResult.userID]].map(([l,v]) => (
                   <div key={l} className="sr-row"><span className="sr-l">{l}</span><span className="sr-v">{v}</span></div>
                 ))}
                 <div className="sr-row">
                   <span className="sr-l">GOODIES</span>
-                  <span className={`sr-v ${goodiesResult.b1 ? "ok" : "no"}`}>{goodiesResult.b1 ? "✔ ALREADY COLLECTED" : "✕ NOT YET COLLECTED"}</span>
+                  <span className={`sr-v ${goodiesResult.isCollectedTshirt ? "ok" : "no"}`}>{goodiesResult.isCollectedTshirt ? "✔ ALREADY COLLECTED" : "✕ NOT YET COLLECTED"}</span>
                 </div>
-                {!goodiesResult.b1 && (
+                {!goodiesResult.isCollectedTshirt && (
                   <button className="btn-approve" style={{marginTop:16, width:"100%"}} disabled={goodiesLoading}
                     onClick={async () => {
                       setGoodiesLoading(true);
@@ -510,7 +510,7 @@ export default function AdminClient({ payments, eventRegs, contacts, stats }: {
                     {goodiesLoading ? <span className="spin" /> : "★ MARK AS COLLECTED"}
                   </button>
                 )}
-                {goodiesResult.b1 && <div className="final-badge badge-ok" style={{marginTop:16}}>✔ GOODIES COLLECTED</div>}
+                {goodiesResult.isCollectedTshirt && <div className="final-badge badge-ok" style={{marginTop:16}}>✔ GOODIES COLLECTED</div>}
               </div>
             )}
           </div>
