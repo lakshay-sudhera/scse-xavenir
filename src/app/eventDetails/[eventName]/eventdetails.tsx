@@ -133,8 +133,8 @@ export default function RegisterEventPage() {
             <div className="header-badge">
               <span className="hb-rdy">EVENT // READY</span>
               <div className="hb-row">
-                <span className="hb-scse">SCSE</span>
-                <span className="hb-date">APR 26</span>
+                <span className="hb-scse">APR</span>
+                <span className="hb-date">2026</span>
               </div>
               <div className="hb-sub-row">
                 <span className="hb-sub">XAVENIR 2026</span>
@@ -166,7 +166,7 @@ export default function RegisterEventPage() {
                   <div className="img-overlay"/>
                   <span className="hud tl"/><span className="hud tr"/>
                   <span className="hud bl"/><span className="hud br"/>
-                  <div className="img-date-badge">APR 26</div>
+                  <div className="img-date-badge">APR 18-19</div>
                 </div>
                 <div className="img-statusbar">
                   <span className="isb-dec">DECRYPTED</span>

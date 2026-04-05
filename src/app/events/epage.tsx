@@ -67,7 +67,7 @@ function EventCard({ event, index }: { event: Event; index: number }) {
         </div>
         <span className="hud tl"/><span className="hud tr"/>
         <span className="hud bl"/><span className="hud br"/>
-        <div className="c-date-badge">APR 26</div>
+        <div className="c-date-badge">APR 18-19</div>
       </div>
       <div className="c-status">
         <span className="c-decrypt-lbl">{decryptLabel}</span>
@@ -133,7 +133,7 @@ function SkeletonCard() {
 /* ── Ticker items ── */
 const TICKER_ITEMS = [
   "XAVENIR 2026", "NIT JAMSHEDPUR", "SCSE OPS ACTIVE",
-  "16 EVENTS LIVE", "APR 26", "CYBER WORLD", "CODE // CREATE // CONQUER",
+  "16 EVENTS LIVE", "APR 18-19", "CYBER WORLD", "CODE // CREATE // CONQUER",
   "REGISTER NOW", "PRIZE POOL ₹50K+", "500+ PARTICIPANTS",
 ];
 
@@ -194,7 +194,7 @@ export default function EventsPage() {
               <span className="live-dot"/>
               <span className="live-txt">SYSTEM ONLINE</span>
               <span className="hts-sep">//</span>
-              <span className="hts-dept">APR 26, 2026</span>
+              <span className="hts-dept">APR 18-19, 2026</span>
             </div>
           </div>
 
